@@ -1,0 +1,17 @@
+<resources>
+<string name="app_name">DivyaDhun</string><string name="brand_hindi">दिव्यधुन</string>
+<string name="tagline">Your Daily Bhakti</string><string name="secondary_tagline">Bhakti, bas ek tap mein.</string>
+<string name="home">Home</string><string name="explore">Explore</string><string name="search">Search</string><string name="library">My Bhakti</string>
+<string name="namaste">Namaste</string><string name="home_intro">A little stillness. A moment of devotion.</string>
+<string name="hero_title">Make room for
+peace, every day.</string><string name="hero_body">A quiet place for your daily devotion.</string>
+<string name="explore_action">Explore DivyaDhun</string><string name="foundation_label">YOUR DAILY BHAKTI</string>
+<string name="welcome_title">Devotion, at your pace</string><string name="welcome_body">We are preparing a thoughtful listening experience. Your favorite prayers will feel right at home.</string>
+<string name="explore_intro">Find your own way to devotion.</string><string name="collection_title">A space for every devotion</string><string name="collection_body">Aartis, bhajans, mantras and more will come together here.</string>
+<string name="coming_soon">Listening collections are coming in a future phase.</string>
+<string name="search_intro">A familiar prayer is a good place to begin.</string><string name="search_title">Your next moment of peace</string><string name="search_body">Search by prayer, deity or artist when the devotional catalog arrives.</string>
+<string name="library_intro">A place for the prayers you love.</string><string name="favorites_title">No favorites yet</string><string name="favorites_body">Your saved devotional audio will appear here once listening is available.</string>
+<string name="appearance">Appearance</string><string name="system">System</string><string name="light">Light</string><string name="dark">Dark</string>
+<string name="preference_error">Your appearance preference could not be saved. Please try again.</string>
+<string name="retry">Retry</string>
+</resources>
