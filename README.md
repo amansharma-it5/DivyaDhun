@@ -2,62 +2,51 @@
 
 Your Daily Bhakti. Bhakti, bas ek tap mein.
 
-An Android-first devotional listening product. **Current scope: Phase 0 and Phase 1 foundation only.** This build contains no playable catalog.
+DivyaDhun is an Android-first devotional discovery experience. **Phase 2 adds first-use onboarding, English/Hindi localization, persisted preferences, and a local metadata catalog. Audio playback is intentionally not implemented yet.**
 
-## Implemented
+## Phase 2 completed features
 
-- Material 3 Compose theme with warm light/dark palettes, scalable English/Devanagari typography, semantic colors, spacing and rounded shapes.
-- Home, Explore, Search and My Bhakti navigation scaffolds; selected tab and navigation restoration.
-- Home discovery link, honest future-content states, persistent System/Light/Dark appearance settings via DataStore.
-- Original vector launcher mark and decorative line artwork; resource-based visible strings.
-- Edge-to-edge scaffold with system insets, scrollable screens, minimum 48dp controls and labeled navigation.
+- Four-step onboarding: welcome, language, favorite deities, and normal listening time.
+- English and Hindi strings with persisted app language selection.
+- Multi-select deity preferences and Morning, Evening, Before Sleep, or Anytime listening preference.
+- Home sections backed by local content: Your Gods, Aaj Ki Bhakti, Popular Aartis, and Mantras.
+- Explore by devotional type or deity, reusable deity detail, honest track information, and local search.
+- My Bhakti preferences for language, deities, listening time, and System/Light/Dark appearance.
+- Original Compose-drawn devotional artwork with accessible selection semantics and minimum touch targets.
 
 ## Architecture
 
-One app module keeps this initial project easy to inspect. Packages separate UI, reusable components and theme. ShellViewModel exposes immutable ShellUiState through StateFlow; DataStore owns appearance persistence. Navigation Compose owns the back stack. UI does not access storage.
+The single `app` module remains small and inspectable. `domain.model` contains immutable `Deity`, `Track`, `Lyrics`, `DevotionalCollection`, `DevotionalCategory`, `Language`, and `ListeningTime` types. `data.ContentRepository` is the UI-independent catalog contract, implemented by `LocalContentRepository`. `UserPreferencesRepository` owns the single DataStore and exposes immutable preference state through `Flow`. Feature ViewModels keep loading, search, onboarding, and preference changes out of Composables. Navigation Compose handles onboarding, the main shell, deity/category/track routes, and back-stack behavior.
 
-Future phases should introduce domain repository contracts and data implementations with feature ViewModels when real content arrives. Media3 playback will live in a service behind PlaybackController, separate from Compose. Room, Hilt, Coil, backend and media libraries are intentionally absent until needed.
+Locale changes use Android application locale APIs on API 33+ and a compatibility configuration update below that level. The selected onboarding step is persisted so a locale-triggered Activity recreation resumes safely.
 
-## Toolchain and build
+## Local catalog
 
-Pinned to the available environment: AGP 9.4.0, Gradle 9.7.1, Kotlin/Compose compiler 2.2.10, Compose BOM 2026.02.01, Material 3, Navigation 2.9.0. AGP provides built-in Kotlin; no duplicate Kotlin Android plugin. Requires Android SDK 37, minimum runtime API 26, Java 17 or compatible newer JDK (tested with Android Studio bundled JBR).
+The fixture contains 8 deities, 32 metadata-only tracks, and six stable categories: Aarti, Bhajan, Mantra, Chalisa, Stotra, and Meditation. Deity IDs (`hanuman`, `shiv`, `krishna`, `ram`, `ganesh`, `durga`, `lakshmi`, `sai`) and track IDs are stable and independent of localized display names. Search normalizes case, whitespace, and punctuation and checks titles, deity names, category names, keywords, aliases, and curated Devanagari aliases such as `महादेव`, `हनुमान`, `राम`, and `कृष्ण`.
 
-Open this directory in Android Studio. Set ANDROID_HOME or create an ignored local.properties containing sdk.dir pointing to your SDK. Set JAVA_HOME to your JDK.
+The repository is ready for a future JSON, database, or network implementation without exposing that choice to the UI. `audioSource` is nullable and all current records are metadata/demo entries; no remote URLs or recordings are bundled.
+
+## Build and tests
+
+Pinned to the available environment: AGP 9.4.0, Gradle 9.7.1, Kotlin/Compose compiler 2.2.10, Compose BOM 2026.02.01, Material 3, Navigation 2.9.0, minimum runtime API 26. Set `JAVA_HOME` to a compatible JDK and `ANDROID_HOME` to the Android SDK.
 
 Windows:
 
 ```powershell
-.\gradlew.bat testDebugUnitTest
-.\gradlew.bat lintDebug
-.\gradlew.bat assembleDebug
-.\gradlew.bat connectedDebugAndroidTest
+.\gradlew.bat testDebugUnitTest --console=plain
+.\gradlew.bat lintDebug --console=plain
+.\gradlew.bat assembleDebug --console=plain
+.\gradlew.bat connectedDebugAndroidTest --rerun-tasks --console=plain
 ```
 
-macOS/Linux: use ./gradlew with the same tasks. Connected tests need a running emulator or connected device.
+The debug APK is `app/build/outputs/apk/debug/app-debug.apk`. Unit test reports are under `app/build/test-results`; instrumentation reports are under `app/build/outputs/androidTest-results`; lint writes `app/build/reports/lint-results-debug.html`.
 
-APK: app/build/outputs/apk/debug/app-debug.apk.
-Reports: app/build/reports/tests, app/build/reports/lint-results-debug.html and app/build/reports/androidTests.
+## Content and asset safety
 
-## Audit and Git
+Phase 2 includes no MP3s, commercial recordings, embedded streaming URLs, scraped services, or downloaded photographs. Deity visuals are original Compose-drawn symbols. Traditional titles are metadata only and use neutral sources such as Traditional or DivyaDhun Demo; no singer or label is falsely attributed. Future recordings and artwork require documented rights.
 
-The supplied workspace was empty and not a Git repository. No starting SHA, existing branch, Gradle configuration, tests, README, CI or technical debt existed. A new repository was created on feat/divyadhun-foundation. No existing code was removed. No remote or merge is configured.
+## Deferred work and known limitations
 
-## Content, copyright and privacy
+Media3/ExoPlayer, playback services, mini/full player, downloads, notifications, widgets, backend/API, authentication, cloud sync, favorites/history, lyrics UI, daily sequencing, Mantra/Aarti modes, sharing, subscriptions, analytics, AI, and production devotional recordings remain deferred. Search is intentionally deterministic local matching, not fuzzy or transliteration search. Physical-device, TalkBack, and production-release certification are outside this phase.
 
-No audio, photographs, downloaded deity images, font files, analytics or network service are included. The launcher vector and decorative petal artwork were authored for this project. Navigation uses AndroidX Material icons. Typography uses Android system fonts and Devanagari fallback. Future demo recordings require documented rights; a traditional prayer does not make a commercial recording public domain.
-
-No permissions are requested. Appearance stays on the device, with backup disabled. No secrets or signing keys are committed. Release signing and Play Store readiness belong to Phase 16.
-
-## Deferred and roadmap
-
-Phase 2: onboarding, Hindi/English preference, deity and listening-time selection, local domain models and demo catalog.
-Phase 3: real Home/Explore/deity content.
-Phases 4–6: media service, mini/full player, search, favorites and history.
-Phases 7–11: lyrics/Aarti, mantra counts, daily routines, Simple Mode and festival configuration.
-Phases 12–16: remote content, separately scoped offline/reminders/widget, sharing, explicitly approved Family Mandir and production hardening.
-
-No fake search field, play control, favorites action or mini-player appears before its behavior exists.
-
-## Limitations
-
-English interface with Hindi branding; full Hindi localization is Phase 2. No physical-device, TalkBack or production-release certification. Scaffold copy intentionally describes future content. No CI service is configured. The current package ID com.divyadhun.app must be confirmed before publication.
+The app stays on `feat/divyadhun-phase2-content`; this work is not merged to the default branch.
