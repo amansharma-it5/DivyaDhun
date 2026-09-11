@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.automirrored.outlined.List
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -19,9 +20,15 @@ import androidx.navigation.compose.*
 import com.divyadhun.app.*
 import com.divyadhun.app.R
 import com.divyadhun.app.ui.theme.*
-enum class Destination(val label: Int, val icon: ImageVector) {
- HOME(R.string.home, Icons.Outlined.Home), EXPLORE(R.string.explore, Icons.Outlined.List),
- SEARCH(R.string.search, Icons.Outlined.Search), LIBRARY(R.string.library, Icons.Outlined.FavoriteBorder)
+enum class Destination {
+ HOME, EXPLORE, SEARCH, LIBRARY;
+ val label: Int get() = when(this) {
+  HOME -> R.string.home; EXPLORE -> R.string.explore; SEARCH -> R.string.search; LIBRARY -> R.string.library
+ }
+ val icon: ImageVector get() = when(this) {
+  HOME -> Icons.Outlined.Home; EXPLORE -> Icons.AutoMirrored.Outlined.List
+  SEARCH -> Icons.Outlined.Search; LIBRARY -> Icons.Outlined.FavoriteBorder
+ }
 }
 @Composable fun DivyaDhunApp(model: ShellViewModel) {
  val state by model.state.collectAsStateWithLifecycle()
