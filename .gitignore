@@ -6,4 +6,9 @@ local.properties
 *.iml
 *.jks
 *.keystore
-
+keystore.properties
+.env
+.env.*
+*.log
+logs/
+validation-outputs/
