@@ -11,6 +11,7 @@ android {
   testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
  }
  buildFeatures { compose = true }
+ bundle { language { enableSplit = false } }
  compileOptions { sourceCompatibility = JavaVersion.VERSION_17; targetCompatibility = JavaVersion.VERSION_17 }
 }
 dependencies {
@@ -32,4 +33,3 @@ dependencies {
  androidTestImplementation(libs.android.test)
  androidTestImplementation(libs.test.runner)
 }
-

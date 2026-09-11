@@ -13,12 +13,7 @@
     <string name="hero_body">Aartis, bhajans and mantras for a quiet moment today.</string>
     <string name="explore_action">Explore Bhakti</string>
     <string name="foundation_label">YOUR DAILY BHAKTI</string>
-    <string name="welcome_title">Devotion, at your pace</string>
-    <string name="welcome_body">Your favorite prayers will feel right at home.</string>
     <string name="explore_intro">Find your own way to devotion.</string>
-    <string name="collection_title">A space for every devotion</string>
-    <string name="collection_body">Browse aartis, bhajans, mantras and more.</string>
-    <string name="coming_soon">More listening experiences are coming soon.</string>
     <string name="search_intro">A familiar prayer is a good place to begin.</string>
     <string name="search_title">Search devotional audio</string>
     <string name="search_body">Try a deity, prayer, or mantra.</string>
@@ -26,7 +21,10 @@
     <string name="clear_search">Clear search</string>
     <string name="no_results_title">No results found</string>
     <string name="no_results_body">Try another deity, mantra, or devotional title.</string>
-    <string name="search_result_count">%1$d devotional tracks</string>
+    <plurals name="search_result_count">
+        <item quantity="one">%1$d devotional track</item>
+        <item quantity="other">%1$d devotional tracks</item>
+    </plurals>
     <string name="favorites_title">Favorites are coming soon</string>
     <string name="favorites_body">Saved devotional audio will appear here in a later phase.</string>
     <string name="library_intro">A place for the prayers you love.</string>
@@ -35,13 +33,11 @@
     <string name="light">Light</string>
     <string name="dark">Dark</string>
     <string name="preference_error">Your preference could not be saved. Please try again.</string>
-    <string name="retry">Retry</string>
     <string name="preferences">Preferences</string>
     <string name="language">Language</string>
     <string name="your_gods">Your Gods</string>
     <string name="listening_time">Listening Time</string>
     <string name="choose_gods">Choose your Gods</string>
-    <string name="choose_gods_body">Select as many as you like.</string>
     <string name="choose_time">When do you usually listen?</string>
     <string name="done">Done</string>
     <string name="skip">Skip for now</string>
@@ -59,7 +55,10 @@
     <string name="deity_question_body">Pick a few favourites to shape your Home.</string>
     <string name="time_question">When do you usually listen?</string>
     <string name="time_question_body">We’ll keep your daily moments in mind.</string>
-    <string name="selected_count">%1$d selected</string>
+    <plurals name="selected_count">
+        <item quantity="one">%1$d selected</item>
+        <item quantity="other">%1$d selected</item>
+    </plurals>
     <string name="open_track_info">Open devotional track information</string>
     <string name="track_info">Track information</string>
     <string name="playback_deferred">Playback arrives in the next phase.</string>

@@ -61,6 +61,7 @@ class Phase2FlowTest {
         rule.onNodeWithTag("setting_deities").performClick()
         rule.onNodeWithTag("setting_deity_hanuman").performClick()
         rule.onNodeWithTag("setting_deities_done").performClick()
+        rule.waitUntil(5000) { rule.onAllNodesWithText("हनुमान").fetchSemanticsNodes().isNotEmpty() }
         rule.onNodeWithText("हनुमान").assertIsDisplayed()
         rule.onNodeWithTag("setting_time").performClick()
         rule.onNodeWithTag("setting_time_EVENING").performClick()
@@ -69,6 +70,7 @@ class Phase2FlowTest {
         rule.activityRule.scenario.recreate()
         rule.waitUntil(10000) { rule.onAllNodesWithTag("screen_LIBRARY").fetchSemanticsNodes().isNotEmpty() }
         rule.onNodeWithTag("setting_language_HINDI").assertIsSelected()
+        rule.waitUntil(5000) { rule.onAllNodesWithText("हनुमान").fetchSemanticsNodes().isNotEmpty() }
         rule.onNodeWithText("हनुमान").assertIsDisplayed()
         rule.onNodeWithTag("screen_LIBRARY").performScrollToNode(hasTestTag("theme_DARK"))
         rule.onNodeWithTag("theme_DARK").assertIsSelected()

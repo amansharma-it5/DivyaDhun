@@ -37,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.selected
@@ -155,7 +156,7 @@ fun OnboardingFlow(viewModel: OnboardingViewModel, deities: List<Deity>) {
     Column(Modifier.fillMaxWidth().verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(Space.md)) {
         Text(stringResource(R.string.deity_question), style = MaterialTheme.typography.headlineLarge)
         Text(stringResource(R.string.deity_question_body), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        Text(stringResource(R.string.selected_count, selected.size), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+        Text(pluralStringResource(R.plurals.selected_count, selected.size, selected.size), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
         deities.chunked(2).forEach { pair ->
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(Space.sm)) {
                 pair.forEach { deity ->
@@ -175,7 +176,7 @@ fun OnboardingFlow(viewModel: OnboardingViewModel, deities: List<Deity>) {
         Column(Modifier.fillMaxWidth().padding(Space.sm), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(Space.xs)) {
             DeityArtwork(deity, Modifier.size(56.dp))
             Text(stringResource(deityNameRes(deity.id)), style = MaterialTheme.typography.titleSmall)
-            if (isSelected) Icon(Icons.Outlined.Check, contentDescription = stringResource(R.string.selected_count, 1), tint = MaterialTheme.colorScheme.primary)
+            if (isSelected) Icon(Icons.Outlined.Check, contentDescription = pluralStringResource(R.plurals.selected_count, 1, 1), tint = MaterialTheme.colorScheme.primary)
         }
     }
 }

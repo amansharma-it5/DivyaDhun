@@ -39,6 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
@@ -231,7 +232,7 @@ fun SearchScreen(viewModel: SearchViewModel, state: SearchUiState, language: Lan
         } else if (state.results.isEmpty() && !state.isSearching) {
             item { EmptyState(stringResource(R.string.no_results_title), stringResource(R.string.no_results_body)) }
         } else {
-            item { Text(stringResource(R.string.search_result_count, state.results.size), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary) }
+            item { Text(pluralStringResource(R.plurals.search_result_count, state.results.size, state.results.size), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary) }
             item { TrackGroup(state.results, language, onTrack) }
         }
         if (state.error) item { Text(stringResource(R.string.preference_error), color = MaterialTheme.colorScheme.error) }
