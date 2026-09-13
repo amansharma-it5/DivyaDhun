@@ -61,7 +61,17 @@
     </plurals>
     <string name="open_track_info">भक्तिमय ट्रैक की जानकारी खोलें</string>
     <string name="track_info">ट्रैक की जानकारी</string>
-    <string name="playback_deferred">ऑडियो अगले चरण में उपलब्ध होगा।</string>
+    <string name="play">चलाएँ</string>
+    <string name="pause">रोकें</string>
+    <string name="resume">फिर चलाएँ</string>
+    <string name="next">अगला</string>
+    <string name="stop">रोकें</string>
+    <string name="now_playing">अभी चल रहा है</string>
+    <string name="demo_audio">दिव्यधुन डेमो ऑडियो</string>
+    <string name="demo_audio_unavailable">डेमो ऑडियो उपलब्ध नहीं है</string>
+    <string name="play_track">%1$s चलाएँ</string>
+    <string name="pause_track">%1$s रोकें</string>
+    <string name="playback_error">यह डेमो ट्रैक नहीं चल सका।</string>
     <string name="source_label">स्रोत</string>
     <string name="browse_by_type">प्रकार से खोजें</string>
     <string name="browse_by_deity">देवता से खोजें</string>

@@ -56,6 +56,9 @@ import com.divyadhun.app.domain.model.Language
 import com.divyadhun.app.domain.model.Track
 import com.divyadhun.app.ui.theme.LocalDevotionalColors
 import com.divyadhun.app.ui.theme.Space
+import com.divyadhun.app.playback.PlaybackController
+import com.divyadhun.app.playback.PlaybackState
+import com.divyadhun.app.playback.playableQueue
 
 @Composable
 fun HomeScreen(
@@ -63,7 +66,9 @@ fun HomeScreen(
     language: Language,
     onExplore: () -> Unit,
     onDeity: (String) -> Unit,
-    onTrack: (String) -> Unit
+    onTrack: (String) -> Unit,
+    playbackState: PlaybackState = PlaybackState(),
+    playbackController: PlaybackController? = null
 ) {
     if (!state.loaded) { LoadingState(); return }
     val content = state.content
@@ -77,13 +82,13 @@ fun HomeScreen(
             }
         }
         item { SectionHeader(stringResource(R.string.recommended_for_you)) }
-        item { TrackGroup(content.recommended, language, onTrack) }
+        item { TrackGroup(content.recommended, language, playbackState, playbackController, onTrack) }
         item { SectionHeader(stringResource(R.string.featured_today)) }
-        item { TrackGroup(content.today, language, onTrack) }
+        item { TrackGroup(content.today, language, playbackState, playbackController, onTrack) }
         item { SectionHeader(stringResource(R.string.popular_aartis)) }
-        item { TrackGroup(content.popularAartis, language, onTrack) }
+        item { TrackGroup(content.popularAartis, language, playbackState, playbackController, onTrack) }
         item { SectionHeader(stringResource(R.string.mantras_section)) }
-        item { TrackGroup(content.mantras, language, onTrack) }
+        item { TrackGroup(content.mantras, language, playbackState, playbackController, onTrack) }
     }
 }
 
@@ -112,7 +117,9 @@ fun ExploreScreen(
     language: Language,
     onDeity: (String) -> Unit,
     onCategory: (DevotionalCategory) -> Unit,
-    onTrack: (String) -> Unit
+    onTrack: (String) -> Unit,
+    playbackState: PlaybackState = PlaybackState(),
+    playbackController: PlaybackController? = null
 ) {
     if (!state.loaded) { LoadingState(); return }
     ContentList(R.string.explore, R.string.explore_intro, "screen_EXPLORE") {
@@ -133,7 +140,7 @@ fun ExploreScreen(
             }
         }
         item { SectionHeader(stringResource(R.string.featured_today)) }
-        item { TrackGroup(state.tracks.take(5), language, onTrack) }
+        item { TrackGroup(state.tracks.take(5), language, playbackState, playbackController, onTrack) }
     }
 }
 
@@ -144,7 +151,9 @@ fun DeityDetailScreen(
     language: Language,
     onBack: () -> Unit,
     onTrack: (String) -> Unit,
-    onCategory: (DevotionalCategory) -> Unit
+    onCategory: (DevotionalCategory) -> Unit,
+    playbackState: PlaybackState = PlaybackState(),
+    playbackController: PlaybackController? = null
 ) {
     LaunchedEffect(deityId) { viewModel.load(deityId) }
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -175,7 +184,7 @@ fun DeityDetailScreen(
         }
         state.sections.forEach { section ->
             item { SectionHeader(stringResource(deitySectionNameRes(section.type))) }
-            item { TrackGroup(section.tracks, language, onTrack) }
+            item { TrackGroup(section.tracks, language, playbackState, playbackController, onTrack) }
         }
     }
 }
@@ -201,7 +210,9 @@ fun CategoryDetailScreen(
     category: DevotionalCategory,
     language: Language,
     onBack: () -> Unit,
-    onTrack: (String) -> Unit
+    onTrack: (String) -> Unit,
+    playbackState: PlaybackState = PlaybackState(),
+    playbackController: PlaybackController? = null
 ) {
     LaunchedEffect(category) { viewModel.load(category) }
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -217,7 +228,7 @@ fun CategoryDetailScreen(
             }
         }
         if (state.tracks.isEmpty()) item { EmptyState(stringResource(R.string.empty_category_title), stringResource(R.string.empty_category_body)) }
-        else item { TrackGroup(state.tracks, language, onTrack) }
+        else item { TrackGroup(state.tracks, language, playbackState, playbackController, onTrack) }
     }
 }
 
@@ -232,7 +243,9 @@ fun TrackDetailScreen(
     language: Language,
     onBack: () -> Unit,
     onDeity: (String) -> Unit,
-    onCategory: (DevotionalCategory) -> Unit
+    onCategory: (DevotionalCategory) -> Unit,
+    playbackState: PlaybackState = PlaybackState(),
+    playbackController: PlaybackController? = null
 ) {
     LaunchedEffect(trackId) { viewModel.load(trackId) }
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -254,7 +267,17 @@ fun TrackDetailScreen(
                         MetadataChip(stringResource(R.string.language_label) + ": " + stringResource(if (track.language == Language.HINDI) R.string.language_hindi else R.string.language_english))
                         track.durationMs?.let { duration -> MetadataChip(stringResource(R.string.duration_label) + ": " + formatDuration(duration)) }
                         MetadataChip(stringResource(if (track.lyricsId == null) R.string.lyrics_unavailable else R.string.lyrics_available))
-                        Text(stringResource(R.string.playback_deferred), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        if (track.isPlayable && playbackController != null) {
+                            val current = playbackState.currentTrackId == track.id
+                            val playing = current && playbackState.isPlaying
+                            androidx.compose.material3.Button(
+                                onClick = { if (playing) playbackController.pause() else if (current) playbackController.resume() else playbackController.playTrack(track) },
+                                modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp).testTag("track_play_action")
+                            ) { Text(stringResource(if (playing) R.string.pause else if (current) R.string.resume else R.string.play)) }
+                            Text(stringResource(R.string.demo_audio), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
+                        } else {
+                            Text(stringResource(R.string.demo_audio_unavailable), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
                         OutlinedButton(onClick = { onDeity(track.deityId) }, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp).testTag("track_view_deity")) { Text(stringResource(R.string.view_deity)) }
                         OutlinedButton(onClick = { onCategory(track.category) }, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp).testTag("track_view_category")) { Text(stringResource(R.string.view_category)) }
                     }
@@ -305,7 +328,14 @@ private fun CategoryCard(category: DevotionalCategory, count: Int, modifier: Mod
 
 @Composable private fun LoadingState() { Column(Modifier.fillMaxWidth().padding(Space.xl), horizontalAlignment = Alignment.CenterHorizontally) { CircularProgressIndicator() } }
 @Composable private fun BackButton(onBack: () -> Unit) { IconButton(onClick = onBack, modifier = Modifier.size(48.dp).testTag("back_button")) { Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = stringResource(R.string.back)) } }
-@Composable private fun TrackGroup(tracks: List<Track>, language: Language, onTrack: (String) -> Unit) { Column(verticalArrangement = Arrangement.spacedBy(Space.sm)) { tracks.forEach { TrackRow(it, language) { onTrack(it.id) } } } }
+@Composable private fun TrackGroup(tracks: List<Track>, language: Language, playbackState: PlaybackState, playbackController: PlaybackController?, onTrack: (String) -> Unit) {
+    val queue = playableQueue(tracks)
+    Column(verticalArrangement = Arrangement.spacedBy(Space.sm)) {
+        tracks.forEach { track ->
+            TrackRow(track, language, playbackState, playbackController, queue, onClick = { onTrack(track.id) })
+        }
+    }
+}
 
 @Composable private fun DeityShortcut(deity: Deity, onClick: () -> Unit) {
     Column(Modifier.width(94.dp).heightIn(min = 112.dp).clickable(onClick = onClick).semantics { role = Role.Button }, horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(Space.xs)) {
@@ -321,7 +351,7 @@ private fun CategoryCard(category: DevotionalCategory, count: Int, modifier: Mod
 }
 
 @Composable
-fun SearchScreen(viewModel: SearchViewModel, state: SearchUiState, language: Language, onTrack: (String) -> Unit, onDeity: (String) -> Unit) {
+fun SearchScreen(viewModel: SearchViewModel, state: SearchUiState, language: Language, onTrack: (String) -> Unit, onDeity: (String) -> Unit, playbackState: PlaybackState = PlaybackState(), playbackController: PlaybackController? = null) {
     ContentList(R.string.search, R.string.search_intro, "screen_SEARCH") {
         item {
             OutlinedTextField(
@@ -353,7 +383,7 @@ fun SearchScreen(viewModel: SearchViewModel, state: SearchUiState, language: Lan
                 item { EmptyState(stringResource(R.string.no_results_title), stringResource(R.string.no_results_body)) }
             } else {
                 item { Text(pluralStringResource(R.plurals.search_result_count, state.results.size, state.results.size), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary) }
-                item { TrackGroup(state.results, language, onTrack) }
+                item { TrackGroup(state.results, language, playbackState, playbackController, onTrack) }
             }
         }
         if (state.error) item { Text(stringResource(R.string.preference_error), color = MaterialTheme.colorScheme.error) }
