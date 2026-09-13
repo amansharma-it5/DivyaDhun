@@ -73,6 +73,15 @@
     <string name="pause_track">%1$s रोकें</string>
     <string name="playback_error">यह डेमो ट्रैक नहीं चल सका।</string>
     <string name="source_label">स्रोत</string>
+    <string name="full_player_title">अभी चल रहा है</string>
+    <string name="player_no_selection">यहाँ देखने के लिए कोई भक्तिमय ट्रैक चुनें।</string>
+    <string name="seek_position">प्लेबैक स्थिति</string>
+    <string name="previous">पिछला</string>
+    <string name="queue">कतार</string>
+    <string name="queue_empty">इस कतार में कोई अन्य चलने योग्य ट्रैक नहीं है।</string>
+    <string name="repeat_off">दोहराव बंद</string>
+    <string name="repeat_all">पूरी कतार दोहराएँ</string>
+    <string name="repeat_one">ट्रैक दोहराएँ</string>
     <string name="browse_by_type">प्रकार से खोजें</string>
     <string name="browse_by_deity">देवता से खोजें</string>
     <string name="featured_today">आज की भक्ति</string>

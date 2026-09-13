@@ -2,7 +2,14 @@
 
 Your Daily Bhakti. Bhakti, bas ek tap mein.
 
-DivyaDhun is an Android-first devotional discovery experience. **Phase 4 adds the first playback foundation: Media3-backed bundled demo audio, a background `MediaSessionService`, transport controls, and a compact mini player.** Production devotional recordings and advanced player experiences remain future work.
+DivyaDhun is an Android-first devotional listening experience. **Phase 5 adds a full player on top of the Phase 4 playback foundation: Media3-backed bundled demo audio, a background `MediaSessionService`, synchronized transport controls, queue browsing, seek, and repeat.** Production devotional recordings and library features remain future work.
+
+## Phase 5 completed features
+
+- The mini player opens a full-screen player without creating a second playback engine. The player observes the same controller state as the notification and background service.
+- Full-player artwork, localized title/source, elapsed and total duration, seek bar, previous, play/pause, next, repeat (off/all/one), queue rows, and playback error state are available for the five bundled demo fixtures.
+- Selecting a queue row starts that track through the existing service-owned Media3 controller. Metadata-only catalog rows remain honest discovery surfaces and never expose a non-functional play control.
+- Player controls include localized content descriptions, stable test tags, 48dp-or-larger touch targets, light/dark theme support, and Hindi strings.
 
 ## Phase 4 completed features
 
@@ -52,6 +59,6 @@ The latest validation run passed 16 JVM unit tests and 7 connected emulator test
 
 ## Deferred work and known limitations
 
-The full player, lyrics UI, downloads, widgets, routine sequencing, Mantra/Aarti modes, favorites/history, backend/API, authentication, cloud sync, sharing, subscriptions, analytics, AI, and production devotional recordings remain deferred. Playback currently covers only the five bundled fixtures; metadata-only rows remain discovery surfaces. Notification appearance and lock-screen controls depend on the host Android system and notification policy. Physical-device loudspeaker, TalkBack, and release certification are outside this phase.
+Lyrics UI, downloads, widgets, routine sequencing, Mantra/Aarti modes, favorites/history, backend/API, authentication, cloud sync, sharing, subscriptions, analytics, AI, and production devotional recordings remain deferred. Playback currently covers only the five bundled fixtures; metadata-only rows remain discovery surfaces. Notification appearance and lock-screen controls depend on the host Android system and notification policy. Physical-device loudspeaker, TalkBack, and release certification are outside this phase.
 
-Phase 4 is developed on `feat/divyadhun-phase4-playback`; it is not merged to `main`.
+Phase 5 is developed on `feat/divyadhun-phase5-player`; it is not merged to `main` until its validation and review are complete.

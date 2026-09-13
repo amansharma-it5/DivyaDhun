@@ -7,6 +7,10 @@ enum class PlaybackStatus {
     IDLE, LOADING, READY, PLAYING, PAUSED, ENDED, ERROR
 }
 
+enum class RepeatMode {
+    OFF, ALL, ONE
+}
+
 data class PlaybackState(
     val currentTrackId: String? = null,
     val isPlaying: Boolean = false,
@@ -16,6 +20,7 @@ data class PlaybackState(
     val bufferedPositionMs: Long = 0L,
     val queue: List<String> = emptyList(),
     val currentIndex: Int = -1,
+    val repeatMode: RepeatMode = RepeatMode.OFF,
     val errorMessage: String? = null
 )
 
@@ -29,6 +34,7 @@ interface PlaybackController {
     fun seekTo(positionMs: Long)
     fun skipNext()
     fun skipPrevious()
+    fun toggleRepeatMode()
     fun stop()
     fun release()
 }
@@ -36,3 +42,9 @@ interface PlaybackController {
 fun playableQueue(tracks: List<Track>): List<Track> = tracks.filter { it.isPlayable }
 
 fun queueStartIndex(queue: List<Track>, trackId: String): Int = queue.indexOfFirst { it.id == trackId }
+
+fun nextRepeatMode(mode: RepeatMode): RepeatMode = when (mode) {
+    RepeatMode.OFF -> RepeatMode.ALL
+    RepeatMode.ALL -> RepeatMode.ONE
+    RepeatMode.ONE -> RepeatMode.OFF
+}

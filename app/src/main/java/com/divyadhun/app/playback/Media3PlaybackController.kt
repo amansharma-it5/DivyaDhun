@@ -77,6 +77,14 @@ class Media3PlaybackController(context: Context) : PlaybackController {
     override fun seekTo(positionMs: Long) = withController { it.seekTo(positionMs.coerceAtLeast(0L)) }
     override fun skipNext() = withController { if (it.hasNextMediaItem()) it.seekToNextMediaItem() }
     override fun skipPrevious() = withController { if (it.hasPreviousMediaItem()) it.seekToPreviousMediaItem() else it.seekTo(0L) }
+    override fun toggleRepeatMode() = withController {
+        it.repeatMode = when (it.repeatMode) {
+            Player.REPEAT_MODE_OFF -> Player.REPEAT_MODE_ALL
+            Player.REPEAT_MODE_ALL -> Player.REPEAT_MODE_ONE
+            else -> Player.REPEAT_MODE_OFF
+        }
+        publish(it)
+    }
     override fun stop() = withController { it.stop(); it.clearMediaItems() }
 
     private fun withController(action: (MediaController) -> Unit) {
@@ -102,6 +110,11 @@ class Media3PlaybackController(context: Context) : PlaybackController {
             bufferedPositionMs = player.bufferedPosition.coerceAtLeast(0L),
             queue = (0 until player.mediaItemCount).map { player.getMediaItemAt(it).mediaId },
             currentIndex = player.currentMediaItemIndex,
+            repeatMode = when (player.repeatMode) {
+                Player.REPEAT_MODE_ONE -> RepeatMode.ONE
+                Player.REPEAT_MODE_ALL -> RepeatMode.ALL
+                else -> RepeatMode.OFF
+            },
             errorMessage = if (status == PlaybackStatus.ERROR) "Unable to play this demo track." else null
         )
     }

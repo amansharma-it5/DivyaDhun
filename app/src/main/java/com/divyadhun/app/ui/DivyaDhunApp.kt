@@ -74,6 +74,7 @@ enum class Destination {
 private const val DEITY_ROUTE = "deity/{deityId}"
 private const val CATEGORY_ROUTE = "category/{categoryName}"
 private const val TRACK_ROUTE = "track/{trackId}"
+private const val PLAYER_ROUTE = "player"
 
 @Composable
 fun DivyaDhunApp(model: ShellViewModel) {
@@ -125,7 +126,7 @@ private fun AppShell(shellState: ShellUiState, exploreViewModel: ExploreViewMode
 
     Scaffold(bottomBar = {
         androidx.compose.foundation.layout.Column {
-            if (currentTrack != null) MiniPlayer(currentTrack, shellState.preferences.language, playbackState, playbackController) { nav.navigate("track/${currentTrack.id}") }
+            if (currentTrack != null) MiniPlayer(currentTrack, shellState.preferences.language, playbackState, playbackController) { nav.navigate(PLAYER_ROUTE) }
             NavigationBar {
                 Destination.entries.forEach { destination ->
                     NavigationBarItem(
@@ -167,6 +168,12 @@ private fun AppShell(shellState: ShellUiState, exploreViewModel: ExploreViewMode
                 val trackId = backStackEntry.arguments?.getString("trackId").orEmpty()
                 val trackViewModel: TrackDetailViewModel = viewModel()
                 TrackDetailScreen(trackViewModel, trackId, shellState.preferences.language, { nav.popBackStack() }, { nav.navigate("deity/$it") }, { nav.navigate("category/${it.name}") }, playbackState, playbackController)
+            }
+            composable(PLAYER_ROUTE) {
+                val queueTracks = playbackState.queue.mapNotNull { id -> exploreState.tracks.firstOrNull { it.id == id } }
+                FullPlayerScreen(currentTrack, queueTracks, shellState.preferences.language, playbackState, playbackController, { nav.popBackStack() }) { selected ->
+                    playbackController.playTrack(selected, queueTracks.ifEmpty { listOf(selected) })
+                }
             }
         }
     }

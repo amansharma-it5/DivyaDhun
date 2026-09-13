@@ -3,6 +3,8 @@ package com.divyadhun.app
 import com.divyadhun.app.data.LocalContentRepository
 import com.divyadhun.app.playback.playableQueue
 import com.divyadhun.app.playback.queueStartIndex
+import com.divyadhun.app.playback.RepeatMode
+import com.divyadhun.app.playback.nextRepeatMode
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -24,5 +26,12 @@ class PlaybackQueueTest {
         assertEquals(0, queueStartIndex(queue, queue.first().id))
         assertEquals(-1, queueStartIndex(queue, "missing"))
         assertEquals(queue.lastIndex, queueStartIndex(queue, queue.last().id))
+    }
+
+    @Test
+    fun repeatModeCyclesWithoutSkippingStates() {
+        assertEquals(RepeatMode.ALL, nextRepeatMode(RepeatMode.OFF))
+        assertEquals(RepeatMode.ONE, nextRepeatMode(RepeatMode.ALL))
+        assertEquals(RepeatMode.OFF, nextRepeatMode(RepeatMode.ONE))
     }
 }
