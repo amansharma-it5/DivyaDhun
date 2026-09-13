@@ -48,6 +48,8 @@ Windows:
 
 The debug APK is `app/build/outputs/apk/debug/app-debug.apk`. Unit reports are under `app/build/test-results`; instrumentation reports are under `app/build/outputs/androidTest-results`; lint writes `app/build/reports/lint-results-debug.html`.
 
+The latest validation run passed 16 JVM unit tests and 7 connected emulator tests (Phase 2, Phase 3, and Phase 4 flows). `lintDebug` completed with zero errors and 13 non-critical warnings, and `assembleDebug` completed successfully. The emulator flow verified onboarding, local search, a playable demo result, the mini player, play/pause, and stop; audible loudspeaker output and system lock-screen presentation still depend on the host device.
+
 ## Deferred work and known limitations
 
 The full player, lyrics UI, downloads, widgets, routine sequencing, Mantra/Aarti modes, favorites/history, backend/API, authentication, cloud sync, sharing, subscriptions, analytics, AI, and production devotional recordings remain deferred. Playback currently covers only the five bundled fixtures; metadata-only rows remain discovery surfaces. Notification appearance and lock-screen controls depend on the host Android system and notification policy. Physical-device loudspeaker, TalkBack, and release certification are outside this phase.
