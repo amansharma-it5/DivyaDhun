@@ -2,21 +2,24 @@
 
 Your Daily Bhakti. Bhakti, bas ek tap mein.
 
-DivyaDhun is an Android-first devotional discovery experience. **Phase 2 adds first-use onboarding, English/Hindi localization, persisted preferences, and a local metadata catalog. Audio playback is intentionally not implemented yet.**
+DivyaDhun is an Android-first devotional discovery experience. **Phase 3 adds a polished personalized Home, data-backed Explore discovery, reusable category/deity/track detail surfaces, and richer English/Hindi navigation. Audio playback is intentionally not implemented yet.**
 
-## Phase 2 completed features
+## Phase 3 completed features
 
-- Four-step onboarding: welcome, language, favorite deities, and normal listening time.
-- English and Hindi strings with persisted app language selection.
-- Multi-select deity preferences and Morning, Evening, Before Sleep, or Anytime listening preference.
-- Home sections backed by local content: Your Gods, Aaj Ki Bhakti, Popular Aartis, and Mantras.
-- Explore by devotional type or deity, reusable deity detail, honest track information, and local search.
-- My Bhakti preferences for language, deities, listening time, and System/Light/Dark appearance.
-- Original Compose-drawn devotional artwork with accessible selection semantics and minimum touch targets.
+- Four-step onboarding remains available for new users: welcome, language, favorite deities, and listening time.
+- Home uses a pure `HomeContentAssembler` for deterministic Your Gods, Recommended, Aaj Ki Bhakti, Popular Aartis, and Mantras sections.
+- Explore presents all six devotional categories with localized descriptions and counts, plus all eight deities.
+- One reusable Category Detail destination supports Aarti, Bhajan, Mantra, Chalisa, Stotra, and Meditation.
+- One reusable Deity Detail destination shows invocation, original artwork, available category chips, featured content, and only non-empty groups.
+- Track Detail shows honest metadata and links back to its deity or category without fake playback controls.
+- Search results open Track Detail and matching deity suggestions open Deity Detail.
+- English and Hindi resources cover Home, Explore, detail surfaces, metadata, empty states, and navigation.
+- My Bhakti preferences remain persisted for language, deities, listening time, and System/Light/Dark appearance.
+- Original Compose-drawn artwork uses restrained deity-specific accents with accessible touch targets and selection semantics.
 
 ## Architecture
 
-The single `app` module remains small and inspectable. `domain.model` contains immutable `Deity`, `Track`, `Lyrics`, `DevotionalCollection`, `DevotionalCategory`, `Language`, and `ListeningTime` types. `data.ContentRepository` is the UI-independent catalog contract, implemented by `LocalContentRepository`. `UserPreferencesRepository` owns the single DataStore and exposes immutable preference state through `Flow`. Feature ViewModels keep loading, search, onboarding, and preference changes out of Composables. Navigation Compose handles onboarding, the main shell, deity/category/track routes, and back-stack behavior.
+The single `app` module remains small and inspectable. `domain.model` contains immutable `Deity`, `Track`, `Lyrics`, `DevotionalCollection`, `DevotionalCategory`, `Language`, and `ListeningTime` types. `data.ContentRepository` is the UI-independent catalog contract, implemented by `LocalContentRepository`. `UserPreferencesRepository` owns the single DataStore and exposes immutable preference state through `Flow`. `HomeContentAssembler` keeps deterministic personalization and section assembly out of Composables. Feature ViewModels keep loading, search, onboarding, detail assembly, and preference changes out of Composables. Navigation Compose handles onboarding, the main shell, deity/category/track routes, and back-stack behavior.
 
 Locale changes use Android application locale APIs on API 33+ and a compatibility configuration update below that level. The selected onboarding step is persisted so a locale-triggered Activity recreation resumes safely.
 
@@ -43,10 +46,10 @@ The debug APK is `app/build/outputs/apk/debug/app-debug.apk`. Unit test reports 
 
 ## Content and asset safety
 
-Phase 2 includes no MP3s, commercial recordings, embedded streaming URLs, scraped services, or downloaded photographs. Deity visuals are original Compose-drawn symbols. Traditional titles are metadata only and use neutral sources such as Traditional or DivyaDhun Demo; no singer or label is falsely attributed. Future recordings and artwork require documented rights.
+Phase 3 includes no MP3s, commercial recordings, embedded streaming URLs, scraped services, commercial album artwork, or downloaded photographs. Deity visuals are original Compose-drawn symbols with local accents. Traditional titles are metadata only and use neutral sources such as Traditional or DivyaDhun Demo; no singer or label is falsely attributed. Future recordings and artwork require documented rights.
 
 ## Deferred work and known limitations
 
-Media3/ExoPlayer, playback services, mini/full player, downloads, notifications, widgets, backend/API, authentication, cloud sync, favorites/history, lyrics UI, daily sequencing, Mantra/Aarti modes, sharing, subscriptions, analytics, AI, and production devotional recordings remain deferred. Search is intentionally deterministic local matching, not fuzzy or transliteration search. Physical-device, TalkBack, and production-release certification are outside this phase.
+Media3/ExoPlayer, playback services, MediaSession, mini/full player, downloads, notifications, widgets, backend/API, authentication, cloud sync, favorites/history, lyrics UI, daily sequencing, Mantra/Aarti modes, sharing, subscriptions, analytics, AI, and production devotional recordings remain deferred. Search is intentionally deterministic local matching, not fuzzy or transliteration search. Physical-device, TalkBack, and production-release certification are outside this phase.
 
-The app stays on `feat/divyadhun-phase2-content`; this work is not merged to the default branch.
+Phase 3 is developed on `feat/divyadhun-phase3-discovery` and is not merged to `main`.
