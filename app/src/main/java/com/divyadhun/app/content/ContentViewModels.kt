@@ -19,6 +19,7 @@ data class HomeUiState(
     val deities: List<Deity> = emptyList(),
     val tracks: List<Track> = emptyList(),
     val preferredDeityIds: Set<String> = emptySet(),
+    val content: HomeContent = HomeContent(),
     val loaded: Boolean = false,
     val error: Boolean = false
 )
@@ -34,8 +35,15 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
             try {
                 val deities = content.getDeities()
                 val tracks = content.getTracks()
+                val assembler = HomeContentAssembler(deities, tracks)
                 preferences.preferences.collect { user ->
-                    mutableState.value = HomeUiState(deities, tracks, user.preferredDeityIds, loaded = true)
+                    mutableState.value = HomeUiState(
+                        deities = deities,
+                        tracks = tracks,
+                        preferredDeityIds = user.preferredDeityIds,
+                        content = assembler.assemble(user.preferredDeityIds),
+                        loaded = true
+                    )
                 }
             } catch (_: Exception) {
                 mutableState.update { it.copy(loaded = true, error = true) }
@@ -47,6 +55,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 data class ExploreUiState(
     val deities: List<Deity> = emptyList(),
     val tracks: List<Track> = emptyList(),
+    val categoryCounts: Map<DevotionalCategory, Int> = emptyMap(),
     val loaded: Boolean = false,
     val error: Boolean = false
 )
@@ -58,7 +67,15 @@ class ExploreViewModel(application: Application) : AndroidViewModel(application)
 
     init {
         viewModelScope.launch {
-            try { mutableState.value = ExploreUiState(content.getDeities(), content.getTracks(), loaded = true) }
+            try {
+                val tracks = content.getTracks()
+                mutableState.value = ExploreUiState(
+                    deities = content.getDeities(),
+                    tracks = tracks,
+                    categoryCounts = tracks.groupingBy { it.category }.eachCount(),
+                    loaded = true
+                )
+            }
             catch (_: Exception) { mutableState.update { it.copy(loaded = true, error = true) } }
         }
     }
@@ -67,6 +84,7 @@ class ExploreViewModel(application: Application) : AndroidViewModel(application)
 data class SearchUiState(
     val query: String = "",
     val results: List<Track> = emptyList(),
+    val deityResults: List<Deity> = emptyList(),
     val isSearching: Boolean = false,
     val loaded: Boolean = false,
     val error: Boolean = false
@@ -82,7 +100,15 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     fun setQuery(query: String) {
         mutableState.update { it.copy(query = query, isSearching = query.isNotBlank(), error = false) }
         viewModelScope.launch {
-            try { mutableState.update { it.copy(results = if (query.isBlank()) emptyList() else content.search(query), isSearching = false) } }
+            try {
+                mutableState.update {
+                    it.copy(
+                        results = if (query.isBlank()) emptyList() else content.search(query),
+                        deityResults = if (query.isBlank()) emptyList() else content.searchDeities(query),
+                        isSearching = false
+                    )
+                }
+            }
             catch (_: Exception) { mutableState.update { it.copy(isSearching = false, error = true) } }
         }
     }
@@ -93,6 +119,8 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
 data class DeityDetailUiState(
     val deity: Deity? = null,
     val tracks: List<Track> = emptyList(),
+    val sections: List<DeityContentSection> = emptyList(),
+    val availableCategories: List<DevotionalCategory> = emptyList(),
     val loaded: Boolean = false,
     val error: Boolean = false
 )
@@ -105,13 +133,44 @@ class DeityDetailViewModel(application: Application) : AndroidViewModel(applicat
     fun load(deityId: String) {
         if (state.value.loaded && state.value.deity?.id == deityId) return
         viewModelScope.launch {
-            try { mutableState.value = DeityDetailUiState(content.getDeities().firstOrNull { it.id == deityId }, content.getTracksForDeity(deityId), loaded = true) }
+            try {
+                val deity = content.getDeities().firstOrNull { it.id == deityId }
+                val tracks = content.getTracksForDeity(deityId)
+                mutableState.value = DeityDetailUiState(
+                    deity = deity,
+                    tracks = tracks,
+                    sections = deitySections(tracks),
+                    availableCategories = tracks.map { it.category }.distinct(),
+                    loaded = true
+                )
+            }
             catch (_: Exception) { mutableState.update { it.copy(loaded = true, error = true) } }
         }
     }
 }
 
-data class ContentUiState(val tracks: List<Track> = emptyList(), val loaded: Boolean = false, val error: Boolean = false)
+enum class DeitySection { POPULAR, AARTIS, MANTRAS, CHALISA_STOTRA, BHAJANS }
+
+data class DeityContentSection(val type: DeitySection, val tracks: List<Track>)
+
+private fun deitySections(tracks: List<Track>): List<DeityContentSection> {
+    if (tracks.isEmpty()) return emptyList()
+    val groups = listOf(
+        DeitySection.POPULAR to tracks.take(3),
+        DeitySection.AARTIS to tracks.filter { it.category == DevotionalCategory.AARTI },
+        DeitySection.MANTRAS to tracks.filter { it.category == DevotionalCategory.MANTRA },
+        DeitySection.CHALISA_STOTRA to tracks.filter { it.category == DevotionalCategory.CHALISA || it.category == DevotionalCategory.STOTRA },
+        DeitySection.BHAJANS to tracks.filter { it.category == DevotionalCategory.BHAJAN }
+    )
+    return groups.filter { it.second.isNotEmpty() }.map { DeityContentSection(it.first, it.second) }
+}
+
+data class ContentUiState(
+    val category: DevotionalCategory? = null,
+    val tracks: List<Track> = emptyList(),
+    val loaded: Boolean = false,
+    val error: Boolean = false
+)
 
 class CategoryViewModel(application: Application) : AndroidViewModel(application) {
     private val content: ContentRepository = LocalContentRepository()
@@ -120,7 +179,7 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
     fun load(category: DevotionalCategory) {
         if (state.value.loaded) return
         viewModelScope.launch {
-            try { mutableState.value = ContentUiState(content.getTracksByCategory(category), loaded = true) }
+            try { mutableState.value = ContentUiState(category, content.getTracksByCategory(category), loaded = true) }
             catch (_: Exception) { mutableState.update { it.copy(loaded = true, error = true) } }
         }
     }

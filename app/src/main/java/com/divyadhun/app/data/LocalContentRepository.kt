@@ -13,7 +13,7 @@ class LocalContentRepository : ContentRepository {
         Deity("krishna", "deity_krishna", "deity_krishna_description", "krishna", setOf("krishna", "kanha", "kanhaiya", "gopal", "कृष्ण"), setOf(DevotionalCategory.AARTI, DevotionalCategory.BHAJAN, DevotionalCategory.MANTRA)),
         Deity("ram", "deity_ram", "deity_ram_description", "ram", setOf("ram", "rama", "shri ram", "sri ram", "राम"), setOf(DevotionalCategory.AARTI, DevotionalCategory.BHAJAN, DevotionalCategory.MANTRA, DevotionalCategory.CHALISA)),
         Deity("ganesh", "deity_ganesh", "deity_ganesh_description", "ganesh", setOf("ganesh", "ganapati", "गणेश"), setOf(DevotionalCategory.AARTI, DevotionalCategory.BHAJAN, DevotionalCategory.MANTRA, DevotionalCategory.STOTRA)),
-        Deity("durga", "deity_durga", "deity_durga_description", "durga", setOf("durga", "ambe", "jagdambe", "दुर्गा"), setOf(DevotionalCategory.AARTI, DevotionalCategory.BHAJAN, DevotionalCategory.MANTRA)),
+        Deity("durga", "deity_durga", "deity_durga_description", "durga", setOf("durga", "ambe", "jagdambe", "दुर्गा"), setOf(DevotionalCategory.AARTI, DevotionalCategory.BHAJAN, DevotionalCategory.MANTRA, DevotionalCategory.MEDITATION)),
         Deity("lakshmi", "deity_lakshmi", "deity_lakshmi_description", "lakshmi", setOf("lakshmi", "mahalakshmi", "लक्ष्मी"), setOf(DevotionalCategory.AARTI, DevotionalCategory.BHAJAN, DevotionalCategory.MANTRA, DevotionalCategory.STOTRA)),
         Deity("sai", "deity_sai", "deity_sai_description", "sai", setOf("sai", "saibaba", "sai baba", "साईं"), setOf(DevotionalCategory.AARTI, DevotionalCategory.BHAJAN, DevotionalCategory.MANTRA, DevotionalCategory.MEDITATION))
     )
@@ -82,6 +82,15 @@ class LocalContentRepository : ContentRepository {
                 track.artistOrSource.english, track.artistOrSource.hindi, track.deityId,
                 track.category.name, *track.keywords.toTypedArray(), *track.aliases.toTypedArray(), *(deity?.aliases?.toTypedArray() ?: emptyArray())
             ).joinToString(" ") { normalize(it) }
+            haystack.contains(normalizedQuery)
+        }
+    }
+
+    override suspend fun searchDeities(query: String): List<Deity> {
+        val normalizedQuery = normalize(query)
+        if (normalizedQuery.isBlank()) return emptyList()
+        return deities.filter { deity ->
+            val haystack = (listOf(deity.id) + deity.aliases).joinToString(" ") { normalize(it) }
             haystack.contains(normalizedQuery)
         }
     }

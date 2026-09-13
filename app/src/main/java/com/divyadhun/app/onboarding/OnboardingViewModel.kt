@@ -52,12 +52,16 @@ class OnboardingViewModel(application: Application) : AndroidViewModel(applicati
         mutableState.update { it.copy(language = language) }
         viewModelScope.launch { repository.setLanguage(language); onSaved() }
     }
-    fun toggleDeity(id: String) = mutableState.update {
-        val ids = it.selectedDeityIds.toMutableSet()
+    fun toggleDeity(id: String) {
+        val ids = state.value.selectedDeityIds.toMutableSet()
         if (!ids.add(id)) ids.remove(id)
-        it.copy(selectedDeityIds = ids)
+        mutableState.update { it.copy(selectedDeityIds = ids) }
+        viewModelScope.launch { repository.setPreferredDeityIds(ids) }
     }
-    fun selectListeningTime(time: ListeningTime) = mutableState.update { it.copy(listeningTime = time) }
+    fun selectListeningTime(time: ListeningTime) {
+        mutableState.update { it.copy(listeningTime = time) }
+        viewModelScope.launch { repository.setListeningTime(time) }
+    }
 
     fun complete(onComplete: () -> Unit) {
         val current = state.value
