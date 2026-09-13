@@ -1,7 +1,7 @@
 package com.divyadhun.app.data
 
-import com.divyadhun.app.domain.model.Deity
 import com.divyadhun.app.domain.model.DevotionalCategory
+import com.divyadhun.app.domain.model.Deity
 import com.divyadhun.app.domain.model.Track
 
 interface ContentRepository {
@@ -11,4 +11,5 @@ interface ContentRepository {
     suspend fun getTracksForDeity(deityId: String): List<Track>
     suspend fun getTracksByCategory(category: DevotionalCategory): List<Track>
     suspend fun search(query: String): List<Track>
+    suspend fun searchDeities(query: String): List<Deity>
 }

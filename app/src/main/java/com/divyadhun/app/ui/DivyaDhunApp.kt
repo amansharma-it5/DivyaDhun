@@ -137,7 +137,7 @@ private fun AppShell(shellState: ShellUiState, exploreViewModel: ExploreViewMode
         NavHost(navController = nav, startDestination = Destination.HOME.name, modifier = Modifier.padding(padding)) {
             composable(Destination.HOME.name) { HomeScreen(homeState, shellState.preferences.language, { nav.navigate(Destination.EXPLORE.name) }, { nav.navigate("deity/$it") }, { nav.navigate("track/$it") }) }
             composable(Destination.EXPLORE.name) { ExploreScreen(exploreState, shellState.preferences.language, { nav.navigate("deity/$it") }, { nav.navigate("category/${it.name}") }, { nav.navigate("track/$it") }) }
-            composable(Destination.SEARCH.name) { SearchScreen(searchViewModel, searchState, shellState.preferences.language, { nav.navigate("track/$it") }) }
+            composable(Destination.SEARCH.name) { SearchScreen(searchViewModel, searchState, shellState.preferences.language, { nav.navigate("track/$it") }, { nav.navigate("deity/$it") }) }
             composable(Destination.LIBRARY.name) {
                 LibraryScreen(preferencesState, exploreState.deities, preferencesViewModel::setTheme,
                     onLanguage = { language -> preferencesViewModel.setLanguage(language); LocaleController.apply(context, language) },
@@ -146,18 +146,18 @@ private fun AppShell(shellState: ShellUiState, exploreViewModel: ExploreViewMode
             composable(DEITY_ROUTE, arguments = listOf(navArgument("deityId") { type = NavType.StringType })) { backStackEntry ->
                 val deityId = backStackEntry.arguments?.getString("deityId").orEmpty()
                 val detailViewModel: DeityDetailViewModel = viewModel()
-                DeityDetailScreen(detailViewModel, deityId, shellState.preferences.language, { nav.popBackStack() }, { nav.navigate("track/$it") })
+                DeityDetailScreen(detailViewModel, deityId, shellState.preferences.language, { nav.popBackStack() }, { nav.navigate("track/$it") }, { nav.navigate("category/${it.name}") })
             }
             composable(CATEGORY_ROUTE, arguments = listOf(navArgument("categoryName") { type = NavType.StringType })) { backStackEntry ->
                 val category = backStackEntry.arguments?.getString("categoryName")?.let { runCatching { DevotionalCategory.valueOf(it) }.getOrNull() }
                 val categoryViewModel: CategoryViewModel = viewModel()
-                if (category != null) CategoryScreen(categoryViewModel, category, shellState.preferences.language, { nav.popBackStack() }, { nav.navigate("track/$it") })
-                else EmptyState(stringResource(R.string.unknown_deity), stringResource(R.string.no_results_body))
+                if (category != null) CategoryDetailScreen(categoryViewModel, category, shellState.preferences.language, { nav.popBackStack() }, { nav.navigate("track/$it") })
+                else NotFoundScreen { nav.popBackStack() }
             }
             composable(TRACK_ROUTE, arguments = listOf(navArgument("trackId") { type = NavType.StringType })) { backStackEntry ->
                 val trackId = backStackEntry.arguments?.getString("trackId").orEmpty()
                 val trackViewModel: TrackDetailViewModel = viewModel()
-                TrackDetailScreen(trackViewModel, trackId, shellState.preferences.language, { nav.popBackStack() })
+                TrackDetailScreen(trackViewModel, trackId, shellState.preferences.language, { nav.popBackStack() }, { nav.navigate("deity/$it") }, { nav.navigate("category/${it.name}") })
             }
         }
     }

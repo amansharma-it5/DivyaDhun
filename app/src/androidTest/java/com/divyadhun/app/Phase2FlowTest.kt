@@ -16,13 +16,13 @@ class Phase2FlowTest {
         val context = ApplicationProvider.getApplicationContext<android.content.Context>()
         runBlocking { UserPreferencesRepository(context).resetForTest() }
         rule.activityRule.scenario.recreate()
-        rule.waitUntil(10000) { rule.onAllNodesWithTag("screen_ONBOARDING").fetchSemanticsNodes().isNotEmpty() }
+        waitForTag("screen_ONBOARDING")
     }
 
     @Test fun newUserCompletesHindiFlowAndRestartSkipsOnboarding() {
         rule.onNodeWithTag("onboarding_get_started").performClick()
         rule.onNodeWithTag("onboarding_language_HINDI").performClick()
-        rule.waitUntil(10000) { rule.onAllNodesWithTag("onboarding_language_HINDI").fetchSemanticsNodes().isNotEmpty() }
+        waitForTag("onboarding_language_HINDI")
         rule.onNodeWithText("अपनी भाषा चुनें").assertIsDisplayed()
         rule.onNodeWithTag("onboarding_language_HINDI").assertIsSelected()
         rule.onNodeWithTag("onboarding_continue").performClick()
@@ -31,11 +31,11 @@ class Phase2FlowTest {
         rule.onNodeWithTag("onboarding_continue").performClick()
         rule.onNodeWithTag("onboarding_time_MORNING").performClick()
         rule.onNodeWithTag("onboarding_finish").performClick()
-        rule.waitUntil(10000) { rule.onAllNodesWithTag("screen_HOME").fetchSemanticsNodes().isNotEmpty() }
+        waitForTag("screen_HOME")
         rule.onAllNodesWithText("आपकी दैनिक भक्ति").assertCountEquals(2)
         rule.onNodeWithText("हनुमान").assertIsDisplayed()
         rule.activityRule.scenario.recreate()
-        rule.waitUntil(10000) { rule.onAllNodesWithTag("screen_HOME").fetchSemanticsNodes().isNotEmpty() }
+        waitForTag("screen_HOME")
         rule.onNodeWithTag("screen_HOME").assertIsDisplayed()
         rule.onNodeWithTag("screen_ONBOARDING").assertDoesNotExist()
     }
@@ -49,7 +49,7 @@ class Phase2FlowTest {
         }
         rule.onNodeWithTag("tab_SEARCH").performClick()
         rule.onNodeWithTag("search_field").performTextInput("mahadev")
-        rule.waitUntil(10000) { rule.onAllNodesWithText("Om Namah Shivaya").fetchSemanticsNodes().isNotEmpty() }
+        waitForText("Om Namah Shivaya")
         rule.onNodeWithText("Om Namah Shivaya").assertIsDisplayed()
     }
 
@@ -57,20 +57,20 @@ class Phase2FlowTest {
         completeWithSkips()
         rule.onNodeWithTag("tab_LIBRARY").performClick()
         rule.onNodeWithTag("setting_language_HINDI").performClick()
-        rule.waitUntil(10000) { rule.onAllNodesWithTag("setting_language_HINDI").fetchSemanticsNodes().isNotEmpty() }
+        waitForTag("setting_language_HINDI")
         rule.onNodeWithTag("setting_deities").performClick()
         rule.onNodeWithTag("setting_deity_hanuman").performClick()
         rule.onNodeWithTag("setting_deities_done").performClick()
-        rule.waitUntil(5000) { rule.onAllNodesWithText("हनुमान").fetchSemanticsNodes().isNotEmpty() }
+        waitForText("हनुमान")
         rule.onNodeWithText("हनुमान").assertIsDisplayed()
         rule.onNodeWithTag("setting_time").performClick()
         rule.onNodeWithTag("setting_time_EVENING").performClick()
         rule.onNodeWithTag("screen_LIBRARY").performScrollToNode(hasTestTag("theme_DARK"))
         rule.onNodeWithTag("theme_DARK").performClick()
         rule.activityRule.scenario.recreate()
-        rule.waitUntil(10000) { rule.onAllNodesWithTag("screen_LIBRARY").fetchSemanticsNodes().isNotEmpty() }
+        waitForTag("screen_LIBRARY")
         rule.onNodeWithTag("setting_language_HINDI").assertIsSelected()
-        rule.waitUntil(5000) { rule.onAllNodesWithText("हनुमान").fetchSemanticsNodes().isNotEmpty() }
+        waitForText("हनुमान")
         rule.onNodeWithText("हनुमान").assertIsDisplayed()
         rule.onNodeWithTag("screen_LIBRARY").performScrollToNode(hasTestTag("theme_DARK"))
         rule.onNodeWithTag("theme_DARK").assertIsSelected()
@@ -81,6 +81,17 @@ class Phase2FlowTest {
         rule.onNodeWithTag("onboarding_continue").performClick()
         rule.onNodeWithTag("onboarding_skip").performClick()
         rule.onNodeWithTag("onboarding_skip").performClick()
-        rule.waitUntil(10000) { rule.onAllNodesWithTag("screen_HOME").fetchSemanticsNodes().isNotEmpty() }
+        waitForTag("screen_HOME")
+    }
+    private fun waitForTag(tag: String) {
+        rule.waitUntil(10000) {
+            runCatching { rule.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty() }.getOrDefault(false)
+        }
+    }
+
+    private fun waitForText(text: String) {
+        rule.waitUntil(10000) {
+            runCatching { rule.onAllNodesWithText(text).fetchSemanticsNodes().isNotEmpty() }.getOrDefault(false)
+        }
     }
 }

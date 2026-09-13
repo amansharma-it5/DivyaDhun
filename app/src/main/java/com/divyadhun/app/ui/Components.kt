@@ -12,7 +12,10 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import com.divyadhun.app.R
 import com.divyadhun.app.domain.model.Deity
@@ -31,17 +34,17 @@ import com.divyadhun.app.ui.theme.*
  }
 }
 @Composable fun TrackArtwork(track: Track, modifier: Modifier) {
- DevotionalArtwork(modifier, LocalDevotionalColors.current.gold)
+ DevotionalArtwork(modifier, deityVisualStyle(track.deityId).accent)
 }
 @Composable fun DeityArtwork(deity: Deity, modifier: Modifier) {
- val tint = when (deity.id) {
-  "shiv", "sai" -> LocalDevotionalColors.current.gold
-  "durga", "lakshmi" -> Color(0xFFE28B54)
-  else -> LocalDevotionalColors.current.accent
- }
- DevotionalArtwork(modifier, tint)
+ DevotionalArtwork(modifier, deityVisualStyle(deity.id).accent)
 }
 @Composable fun SectionHeader(title: String) { Text(title, style = MaterialTheme.typography.titleLarge) }
+@Composable fun MetadataChip(label: String, modifier: Modifier = Modifier) {
+ Surface(modifier = modifier, color = MaterialTheme.colorScheme.secondaryContainer, shape = MaterialTheme.shapes.small) {
+  Text(label, Modifier.padding(horizontal = Space.sm, vertical = Space.xs), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSecondaryContainer)
+ }
+}
 @Composable fun EmptyState(title: String, body: String) {
  Surface(color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = .5f), shape = MaterialTheme.shapes.large) {
   Column(Modifier.fillMaxWidth().padding(Space.lg), verticalArrangement = Arrangement.spacedBy(Space.sm)) {
@@ -57,7 +60,7 @@ import com.divyadhun.app.ui.theme.*
 @Composable fun TrackRow(track: Track, language: Language, onClick: () -> Unit) {
  val trackInfoDescription = stringResource(R.string.open_track_info)
  Card(
-  modifier = Modifier.fillMaxWidth().heightIn(min = 76.dp).clickable(onClick = onClick).semantics { contentDescription = trackInfoDescription },
+  modifier = Modifier.fillMaxWidth().heightIn(min = 76.dp).clickable(onClick = onClick).semantics { contentDescription = trackInfoDescription; role = Role.Button }.testTag("track_${track.id}"),
   colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = .52f))
  ) {
   Row(Modifier.fillMaxWidth().padding(Space.md), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Space.md)) {
@@ -66,7 +69,7 @@ import com.divyadhun.app.ui.theme.*
     LocalizedText(track.title, language, style = MaterialTheme.typography.titleMedium)
     LocalizedText(track.subtitle, language, color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.bodyMedium)
    }
-   Text(stringResource(categoryNameRes(track.category)), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
+   MetadataChip(stringResource(categoryNameRes(track.category)))
   }
  }
 }

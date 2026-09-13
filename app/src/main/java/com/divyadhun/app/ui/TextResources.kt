@@ -5,6 +5,7 @@ import com.divyadhun.app.R
 import com.divyadhun.app.domain.model.DevotionalCategory
 import com.divyadhun.app.domain.model.Language
 import com.divyadhun.app.domain.model.ListeningTime
+import com.divyadhun.app.content.DeitySection
 
 @StringRes fun deityNameRes(id: String) = when (id) {
     "hanuman" -> R.string.deity_hanuman
@@ -37,6 +38,35 @@ import com.divyadhun.app.domain.model.ListeningTime
     DevotionalCategory.CHALISA -> R.string.category_chalisa
     DevotionalCategory.STOTRA -> R.string.category_stotra
     DevotionalCategory.MEDITATION -> R.string.category_meditation
+}
+
+@StringRes fun categoryDescriptionRes(category: DevotionalCategory) = when (category) {
+    DevotionalCategory.AARTI -> R.string.category_aarti_description
+    DevotionalCategory.BHAJAN -> R.string.category_bhajan_description
+    DevotionalCategory.MANTRA -> R.string.category_mantra_description
+    DevotionalCategory.CHALISA -> R.string.category_chalisa_description
+    DevotionalCategory.STOTRA -> R.string.category_stotra_description
+    DevotionalCategory.MEDITATION -> R.string.category_meditation_description
+}
+
+@StringRes fun deityInvocationRes(id: String) = when (id) {
+    "hanuman" -> R.string.invocation_hanuman
+    "shiv" -> R.string.invocation_shiv
+    "krishna" -> R.string.invocation_krishna
+    "ram" -> R.string.invocation_ram
+    "ganesh" -> R.string.invocation_ganesh
+    "durga" -> R.string.invocation_durga
+    "lakshmi" -> R.string.invocation_lakshmi
+    "sai" -> R.string.invocation_sai
+    else -> R.string.invocation_generic
+}
+
+@StringRes fun deitySectionNameRes(section: DeitySection) = when (section) {
+    DeitySection.POPULAR -> R.string.section_popular
+    DeitySection.AARTIS -> R.string.section_aartis
+    DeitySection.MANTRAS -> R.string.section_mantras
+    DeitySection.CHALISA_STOTRA -> R.string.section_chalisa_stotra
+    DeitySection.BHAJANS -> R.string.section_bhajans
 }
 
 @StringRes fun listeningTimeNameRes(time: ListeningTime) = when (time) {
