@@ -5,6 +5,7 @@ compose = "2026.02.01"
 activity = "1.8.2"
 navigation = "2.9.0"
 datastore = "1.1.7"
+media3 = "1.6.1"
 [libraries]
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose" }
 compose-ui = { module = "androidx.compose.ui:ui" }
@@ -12,11 +13,14 @@ compose-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compose-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 compose-material3 = { module = "androidx.compose.material3:material3" }
 compose-icons = { module = "androidx.compose.material:material-icons-core" }
+compose-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
 compose-test = { module = "androidx.compose.ui:ui-test-junit4" }
 compose-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
 navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation" }
 datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
+media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3" }
+media3-session = { module = "androidx.media3:media3-session", version.ref = "media3" }
 lifecycle = { module = "androidx.lifecycle:lifecycle-runtime-compose", version = "2.9.0" }
 viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version = "2.9.0" }
 junit = { module = "junit:junit", version = "4.13.2" }
@@ -25,4 +29,3 @@ test-runner = { module = "androidx.test:runner", version = "1.6.2" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-

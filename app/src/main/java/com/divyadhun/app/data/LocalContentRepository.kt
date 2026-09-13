@@ -4,6 +4,7 @@ import com.divyadhun.app.domain.model.Deity
 import com.divyadhun.app.domain.model.DevotionalCategory
 import com.divyadhun.app.domain.model.LocalizedText
 import com.divyadhun.app.domain.model.Track
+import com.divyadhun.app.domain.model.AudioSource
 import java.util.Locale
 
 class LocalContentRepository : ContentRepository {
@@ -22,22 +23,22 @@ class LocalContentRepository : ContentRepository {
         track("hanuman_chalisa", "Hanuman Chalisa", "हनुमान चालीसा", "A timeless prayer", "एक शाश्वत प्रार्थना", "hanuman", DevotionalCategory.CHALISA, setOf("hanuman", "bajrangbali", "हनुमान")),
         track("hanuman_aarti", "Aarti Kije Hanuman Lala Ki", "आरती कीजै हनुमान लला की", "Traditional prayer", "पारंपरिक प्रार्थना", "hanuman", DevotionalCategory.AARTI, setOf("aarti", "hanuman", "हनुमान")),
         track("bajrang_baan", "Bajrang Baan", "बजरंग बाण", "Traditional prayer", "पारंपरिक प्रार्थना", "hanuman", DevotionalCategory.BHAJAN, setOf("bajrang baan", "bajrangbali")),
-        track("hanuman_mantra", "Hanuman Mantra", "हनुमान मंत्र", "DivyaDhun Demo", "दिव्यधुन डेमो", "hanuman", DevotionalCategory.MANTRA, setOf("mantra", "pawanputra")),
-        track("om_namah_shivaya", "Om Namah Shivaya", "ॐ नमः शिवाय", "A meditative chant", "एक ध्यान मंत्र", "shiv", DevotionalCategory.MANTRA, setOf("shiv", "mahadev", "शिव", "महादेव")),
+        track("hanuman_mantra", "Hanuman Mantra", "हनुमान मंत्र", "DivyaDhun Demo Audio", "दिव्यधुन डेमो ऑडियो", "hanuman", DevotionalCategory.MANTRA, setOf("mantra", "pawanputra"), "demo_hanuman_dhun"),
+        track("om_namah_shivaya", "Om Namah Shivaya", "ॐ नमः शिवाय", "DivyaDhun Demo Audio", "दिव्यधुन डेमो ऑडियो", "shiv", DevotionalCategory.MANTRA, setOf("shiv", "mahadev", "शिव", "महादेव"), "demo_shiv_dhun"),
         track("mahamrityunjaya_mantra", "Mahamrityunjaya Mantra", "महामृत्युंजय मंत्र", "Traditional prayer", "पारंपरिक प्रार्थना", "shiv", DevotionalCategory.MANTRA, setOf("mrityunjaya", "mahadev")),
         track("shiv_aarti", "Shiv Aarti", "शिव आरती", "Traditional prayer", "पारंपरिक प्रार्थना", "shiv", DevotionalCategory.AARTI, setOf("aarti", "shiva")),
         track("shiv_tandav_stotram", "Shiv Tandav Stotram", "शिव तांडव स्तोत्रम्", "Traditional prayer", "पारंपरिक प्रार्थना", "shiv", DevotionalCategory.STOTRA, setOf("tandav", "stotram", "bholenath")),
         track("krishna_aarti", "Krishna Aarti", "कृष्ण आरती", "Traditional prayer", "पारंपरिक प्रार्थना", "krishna", DevotionalCategory.AARTI, setOf("aarti", "krishna", "कृष्ण")),
         track("achyutam_keshavam", "Achyutam Keshavam", "अच्युतम केशवम्", "Traditional prayer", "पारंपरिक प्रार्थना", "krishna", DevotionalCategory.BHAJAN, setOf("achyutam", "gopal")),
-        track("hare_krishna_mantra", "Hare Krishna Mantra", "हरे कृष्ण मंत्र", "DivyaDhun Demo", "दिव्यधुन डेमो", "krishna", DevotionalCategory.MANTRA, setOf("hare krishna", "kanha")),
+        track("hare_krishna_mantra", "Hare Krishna Mantra", "हरे कृष्ण मंत्र", "DivyaDhun Demo Audio", "दिव्यधुन डेमो ऑडियो", "krishna", DevotionalCategory.MANTRA, setOf("hare krishna", "kanha"), "demo_krishna_dhun"),
         track("gopal_bhajan", "Gopal Bhajan", "गोपाल भजन", "Traditional prayer", "पारंपरिक प्रार्थना", "krishna", DevotionalCategory.BHAJAN, setOf("gopal", "kanhaiya")),
         track("shri_ram_aarti", "Shri Ram Aarti", "श्री राम आरती", "Traditional prayer", "पारंपरिक प्रार्थना", "ram", DevotionalCategory.AARTI, setOf("aarti", "shri ram", "राम")),
-        track("shri_ram_jai_ram", "Shri Ram Jai Ram Mantra", "श्री राम जय राम मंत्र", "A meditative chant", "एक ध्यान मंत्र", "ram", DevotionalCategory.MANTRA, setOf("mantra", "rama")),
+        track("shri_ram_jai_ram", "Shri Ram Jai Ram Mantra", "श्री राम जय राम मंत्र", "DivyaDhun Demo Audio", "दिव्यधुन डेमो ऑडियो", "ram", DevotionalCategory.MANTRA, setOf("mantra", "rama"), "demo_ram_dhun"),
         track("ram_bhajan", "Ram Bhajan", "राम भजन", "Traditional prayer", "पारंपरिक प्रार्थना", "ram", DevotionalCategory.BHAJAN, setOf("bhajan", "sri ram")),
         track("ram_stuti", "Ram Stuti", "राम स्तुति", "Traditional prayer", "पारंपरिक प्रार्थना", "ram", DevotionalCategory.CHALISA, setOf("stuti", "shri ram")),
         track("jai_ganesh_deva", "Jai Ganesh Deva", "जय गणेश देवा", "Traditional prayer", "पारंपरिक प्रार्थना", "ganesh", DevotionalCategory.AARTI, setOf("aarti", "ganesh", "गणेश")),
         track("vakratunda_mahakaya", "Vakratunda Mahakaya", "वक्रतुंड महाकाय", "Traditional prayer", "पारंपरिक प्रार्थना", "ganesh", DevotionalCategory.MANTRA, setOf("vakratunda", "ganapati")),
-        track("ganesh_mantra", "Ganesh Mantra", "गणेश मंत्र", "DivyaDhun Demo", "दिव्यधुन डेमो", "ganesh", DevotionalCategory.MANTRA, setOf("mantra", "ganesh")),
+        track("ganesh_mantra", "Ganesh Mantra", "गणेश मंत्र", "DivyaDhun Demo Audio", "दिव्यधुन डेमो ऑडियो", "ganesh", DevotionalCategory.MANTRA, setOf("mantra", "ganesh"), "demo_ganesh_dhun"),
         track("ganesh_bhajan", "Ganesh Bhajan", "गणेश भजन", "Traditional prayer", "पारंपरिक प्रार्थना", "ganesh", DevotionalCategory.BHAJAN, setOf("bhajan", "ganapati")),
         track("ambe_tu_hai", "Ambe Tu Hai Jagdambe Kali", "अंबे तू है जगदंबे काली", "Traditional prayer", "पारंपरिक प्रार्थना", "durga", DevotionalCategory.BHAJAN, setOf("durga", "ambe", "जगदंबे")),
         track("durga_aarti", "Durga Aarti", "दुर्गा आरती", "Traditional prayer", "पारंपरिक प्रार्थना", "durga", DevotionalCategory.AARTI, setOf("aarti", "durga")),
@@ -53,15 +54,16 @@ class LocalContentRepository : ContentRepository {
         track("sai_shanti", "Sai Shanti Meditation", "साईं शांति ध्यान", "A quiet meditation", "एक शांत ध्यान", "sai", DevotionalCategory.MEDITATION, setOf("meditation", "peace"))
     )
 
-    private fun track(id: String, english: String, hindi: String, subEnglish: String, subHindi: String, deityId: String, category: DevotionalCategory, aliases: Set<String>) = Track(
+    private fun track(id: String, english: String, hindi: String, subEnglish: String, subHindi: String, deityId: String, category: DevotionalCategory, aliases: Set<String>, audioResource: String? = null) = Track(
         id = id,
         title = LocalizedText(english, hindi),
         subtitle = LocalizedText(subEnglish, subHindi),
-        artistOrSource = LocalizedText("Traditional", "पारंपरिक"),
+        artistOrSource = if (audioResource == null) LocalizedText("Traditional", "पारंपरिक")
+        else LocalizedText("DivyaDhun Demo", "दिव्यधुन डेमो"),
         deityId = deityId,
         category = category,
         artworkKey = deityId,
-        audioSource = null,
+        audioSource = audioResource?.let(AudioSource::BundledResource),
         keywords = setOf(category.name.lowercase(Locale.ROOT), deityId),
         aliases = aliases
     )
