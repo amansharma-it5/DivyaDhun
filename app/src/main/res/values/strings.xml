@@ -73,6 +73,15 @@
     <string name="pause_track">Pause %1$s</string>
     <string name="playback_error">Unable to play this demo track.</string>
     <string name="source_label">Source</string>
+    <string name="full_player_title">Now playing</string>
+    <string name="player_no_selection">Choose a playable devotional track to see it here.</string>
+    <string name="seek_position">Playback position</string>
+    <string name="previous">Previous</string>
+    <string name="queue">Queue</string>
+    <string name="queue_empty">There are no other playable tracks in this queue.</string>
+    <string name="repeat_off">Repeat off</string>
+    <string name="repeat_all">Repeat queue</string>
+    <string name="repeat_one">Repeat track</string>
     <string name="browse_by_type">Browse by type</string>
     <string name="browse_by_deity">Browse by deity</string>
     <string name="featured_today">Aaj Ki Bhakti</string>
