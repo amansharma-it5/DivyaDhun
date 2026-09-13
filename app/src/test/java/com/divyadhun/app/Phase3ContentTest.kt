@@ -41,7 +41,8 @@ class Phase3ContentTest {
         assertEquals(tracks.size, tracks.map { it.id }.toSet().size)
         assertTrue(tracks.all { track -> deities.any { it.id == track.deityId } })
         assertTrue(deities.all { deity -> deity.supportedCategories.containsAll(tracks.filter { it.deityId == deity.id }.map { it.category }.toSet()) })
-        assertTrue(tracks.all { it.audioSource == null })
+        assertTrue(tracks.any { it.audioSource != null })
+        assertTrue(tracks.any { it.audioSource == null })
         assertTrue(tracks.none { it.artistOrSource.english.contains("T-Series", ignoreCase = true) })
     }
 

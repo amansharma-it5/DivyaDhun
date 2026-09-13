@@ -29,6 +29,12 @@ data class Lyrics(
     val meaning: String
 )
 
+/** A playback-ready source that stays independent from ExoPlayer and Android resources. */
+sealed interface AudioSource {
+    data class BundledResource(val resourceName: String) : AudioSource
+    data class RemoteUrl(val url: String) : AudioSource
+}
+
 data class Deity(
     val id: String,
     val nameKey: String,
@@ -48,11 +54,13 @@ data class Track(
     val language: Language = Language.HINDI,
     val durationMs: Long? = null,
     val artworkKey: String,
-    val audioSource: String? = null,
+    val audioSource: AudioSource? = null,
     val lyricsId: String? = null,
     val keywords: Set<String> = emptySet(),
     val aliases: Set<String> = emptySet()
-)
+) {
+    val isPlayable: Boolean get() = audioSource != null
+}
 
 data class DevotionalCollection(
     val id: String,

@@ -3,6 +3,9 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Pause
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,6 +25,8 @@ import com.divyadhun.app.domain.model.Deity
 import com.divyadhun.app.domain.model.Language
 import com.divyadhun.app.domain.model.LocalizedText
 import com.divyadhun.app.domain.model.Track
+import com.divyadhun.app.playback.PlaybackController
+import com.divyadhun.app.playback.PlaybackState
 import com.divyadhun.app.ui.theme.*
 @Composable fun DevotionalArtwork(modifier: Modifier, tint: Color = LocalDevotionalColors.current.gold) {
  Canvas(modifier) {
@@ -57,8 +62,18 @@ import com.divyadhun.app.ui.theme.*
  Button(onClick, modifier = modifier.fillMaxWidth().heightIn(min = 52.dp), contentPadding = PaddingValues(horizontal = Space.lg, vertical = Space.md)) { Text(label) }
 }
 @Composable fun LocalizedText(text: LocalizedText, language: Language, modifier: Modifier = Modifier, style: TextStyle = MaterialTheme.typography.bodyLarge, color: Color = Color.Unspecified) = Text(if (language == Language.HINDI) text.hindi else text.english, modifier, style = style, color = color)
-@Composable fun TrackRow(track: Track, language: Language, onClick: () -> Unit) {
+@Composable fun TrackRow(
+ track: Track,
+ language: Language,
+ playbackState: PlaybackState = PlaybackState(),
+ playbackController: PlaybackController? = null,
+ playbackQueue: List<Track> = listOf(track),
+ onClick: () -> Unit
+) {
  val trackInfoDescription = stringResource(R.string.open_track_info)
+ val current = playbackState.currentTrackId == track.id
+ val title = if (language == Language.HINDI) track.title.hindi else track.title.english
+ val actionDescription = stringResource(if (current && playbackState.isPlaying) R.string.pause_track else R.string.play_track, title)
  Card(
   modifier = Modifier.fillMaxWidth().heightIn(min = 76.dp).clickable(onClick = onClick).semantics { contentDescription = trackInfoDescription; role = Role.Button }.testTag("track_${track.id}"),
   colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = .52f))
@@ -68,6 +83,15 @@ import com.divyadhun.app.ui.theme.*
    Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Space.xs)) {
     LocalizedText(track.title, language, style = MaterialTheme.typography.titleMedium)
     LocalizedText(track.subtitle, language, color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.bodyMedium)
+    if (current) Text(stringResource(if (playbackState.isPlaying) R.string.now_playing else R.string.pause), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+   }
+   if (track.isPlayable && playbackController != null) {
+    IconButton(
+     onClick = { if (current && playbackState.isPlaying) playbackController.pause() else if (current) playbackController.resume() else playbackController.playTrack(track, playbackQueue) },
+     modifier = Modifier.size(48.dp).semantics { contentDescription = actionDescription }.testTag("play_${track.id}")
+    ) { Icon(if (current && playbackState.isPlaying) Icons.Filled.Pause else Icons.Filled.PlayArrow, contentDescription = null) }
+   } else if (!track.isPlayable) {
+    Text(stringResource(R.string.demo_audio_unavailable), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
    }
    MetadataChip(stringResource(categoryNameRes(track.category)))
   }

@@ -21,6 +21,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
@@ -57,6 +58,7 @@ import com.divyadhun.app.onboarding.OnboardingFlow
 import com.divyadhun.app.onboarding.OnboardingViewModel
 import com.divyadhun.app.ui.theme.DivyaTheme
 import com.divyadhun.app.ui.theme.usesDark
+import com.divyadhun.app.playback.Media3PlaybackController
 
 enum class Destination {
     HOME, EXPLORE, SEARCH, LIBRARY;
@@ -116,28 +118,35 @@ private fun AppShell(shellState: ShellUiState, exploreViewModel: ExploreViewMode
     val searchState by searchViewModel.state.collectAsStateWithLifecycle()
     val preferencesState by preferencesViewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val playbackController = remember(context) { Media3PlaybackController(context) }
+    DisposableEffect(playbackController) { onDispose { playbackController.release() } }
+    val playbackState by playbackController.state.collectAsStateWithLifecycle()
+    val currentTrack = remember(playbackState.currentTrackId, exploreState.tracks) { exploreState.tracks.firstOrNull { it.id == playbackState.currentTrackId } }
 
     Scaffold(bottomBar = {
-        NavigationBar {
-            Destination.entries.forEach { destination ->
-                NavigationBarItem(
-                    modifier = Modifier.testTag("tab_" + destination.name),
-                    selected = route == destination.name,
-                    onClick = { nav.navigate(destination.name) {
-                        popUpTo(nav.graph.findStartDestination().id) { saveState = true }
-                        launchSingleTop = true
-                        restoreState = true
-                    } },
-                    icon = { Icon(destination.icon, contentDescription = null) },
-                    label = { Text(stringResource(destination.label)) }
-                )
+        androidx.compose.foundation.layout.Column {
+            if (currentTrack != null) MiniPlayer(currentTrack, shellState.preferences.language, playbackState, playbackController) { nav.navigate("track/${currentTrack.id}") }
+            NavigationBar {
+                Destination.entries.forEach { destination ->
+                    NavigationBarItem(
+                        modifier = Modifier.testTag("tab_" + destination.name),
+                        selected = route == destination.name,
+                        onClick = { nav.navigate(destination.name) {
+                            popUpTo(nav.graph.findStartDestination().id) { saveState = true }
+                            launchSingleTop = true
+                            restoreState = true
+                        } },
+                        icon = { Icon(destination.icon, contentDescription = null) },
+                        label = { Text(stringResource(destination.label)) }
+                    )
+                }
             }
         }
     }) { padding ->
         NavHost(navController = nav, startDestination = Destination.HOME.name, modifier = Modifier.padding(padding)) {
-            composable(Destination.HOME.name) { HomeScreen(homeState, shellState.preferences.language, { nav.navigate(Destination.EXPLORE.name) }, { nav.navigate("deity/$it") }, { nav.navigate("track/$it") }) }
-            composable(Destination.EXPLORE.name) { ExploreScreen(exploreState, shellState.preferences.language, { nav.navigate("deity/$it") }, { nav.navigate("category/${it.name}") }, { nav.navigate("track/$it") }) }
-            composable(Destination.SEARCH.name) { SearchScreen(searchViewModel, searchState, shellState.preferences.language, { nav.navigate("track/$it") }, { nav.navigate("deity/$it") }) }
+            composable(Destination.HOME.name) { HomeScreen(homeState, shellState.preferences.language, { nav.navigate(Destination.EXPLORE.name) }, { nav.navigate("deity/$it") }, { nav.navigate("track/$it") }, playbackState, playbackController) }
+            composable(Destination.EXPLORE.name) { ExploreScreen(exploreState, shellState.preferences.language, { nav.navigate("deity/$it") }, { nav.navigate("category/${it.name}") }, { nav.navigate("track/$it") }, playbackState, playbackController) }
+            composable(Destination.SEARCH.name) { SearchScreen(searchViewModel, searchState, shellState.preferences.language, { nav.navigate("track/$it") }, { nav.navigate("deity/$it") }, playbackState, playbackController) }
             composable(Destination.LIBRARY.name) {
                 LibraryScreen(preferencesState, exploreState.deities, preferencesViewModel::setTheme,
                     onLanguage = { language -> preferencesViewModel.setLanguage(language); LocaleController.apply(context, language) },
@@ -146,18 +155,18 @@ private fun AppShell(shellState: ShellUiState, exploreViewModel: ExploreViewMode
             composable(DEITY_ROUTE, arguments = listOf(navArgument("deityId") { type = NavType.StringType })) { backStackEntry ->
                 val deityId = backStackEntry.arguments?.getString("deityId").orEmpty()
                 val detailViewModel: DeityDetailViewModel = viewModel()
-                DeityDetailScreen(detailViewModel, deityId, shellState.preferences.language, { nav.popBackStack() }, { nav.navigate("track/$it") }, { nav.navigate("category/${it.name}") })
+                DeityDetailScreen(detailViewModel, deityId, shellState.preferences.language, { nav.popBackStack() }, { nav.navigate("track/$it") }, { nav.navigate("category/${it.name}") }, playbackState, playbackController)
             }
             composable(CATEGORY_ROUTE, arguments = listOf(navArgument("categoryName") { type = NavType.StringType })) { backStackEntry ->
                 val category = backStackEntry.arguments?.getString("categoryName")?.let { runCatching { DevotionalCategory.valueOf(it) }.getOrNull() }
                 val categoryViewModel: CategoryViewModel = viewModel()
-                if (category != null) CategoryDetailScreen(categoryViewModel, category, shellState.preferences.language, { nav.popBackStack() }, { nav.navigate("track/$it") })
+                if (category != null) CategoryDetailScreen(categoryViewModel, category, shellState.preferences.language, { nav.popBackStack() }, { nav.navigate("track/$it") }, playbackState, playbackController)
                 else NotFoundScreen { nav.popBackStack() }
             }
             composable(TRACK_ROUTE, arguments = listOf(navArgument("trackId") { type = NavType.StringType })) { backStackEntry ->
                 val trackId = backStackEntry.arguments?.getString("trackId").orEmpty()
                 val trackViewModel: TrackDetailViewModel = viewModel()
-                TrackDetailScreen(trackViewModel, trackId, shellState.preferences.language, { nav.popBackStack() }, { nav.navigate("deity/$it") }, { nav.navigate("category/${it.name}") })
+                TrackDetailScreen(trackViewModel, trackId, shellState.preferences.language, { nav.popBackStack() }, { nav.navigate("deity/$it") }, { nav.navigate("category/${it.name}") }, playbackState, playbackController)
             }
         }
     }

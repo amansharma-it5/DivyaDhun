@@ -61,7 +61,17 @@
     </plurals>
     <string name="open_track_info">Open devotional track information</string>
     <string name="track_info">Track information</string>
-    <string name="playback_deferred">Playback arrives in the next phase.</string>
+    <string name="play">Play</string>
+    <string name="pause">Pause</string>
+    <string name="resume">Resume</string>
+    <string name="next">Next</string>
+    <string name="stop">Stop</string>
+    <string name="now_playing">Now playing</string>
+    <string name="demo_audio">DivyaDhun Demo Audio</string>
+    <string name="demo_audio_unavailable">Demo audio unavailable</string>
+    <string name="play_track">Play %1$s</string>
+    <string name="pause_track">Pause %1$s</string>
+    <string name="playback_error">Unable to play this demo track.</string>
     <string name="source_label">Source</string>
     <string name="browse_by_type">Browse by type</string>
     <string name="browse_by_deity">Browse by deity</string>
