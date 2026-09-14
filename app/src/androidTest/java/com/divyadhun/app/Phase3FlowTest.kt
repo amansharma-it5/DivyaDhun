@@ -29,6 +29,7 @@ class Phase3FlowTest {
     fun exploreCategoryDeityAndTrackDetailsHaveRealRoutes() {
         completeWithSkips()
         rule.onNodeWithTag("tab_EXPLORE").performClick()
+        waitForTag("screen_EXPLORE")
         rule.onNodeWithTag("category_AARTI").performClick()
         waitForTag("screen_CATEGORY_AARTI")
         rule.onNodeWithTag("track_hanuman_aarti").performClick()

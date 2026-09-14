@@ -27,6 +27,8 @@ class LocalContentRepositoryTest {
 
     @Test fun searchIsCaseInsensitiveAndSupportsAliases() = runBlocking {
         assertTrue(repository.search("ShIv").any { it.id == "om_namah_shivaya" })
+        assertTrue(repository.search("shiv").any { it.id == "shiv_aarti" })
+        assertTrue(repository.search("shiv aarti").any { it.id == "shiv_aarti" })
         assertTrue(repository.search("mahadev").all { it.deityId == "shiv" })
         assertTrue(repository.search("bajrang bali").all { it.deityId == "hanuman" })
     }
@@ -35,5 +37,13 @@ class LocalContentRepositoryTest {
         assertTrue(repository.search("महादेव").all { it.deityId == "shiv" })
         assertTrue(repository.search("   ").isEmpty())
         assertTrue(repository.search("not a prayer").isEmpty())
+    }
+
+    @Test fun traditionalLyricsMapToTracksWithoutMissingReferences() = runBlocking {
+        val tracks = repository.getTracks()
+        val withLyrics = tracks.filter { it.lyricsId != null }
+        assertTrue(withLyrics.isNotEmpty())
+        assertTrue(withLyrics.all { track -> repository.getLyrics(track.lyricsId!!)?.id == track.lyricsId })
+        assertEquals(null, repository.getLyrics("missing-lyrics"))
     }
 }
