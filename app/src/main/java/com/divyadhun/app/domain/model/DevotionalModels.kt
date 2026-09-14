@@ -35,13 +35,20 @@ sealed interface AudioSource {
     data class RemoteUrl(val url: String) : AudioSource
 }
 
+/** Artwork can stay local today while a future catalog supplies a validated CDN URL. */
+sealed interface ArtworkSource {
+    data class LocalKey(val key: String) : ArtworkSource
+    data class RemoteUrl(val url: String) : ArtworkSource
+}
+
 data class Deity(
     val id: String,
     val nameKey: String,
     val descriptionKey: String,
     val artworkKey: String,
     val aliases: Set<String>,
-    val supportedCategories: Set<DevotionalCategory>
+    val supportedCategories: Set<DevotionalCategory>,
+    val artworkSource: ArtworkSource? = null
 )
 
 data class Track(
@@ -57,7 +64,8 @@ data class Track(
     val audioSource: AudioSource? = null,
     val lyricsId: String? = null,
     val keywords: Set<String> = emptySet(),
-    val aliases: Set<String> = emptySet()
+    val aliases: Set<String> = emptySet(),
+    val artworkSource: ArtworkSource? = null
 ) {
     val isPlayable: Boolean get() = audioSource != null
 }
@@ -69,5 +77,6 @@ data class DevotionalCollection(
     val trackIds: List<String>,
     val category: DevotionalCategory? = null,
     val deityId: String? = null,
-    val artworkKey: String
+    val artworkKey: String,
+    val artworkSource: ArtworkSource? = null
 )
