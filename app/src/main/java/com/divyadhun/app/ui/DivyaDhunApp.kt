@@ -166,6 +166,7 @@ private fun AppShell(shellState: ShellUiState, exploreViewModel: ExploreViewMode
                 LibraryScreen(preferencesState, libraryState, exploreState.tracks, exploreState.deities, preferencesViewModel::setTheme, preferencesViewModel::setSimpleMode,
                     onLanguage = { language -> preferencesViewModel.setLanguage(language); LocaleController.apply(context, language) },
                     onTime = preferencesViewModel::setListeningTime, onDeities = preferencesViewModel::setDeities,
+                    onDailyReminder = preferencesViewModel::setDailyReminder,
                     onTrack = { nav.navigate("track/$it") },
                     onFavorite = { id -> libraryViewModel.setFavorite(id, id !in libraryState.favoriteTrackIds) },
                     onClearHistory = libraryViewModel::clearHistory,

@@ -38,6 +38,11 @@
     <string name="appearance">Appearance</string>
     <string name="simple_mode">Simple Mode</string>
     <string name="simple_mode_body">Larger type, larger touch targets, and a quieter Home.</string>
+    <string name="daily_reminder">Daily Bhakti reminder</string>
+    <string name="daily_reminder_body">A gentle optional reminder at your listening time.</string>
+    <string name="reminder_channel_name">Daily Bhakti</string>
+    <string name="reminder_notification_title">A moment for Bhakti</string>
+    <string name="reminder_notification_body">Your daily devotional moment is waiting.</string>
     <string name="festival_section">Festivals</string>
     <string name="festival_card_body">A local devotional collection</string>
     <string name="festival_collection">Festival collection</string>

@@ -25,6 +25,7 @@ data class UserPreferences(
     val listeningTime: ListeningTime = ListeningTime.ANYTIME,
     val theme: ThemeMode = ThemeMode.SYSTEM,
     val simpleMode: Boolean = false,
+    val dailyReminderEnabled: Boolean = false,
     val favoriteTrackIds: Set<String> = emptySet(),
     val recentTrackIds: List<String> = emptyList(),
     val lastPlayedTrackId: String? = null
@@ -39,6 +40,7 @@ class UserPreferencesRepository(private val context: Context) {
         val listeningTime = stringPreferencesKey("listening_time")
         val theme = stringPreferencesKey("theme")
         val simpleMode = booleanPreferencesKey("simple_mode")
+        val dailyReminderEnabled = booleanPreferencesKey("daily_reminder_enabled")
         val favoriteTrackIds = stringSetPreferencesKey("favorite_track_ids")
         val recentTrackIds = stringPreferencesKey("recent_track_ids")
         val lastPlayedTrackId = stringPreferencesKey("last_played_track_id")
@@ -57,6 +59,7 @@ class UserPreferencesRepository(private val context: Context) {
                 listeningTime = ListeningTime.fromStored(values[Keys.listeningTime]),
                 theme = ThemeMode.fromStored(values[Keys.theme]),
                 simpleMode = values[Keys.simpleMode] ?: false,
+                dailyReminderEnabled = values[Keys.dailyReminderEnabled] ?: false,
                 favoriteTrackIds = values[Keys.favoriteTrackIds] ?: emptySet(),
                 recentTrackIds = decodeIds(values[Keys.recentTrackIds]),
                 lastPlayedTrackId = values[Keys.lastPlayedTrackId]
@@ -79,6 +82,7 @@ class UserPreferencesRepository(private val context: Context) {
     suspend fun setListeningTime(time: ListeningTime) = context.userPreferencesDataStore.edit { it[Keys.listeningTime] = time.name }
     suspend fun setTheme(theme: ThemeMode) = context.userPreferencesDataStore.edit { it[Keys.theme] = theme.name }
     suspend fun setSimpleMode(enabled: Boolean) = context.userPreferencesDataStore.edit { it[Keys.simpleMode] = enabled }
+    suspend fun setDailyReminderEnabled(enabled: Boolean) = context.userPreferencesDataStore.edit { it[Keys.dailyReminderEnabled] = enabled }
 
     suspend fun setFavoriteTrack(trackId: String, favorite: Boolean) = context.userPreferencesDataStore.edit { values ->
         val updated = (values[Keys.favoriteTrackIds] ?: emptySet()).toMutableSet()

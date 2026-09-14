@@ -15,6 +15,7 @@ import com.divyadhun.app.domain.model.Lyrics
 import com.divyadhun.app.domain.model.MantraProgress
 import com.divyadhun.app.domain.model.MantraProgression
 import com.divyadhun.app.domain.model.MantraSessionStatus
+import com.divyadhun.app.engagement.ReminderScheduler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -331,8 +332,16 @@ class PreferencesViewModel(application: Application) : AndroidViewModel(applicat
     init { viewModelScope.launch { repository.preferences.collect { mutableState.value = PreferencesUiState(it, loaded = true) } } }
     fun setTheme(theme: com.divyadhun.app.ThemeMode) = update { repository.setTheme(theme) }
     fun setSimpleMode(enabled: Boolean) = update { repository.setSimpleMode(enabled) }
+    fun setDailyReminder(enabled: Boolean) = update {
+        repository.setDailyReminderEnabled(enabled)
+        if (enabled) ReminderScheduler.schedule(getApplication(), state.value.preferences.listeningTime)
+        else ReminderScheduler.cancel(getApplication())
+    }
     fun setLanguage(language: com.divyadhun.app.domain.model.Language) = update { repository.setLanguage(language) }
-    fun setListeningTime(time: com.divyadhun.app.domain.model.ListeningTime) = update { repository.setListeningTime(time) }
+    fun setListeningTime(time: com.divyadhun.app.domain.model.ListeningTime) = update {
+        repository.setListeningTime(time)
+        if (state.value.preferences.dailyReminderEnabled) ReminderScheduler.schedule(getApplication(), time)
+    }
     fun setDeities(ids: Set<String>) = update { repository.setPreferredDeityIds(ids) }
     private fun update(action: suspend () -> Unit) { viewModelScope.launch { try { action(); mutableState.update { it.copy(error = false) } } catch (_: Exception) { mutableState.update { it.copy(error = true) } } } }
 }
