@@ -67,6 +67,7 @@ fun HomeScreen(
     language: Language,
     onExplore: () -> Unit,
     onDailyBhakti: () -> Unit,
+    onFestival: (String) -> Unit,
     onDeity: (String) -> Unit,
     onTrack: (String) -> Unit,
     playbackState: PlaybackState = PlaybackState(),
@@ -79,6 +80,21 @@ fun HomeScreen(
     val content = state.content
     ContentList(title = R.string.namaste, intro = R.string.home_intro, tag = "screen_HOME") {
         item { HomeHeroCard(onExplore, onDailyBhakti) }
+        item {
+            SectionHeader(stringResource(R.string.festival_section))
+        }
+        item {
+            LazyRow(horizontalArrangement = Arrangement.spacedBy(Space.sm), contentPadding = PaddingValues(end = Space.lg)) {
+                items(content.festivals, key = { it.id }) { festival ->
+                    Card(Modifier.width(190.dp).heightIn(min = 96.dp).clickable { onFestival(festival.id) }.semantics { role = Role.Button }.testTag("festival_${festival.id}"), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = .52f))) {
+                        Column(Modifier.fillMaxWidth().padding(Space.md), verticalArrangement = Arrangement.spacedBy(Space.xs)) {
+                            Text(stringResource(festivalNameRes(festival.id)), style = MaterialTheme.typography.titleMedium)
+                            Text(stringResource(R.string.festival_card_body), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                    }
+                }
+            }
+        }
         item { SectionHeader(stringResource(R.string.your_gods_section)) }
         item {
             if (content.yourGods.isEmpty()) EmptyState(stringResource(R.string.your_gods_section), stringResource(R.string.no_preference_deities))
