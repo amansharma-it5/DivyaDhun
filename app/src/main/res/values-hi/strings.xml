@@ -38,6 +38,11 @@
     <string name="appearance">दिखावट</string>
     <string name="simple_mode">सरल मोड</string>
     <string name="simple_mode_body">बड़ा लेखन, बड़े स्पर्श क्षेत्र और शांत होम स्क्रीन।</string>
+    <string name="daily_reminder">दैनिक भक्ति अनुस्मारक</string>
+    <string name="daily_reminder_body">आपके सुनने के समय पर एक सरल वैकल्पिक अनुस्मारक।</string>
+    <string name="reminder_channel_name">दैनिक भक्ति</string>
+    <string name="reminder_notification_title">भक्ति का एक पल</string>
+    <string name="reminder_notification_body">आपका दैनिक भक्तिमय पल आपका इंतज़ार कर रहा है।</string>
     <string name="festival_section">पर्व</string>
     <string name="festival_card_body">स्थानीय भक्तिमय संग्रह</string>
     <string name="festival_collection">पर्व संग्रह</string>

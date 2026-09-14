@@ -23,6 +23,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -51,6 +57,7 @@ fun LibraryScreen(
     onSimpleMode: (Boolean) -> Unit,
     onLanguage: (Language) -> Unit,
     onTime: (ListeningTime) -> Unit,
+    onDailyReminder: (Boolean) -> Unit,
     onDeities: (Set<String>) -> Unit,
     onTrack: (String) -> Unit,
     onFavorite: (String) -> Unit,
@@ -60,6 +67,8 @@ fun LibraryScreen(
 ) {
     var showDeities by remember { mutableStateOf(false) }
     var showTime by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+    val reminderPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted -> if (granted) onDailyReminder(true) }
     val favorites = tracks.filter { it.id in library.favoriteTrackIds }
     val recent = library.recentTrackIds.mapNotNull { id -> tracks.firstOrNull { it.id == id } }
     val lastPlayed = library.lastPlayedTrackId?.let { id -> tracks.firstOrNull { it.id == id } }
@@ -71,6 +80,19 @@ fun LibraryScreen(
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                 Text(stringResource(R.string.recently_played), style = MaterialTheme.typography.titleLarge)
                 if (recent.isNotEmpty()) TextButton(onClick = onClearHistory, modifier = Modifier.testTag("clear_history")) { Text(stringResource(R.string.clear_history)) }
+            }
+        }
+        item {
+            Row(Modifier.fillMaxWidth().heightIn(min = 64.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Space.xs)) {
+                    Text(stringResource(R.string.daily_reminder), style = MaterialTheme.typography.titleMedium)
+                    Text(stringResource(R.string.daily_reminder_body), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+                Switch(checked = state.preferences.dailyReminderEnabled, onCheckedChange = { enabled ->
+                    if (!enabled) onDailyReminder(false)
+                    else if (Build.VERSION.SDK_INT >= 33 && context.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) reminderPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
+                    else onDailyReminder(true)
+                }, modifier = Modifier.testTag("daily_reminder_toggle"))
             }
         }
         if (recent.isEmpty()) item { EmptyState(stringResource(R.string.recently_played), stringResource(R.string.recently_played_empty), Modifier.testTag("recently_played_empty")) }
