@@ -9,6 +9,11 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import com.divyadhun.app.MainActivity
 import com.divyadhun.app.R
 import com.divyadhun.app.domain.model.ListeningTime
@@ -73,5 +78,21 @@ class DailyReminderReceiver : BroadcastReceiver() {
             .setAutoCancel(true)
             .build()
         manager.notify(DailyReminderSchedule.REQUEST_CODE, notification)
+    }
+}
+
+/** Restores an opted-in inexact reminder after a device reboot without exporting app data. */
+class ReminderBootReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent?) {
+        if (intent?.action != Intent.ACTION_BOOT_COMPLETED) return
+        val pending = goAsync()
+        CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
+            try {
+                val preferences = com.divyadhun.app.data.UserPreferencesRepository(context).preferences.first()
+                if (preferences.dailyReminderEnabled) ReminderScheduler.schedule(context, preferences.listeningTime)
+            } finally {
+                pending.finish()
+            }
+        }
     }
 }
