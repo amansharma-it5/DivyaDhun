@@ -25,8 +25,15 @@
         <item quantity="one">%1$d भक्तिमय ट्रैक</item>
         <item quantity="other">%1$d भक्तिमय ट्रैक</item>
     </plurals>
-    <string name="favorites_title">पसंदीदा जल्द आएंगे</string>
-    <string name="favorites_body">आपका सहेजा हुआ भक्तिमय ऑडियो अगले चरण में यहाँ दिखेगा।</string>
+    <string name="favorites_title">पसंदीदा</string>
+    <string name="favorites_empty_title">आपके पसंदीदा यहाँ दिखेंगे</string>
+    <string name="favorites_empty_body">किसी भी भक्तिमय ट्रैक को सहेजने के लिए दिल पर टैप करें।</string>
+    <string name="recently_played">हाल ही में चलाए गए</string>
+    <string name="recently_played_empty">आपके शुरू किए गए ट्रैक यहाँ दिखेंगे।</string>
+    <string name="last_played">आखिरी बार चलाया गया</string>
+    <string name="clear_history">इतिहास मिटाएँ</string>
+    <string name="favorite_track">%1$s को पसंदीदा में जोड़ें</string>
+    <string name="unfavorite_track">%1$s को पसंदीदा से हटाएँ</string>
     <string name="library_intro">आपकी प्रिय प्रार्थनाओं के लिए एक स्थान।</string>
     <string name="appearance">दिखावट</string>
     <string name="system">सिस्टम</string>

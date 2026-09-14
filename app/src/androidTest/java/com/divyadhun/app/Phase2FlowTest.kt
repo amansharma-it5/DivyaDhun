@@ -3,8 +3,6 @@ package com.divyadhun.app
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.core.app.ApplicationProvider
-import com.divyadhun.app.data.UserPreferencesRepository
-import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -14,7 +12,7 @@ class Phase2FlowTest {
 
     @Before fun resetPreferences() {
         val context = ApplicationProvider.getApplicationContext<android.content.Context>()
-        runBlocking { UserPreferencesRepository(context).resetForTest() }
+        resetDivyaDhunState(context)
         rule.activityRule.scenario.recreate()
         waitForTag("screen_ONBOARDING")
     }
@@ -63,6 +61,7 @@ class Phase2FlowTest {
         rule.onNodeWithTag("setting_deities_done").performClick()
         waitForText("हनुमान")
         rule.onNodeWithText("हनुमान").assertIsDisplayed()
+        rule.onNodeWithTag("screen_LIBRARY").performScrollToNode(hasTestTag("setting_time"))
         rule.onNodeWithTag("setting_time").performClick()
         rule.onNodeWithTag("setting_time_EVENING").performClick()
         rule.onNodeWithTag("screen_LIBRARY").performScrollToNode(hasTestTag("theme_DARK"))

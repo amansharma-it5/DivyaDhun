@@ -2,7 +2,14 @@
 
 Your Daily Bhakti. Bhakti, bas ek tap mein.
 
-DivyaDhun is an Android-first devotional listening experience. **Phase 5 adds a full player on top of the Phase 4 playback foundation: Media3-backed bundled demo audio, a background `MediaSessionService`, synchronized transport controls, queue browsing, seek, and repeat.** Production devotional recordings and library features remain future work.
+DivyaDhun is an Android-first devotional listening experience. **Phase 6 adds a local My Bhakti library on top of the Phase 5 player: favorites, ordered recent history, last played, and clear-history controls.** Production devotional recordings and cloud sync remain future work.
+
+## Phase 6 completed features
+
+- Favorites persist in the existing DataStore and can be added or removed from track rows, Track Detail, the full player, and My Bhakti.
+- Playback start and automatic queue changes record an ordered recent history (up to 20 stable track IDs) and expose the last played item.
+- My Bhakti now renders Favorites and Recently played collections with the same reusable track rows and playback controls, plus a clear-history action.
+- Library state is isolated in `LibraryViewModel`; catalog metadata still comes from `ContentRepository`, and playback remains owned by `PlaybackService`.
 
 ## Phase 5 completed features
 
@@ -55,10 +62,10 @@ Windows:
 
 The debug APK is `app/build/outputs/apk/debug/app-debug.apk`. Unit reports are under `app/build/test-results`; instrumentation reports are under `app/build/outputs/androidTest-results`; lint writes `app/build/reports/lint-results-debug.html`.
 
-The latest validation run passed 16 JVM unit tests and 7 connected emulator tests (Phase 2, Phase 3, and Phase 4 flows). `lintDebug` completed with zero errors and 13 non-critical warnings, and `assembleDebug` completed successfully. The emulator flow verified onboarding, local search, a playable demo result, the mini player, play/pause, and stop; audible loudspeaker output and system lock-screen presentation still depend on the host device.
+The latest validation run passed 19 JVM unit tests and 10 connected emulator tests (Phase 2 through Phase 6 flows). `lintDebug` completed with zero errors and 13 non-critical warnings, and `assembleDebug` completed successfully. The emulator flow verified onboarding, local search, a playable demo result, the mini player, full-player controls, favorites, and history; audible loudspeaker output and system lock-screen presentation still depend on the host device.
 
 ## Deferred work and known limitations
 
-Lyrics UI, downloads, widgets, routine sequencing, Mantra/Aarti modes, favorites/history, backend/API, authentication, cloud sync, sharing, subscriptions, analytics, AI, and production devotional recordings remain deferred. Playback currently covers only the five bundled fixtures; metadata-only rows remain discovery surfaces. Notification appearance and lock-screen controls depend on the host Android system and notification policy. Physical-device loudspeaker, TalkBack, and release certification are outside this phase.
+Lyrics UI, downloads, widgets, routine sequencing, Mantra/Aarti modes, backend/API, authentication, cloud sync, sharing, subscriptions, analytics, AI, and production devotional recordings remain deferred. Playback currently covers only the five bundled fixtures; metadata-only rows remain discovery surfaces. Library data is local to the device and has no account or cross-device sync. Notification appearance and lock-screen controls depend on the host Android system and notification policy. Physical-device loudspeaker, TalkBack, and release certification are outside this phase.
 
-Phase 5 is developed on `feat/divyadhun-phase5-player`; it is not merged to `main` until its validation and review are complete.
+Phase 6 is developed on `feat/divyadhun-phase6-library`; it is not merged to `main` until its validation and review are complete.

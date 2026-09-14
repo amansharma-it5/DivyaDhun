@@ -31,24 +31,56 @@ import androidx.compose.ui.unit.dp
 import com.divyadhun.app.R
 import com.divyadhun.app.ThemeMode
 import com.divyadhun.app.content.PreferencesUiState
+import com.divyadhun.app.content.LibraryUiState
 import com.divyadhun.app.domain.model.Deity
 import com.divyadhun.app.domain.model.Language
 import com.divyadhun.app.domain.model.ListeningTime
+import com.divyadhun.app.domain.model.Track
+import com.divyadhun.app.playback.PlaybackController
+import com.divyadhun.app.playback.PlaybackState
 import com.divyadhun.app.ui.theme.Space
 
 @Composable
 fun LibraryScreen(
     state: PreferencesUiState,
+    library: LibraryUiState,
+    tracks: List<Track>,
     deities: List<Deity>,
     onTheme: (ThemeMode) -> Unit,
     onLanguage: (Language) -> Unit,
     onTime: (ListeningTime) -> Unit,
-    onDeities: (Set<String>) -> Unit
+    onDeities: (Set<String>) -> Unit,
+    onTrack: (String) -> Unit,
+    onFavorite: (String) -> Unit,
+    onClearHistory: () -> Unit,
+    playbackState: PlaybackState = PlaybackState(),
+    playbackController: PlaybackController? = null
 ) {
     var showDeities by remember { mutableStateOf(false) }
     var showTime by remember { mutableStateOf(false) }
+    val favorites = tracks.filter { it.id in library.favoriteTrackIds }
+    val recent = library.recentTrackIds.mapNotNull { id -> tracks.firstOrNull { it.id == id } }
+    val lastPlayed = library.lastPlayedTrackId?.let { id -> tracks.firstOrNull { it.id == id } }
     ContentList(R.string.library, R.string.library_intro, "screen_LIBRARY") {
-        item { EmptyState(stringResource(R.string.favorites_title), stringResource(R.string.favorites_body)) }
+        item { SectionHeader(stringResource(R.string.favorites_title)) }
+        if (favorites.isEmpty()) item { EmptyState(stringResource(R.string.favorites_empty_title), stringResource(R.string.favorites_empty_body), Modifier.testTag("favorites_empty_title")) }
+        else item { TrackGroup(favorites, state.preferences.language, playbackState, playbackController, onTrack, library.favoriteTrackIds, onFavorite) }
+        item {
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Text(stringResource(R.string.recently_played), style = MaterialTheme.typography.titleLarge)
+                if (recent.isNotEmpty()) TextButton(onClick = onClearHistory, modifier = Modifier.testTag("clear_history")) { Text(stringResource(R.string.clear_history)) }
+            }
+        }
+        if (recent.isEmpty()) item { EmptyState(stringResource(R.string.recently_played), stringResource(R.string.recently_played_empty), Modifier.testTag("recently_played_empty")) }
+        else item { TrackGroup(recent, state.preferences.language, playbackState, playbackController, onTrack, library.favoriteTrackIds, onFavorite) }
+        lastPlayed?.let { track ->
+            item {
+                Column(verticalArrangement = Arrangement.spacedBy(Space.sm)) {
+                    Text(stringResource(R.string.last_played), style = MaterialTheme.typography.titleLarge)
+                    TrackRow(track, state.preferences.language, playbackState, playbackController, listOf(track), onClick = { onTrack(track.id) }, isFavorite = track.id in library.favoriteTrackIds, onFavorite = { onFavorite(track.id) })
+                }
+            }
+        }
         item { Text(stringResource(R.string.preferences), style = MaterialTheme.typography.titleLarge) }
         item {
             Column(verticalArrangement = Arrangement.spacedBy(Space.sm)) {
@@ -74,7 +106,7 @@ fun LibraryScreen(
                 Text(stringResource(label))
             }
         }
-        if (state.error) item { Text(stringResource(R.string.preference_error), color = MaterialTheme.colorScheme.error) }
+        if (state.error || library.error) item { Text(stringResource(R.string.preference_error), color = MaterialTheme.colorScheme.error) }
     }
     if (showDeities) DeityDialog(deities, state.preferences.preferredDeityIds, { onDeities(it) }, { showDeities = false })
     if (showTime) TimeDialog(state.preferences.listeningTime, onTime, { showTime = false })

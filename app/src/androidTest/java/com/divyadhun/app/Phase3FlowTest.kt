@@ -1,15 +1,15 @@
 package com.divyadhun.app
 
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.test.core.app.ApplicationProvider
-import com.divyadhun.app.data.UserPreferencesRepository
-import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -20,7 +20,7 @@ class Phase3FlowTest {
     @Before
     fun resetPreferences() {
         val context = ApplicationProvider.getApplicationContext<android.content.Context>()
-        runBlocking { UserPreferencesRepository(context).resetForTest() }
+        resetDivyaDhunState(context)
         rule.activityRule.scenario.recreate()
         waitForTag("screen_ONBOARDING")
     }
@@ -31,7 +31,7 @@ class Phase3FlowTest {
         rule.onNodeWithTag("tab_EXPLORE").performClick()
         rule.onNodeWithTag("category_AARTI").performClick()
         waitForTag("screen_CATEGORY_AARTI")
-        rule.onNodeWithText("Aarti Kije Hanuman Lala Ki").performClick()
+        rule.onNodeWithTag("track_hanuman_aarti").performClick()
         waitForTag("screen_TRACK_hanuman_aarti")
         rule.onNodeWithTag("track_view_deity").performClick()
         waitForTag("screen_DEITY_hanuman")
@@ -44,16 +44,18 @@ class Phase3FlowTest {
         rule.onNodeWithTag("tab_SEARCH").performClick()
         rule.onNodeWithTag("search_field").performTextInput("mahadev")
         waitForTag("track_om_namah_shivaya")
-        rule.onNodeWithTag("search_deity_shiv").performClick()
-        waitForTag("screen_DEITY_shiv")
+        rule.onNodeWithTag("screen_SEARCH").performScrollToNode(hasTestTag("track_om_namah_shivaya"))
+        rule.onNodeWithTag("track_title_om_namah_shivaya").performClick()
+        waitForTag("screen_TRACK_om_namah_shivaya")
+        rule.onNodeWithTag("screen_TRACK_om_namah_shivaya").performScrollToNode(hasTestTag("track_view_category"))
+        rule.onNodeWithTag("track_view_category").assertIsDisplayed()
         rule.onNodeWithTag("back_button").performClick()
         waitForTag("screen_SEARCH")
         if (rule.onAllNodesWithTag("clear_search").fetchSemanticsNodes().isNotEmpty()) rule.onNodeWithTag("clear_search").performClick()
         rule.onNodeWithTag("search_field").performTextInput("mahadev")
         waitForTag("track_om_namah_shivaya")
-        rule.onNodeWithText("Om Namah Shivaya").performClick()
-        waitForTag("screen_TRACK_om_namah_shivaya")
-        rule.onNodeWithTag("track_view_category").assertIsDisplayed()
+        rule.onNodeWithTag("search_deity_shiv").performClick()
+        waitForTag("screen_DEITY_shiv")
     }
 
     @Test
