@@ -54,6 +54,7 @@ import com.divyadhun.app.content.SearchViewModel
 import com.divyadhun.app.content.TrackDetailViewModel
 import com.divyadhun.app.content.DeityDetailViewModel
 import com.divyadhun.app.content.LyricsViewModel
+import com.divyadhun.app.content.MantraViewModel
 import com.divyadhun.app.domain.model.DevotionalCategory
 import com.divyadhun.app.domain.model.Language
 import com.divyadhun.app.onboarding.OnboardingFlow
@@ -77,6 +78,7 @@ private const val DEITY_ROUTE = "deity/{deityId}"
 private const val CATEGORY_ROUTE = "category/{categoryName}"
 private const val TRACK_ROUTE = "track/{trackId}"
 private const val LYRICS_ROUTE = "lyrics/{trackId}"
+private const val MANTRA_ROUTE = "mantra/{trackId}"
 private const val PLAYER_ROUTE = "player"
 
 @Composable
@@ -179,12 +181,17 @@ private fun AppShell(shellState: ShellUiState, exploreViewModel: ExploreViewMode
             composable(TRACK_ROUTE, arguments = listOf(navArgument("trackId") { type = NavType.StringType })) { backStackEntry ->
                 val trackId = backStackEntry.arguments?.getString("trackId").orEmpty()
                 val trackViewModel: TrackDetailViewModel = viewModel()
-                TrackDetailScreen(trackViewModel, trackId, shellState.preferences.language, { nav.popBackStack() }, { nav.navigate("deity/$it") }, { nav.navigate("category/${it.name}") }, playbackState, playbackController, libraryState.favoriteTrackIds, { id -> libraryViewModel.setFavorite(id, id !in libraryState.favoriteTrackIds) }, { nav.navigate("lyrics/$it") })
+                TrackDetailScreen(trackViewModel, trackId, shellState.preferences.language, { nav.popBackStack() }, { nav.navigate("deity/$it") }, { nav.navigate("category/${it.name}") }, playbackState, playbackController, libraryState.favoriteTrackIds, { id -> libraryViewModel.setFavorite(id, id !in libraryState.favoriteTrackIds) }, { nav.navigate("lyrics/$it") }, { nav.navigate("mantra/$it") })
             }
             composable(LYRICS_ROUTE, arguments = listOf(navArgument("trackId") { type = NavType.StringType })) { backStackEntry ->
                 val trackId = backStackEntry.arguments?.getString("trackId").orEmpty()
                 val lyricsViewModel: LyricsViewModel = viewModel()
                 LyricsScreen(lyricsViewModel, trackId, shellState.preferences.language, playbackState, playbackController, { nav.popBackStack() })
+            }
+            composable(MANTRA_ROUTE, arguments = listOf(navArgument("trackId") { type = NavType.StringType })) { backStackEntry ->
+                val trackId = backStackEntry.arguments?.getString("trackId").orEmpty()
+                val mantraViewModel: MantraViewModel = viewModel()
+                MantraScreen(mantraViewModel, trackId, shellState.preferences.language, playbackState, playbackController, { nav.popBackStack() })
             }
             composable(PLAYER_ROUTE) {
                 val queueTracks = playbackState.queue.mapNotNull { id -> exploreState.tracks.firstOrNull { it.id == id } }

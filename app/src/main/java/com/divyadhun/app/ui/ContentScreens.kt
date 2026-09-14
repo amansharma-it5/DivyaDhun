@@ -257,7 +257,8 @@ fun TrackDetailScreen(
     playbackController: PlaybackController? = null,
     favoriteTrackIds: Set<String> = emptySet(),
     onFavorite: (String) -> Unit = {},
-    onLyrics: (String) -> Unit = {}
+    onLyrics: (String) -> Unit = {},
+    onMantra: (String) -> Unit = {}
 ) {
     LaunchedEffect(trackId) { viewModel.load(trackId) }
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -287,7 +288,12 @@ fun TrackDetailScreen(
                         MetadataChip(stringResource(R.string.language_label) + ": " + stringResource(if (track.language == Language.HINDI) R.string.language_hindi else R.string.language_english))
                         track.durationMs?.let { duration -> MetadataChip(stringResource(R.string.duration_label) + ": " + formatDuration(duration)) }
                         MetadataChip(stringResource(if (track.lyricsId == null) R.string.lyrics_unavailable else R.string.lyrics_available))
-                        track.lyricsId?.let {
+                        if (track.category == DevotionalCategory.MANTRA) {
+                            OutlinedButton(
+                                onClick = { onMantra(track.id) },
+                                modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp).testTag("track_open_mantra")
+                            ) { Text(stringResource(R.string.open_mantra_mode)) }
+                        } else track.lyricsId?.let {
                             OutlinedButton(
                                 onClick = { onLyrics(track.id) },
                                 modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp).testTag("track_open_lyrics")
@@ -356,7 +362,7 @@ private fun CategoryCard(category: DevotionalCategory, count: Int, modifier: Mod
     }
 }
 
-@Composable private fun LoadingState() { Column(Modifier.fillMaxWidth().padding(Space.xl), horizontalAlignment = Alignment.CenterHorizontally) { CircularProgressIndicator() } }
+@Composable fun LoadingState() { Column(Modifier.fillMaxWidth().padding(Space.xl), horizontalAlignment = Alignment.CenterHorizontally) { CircularProgressIndicator() } }
 @Composable private fun BackButton(onBack: () -> Unit) { IconButton(onClick = onBack, modifier = Modifier.size(48.dp).testTag("back_button")) { Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = stringResource(R.string.back)) } }
 @Composable fun TrackGroup(tracks: List<Track>, language: Language, playbackState: PlaybackState, playbackController: PlaybackController?, onTrack: (String) -> Unit, favoriteTrackIds: Set<String> = emptySet(), onFavorite: (String) -> Unit = {}) {
     val queue = playableQueue(tracks)

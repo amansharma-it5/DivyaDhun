@@ -11,6 +11,9 @@ import com.divyadhun.app.domain.model.Deity
 import com.divyadhun.app.domain.model.DevotionalCategory
 import com.divyadhun.app.domain.model.Track
 import com.divyadhun.app.domain.model.Lyrics
+import com.divyadhun.app.domain.model.MantraProgress
+import com.divyadhun.app.domain.model.MantraProgression
+import com.divyadhun.app.domain.model.MantraSessionStatus
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -224,6 +227,42 @@ class LyricsViewModel(application: Application) : AndroidViewModel(application) 
                 mutableState.update { it.copy(loaded = true, error = true) }
             }
         }
+    }
+}
+
+data class MantraUiState(
+    val track: Track? = null,
+    val lyrics: Lyrics? = null,
+    val progress: MantraProgress = MantraProgress(),
+    val loaded: Boolean = false,
+    val error: Boolean = false
+)
+
+class MantraViewModel(application: Application) : AndroidViewModel(application) {
+    private val content: ContentRepository = LocalContentRepository()
+    private val mutableState = MutableStateFlow(MantraUiState())
+    val state = mutableState.asStateFlow()
+
+    fun load(trackId: String) {
+        if (state.value.loaded && state.value.track?.id == trackId) return
+        viewModelScope.launch {
+            try {
+                val track = content.getTrack(trackId)
+                val lyrics = track?.lyricsId?.let { id -> content.getLyrics(id) }
+                mutableState.value = MantraUiState(track = track, lyrics = lyrics, loaded = true)
+            } catch (_: Exception) {
+                mutableState.update { it.copy(loaded = true, error = true) }
+            }
+        }
+    }
+
+    fun selectTarget(target: Int) = updateProgress { MantraProgression.selectTarget(it, target) }
+    fun toggleRunning() = updateProgress(MantraProgression::toggleRunning)
+    fun increment() = updateProgress(MantraProgression::increment)
+    fun reset() = updateProgress(MantraProgression::reset)
+
+    private fun updateProgress(transform: (MantraProgress) -> MantraProgress) {
+        mutableState.update { it.copy(progress = transform(it.progress)) }
     }
 }
 

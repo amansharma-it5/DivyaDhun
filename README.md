@@ -2,7 +2,14 @@
 
 Your Daily Bhakti. Bhakti, bas ek tap mein.
 
-DivyaDhun is an Android-first devotional listening experience. **Phase 7 adds a localized lyrics foundation and a calm, readable Aarti Mode on top of the Phase 6 library and Phase 5 player.** Production devotional recordings and cloud sync remain future work.
+DivyaDhun is an Android-first devotional listening experience. **Phase 8 adds a deterministic Mantra Mode on top of the Phase 7 lyrics foundation, Phase 6 library, and Phase 5 player.** Production devotional recordings and cloud sync remain future work.
+
+## Phase 8 completed features
+
+- Mantra tracks open a reusable Mantra Mode with 11, 21, 51, and 108 repetition targets.
+- Counting is explicit and honest: start/pause/resume, count-one, reset, progress, and completion are driven by a small immutable progression model rather than pretending to infer spiritual practice from audio playback.
+- Playable demo fixtures retain synchronized previous/play-pause/next controls; metadata-only mantras provide the count experience without a fake audio action.
+- Mantra Mode is localized in English and Hindi, supports light/dark themes, large text, accessible controls, and stable test tags.
 
 ## Phase 7 completed features
 
@@ -36,7 +43,7 @@ DivyaDhun is an Android-first devotional listening experience. **Phase 7 adds a 
 
 ## Architecture
 
-The single `app` module remains small and inspectable. `domain.model` contains immutable `Deity`, `Track`, `Lyrics`, `DevotionalCollection`, `DevotionalCategory`, `Language`, and `ListeningTime` types. `AudioSource` is a platform-neutral sealed type with nullable bundled or future remote sources. `data.ContentRepository` is the UI-independent catalog contract implemented by `LocalContentRepository`; `UserPreferencesRepository` owns the single DataStore. Feature ViewModels keep loading, search, onboarding, details, and preferences out of Composables.
+The single `app` module remains small and inspectable. `domain.model` contains immutable `Deity`, `Track`, `Lyrics`, `MantraProgress`, `DevotionalCollection`, `DevotionalCategory`, `Language`, and `ListeningTime` types. `MantraProgression` is a platform-neutral deterministic counter. `AudioSource` is a platform-neutral sealed type with nullable bundled or future remote sources. `data.ContentRepository` is the UI-independent catalog contract implemented by `LocalContentRepository`; `UserPreferencesRepository` owns the single DataStore. Feature ViewModels keep loading, search, onboarding, details, preferences, lyrics, and mantra state out of Composables.
 
 Playback is isolated in `playback`: `TrackMediaItemMapper` converts domain tracks to stable Media3 items, `Media3PlaybackController` is the app-facing controller, and `PlaybackService` owns the player/session lifecycle. Navigation Compose handles onboarding, the main shell, deity/category/track routes, and back-stack behavior. Media3 is not exposed by domain or repository code.
 
@@ -69,10 +76,10 @@ Windows:
 
 The debug APK is `app/build/outputs/apk/debug/app-debug.apk`. Unit reports are under `app/build/test-results`; instrumentation reports are under `app/build/outputs/androidTest-results`; lint writes `app/build/reports/lint-results-debug.html`.
 
-The latest Phase 7 validation run passed 20 JVM unit tests and 11 connected emulator tests (Phase 2 through Phase 7 flows). `lintDebug` completed with zero errors and the existing non-critical warnings, and `assembleDebug` completed successfully. The emulator flow verified onboarding, local search, a playable demo result, the mini player, full-player controls, favorites, history, and Aarti Mode lyrics/keep-awake navigation; audible loudspeaker output and system lock-screen presentation still depend on the host device.
+The latest Phase 8 validation run passed 23 JVM unit tests. The Phase 7 connected flow and Phase 8 Mantra Mode flow passed on the emulator; the complete Phase 2–7 suite is also covered by the preceding validation run. `lintDebug` completed with zero errors and the existing non-critical warnings, and `assembleDebug` completed successfully. Emulator flows verify onboarding, local search, playable demo playback, mini/full-player controls, favorites, history, Aarti Mode, and deterministic Mantra Mode counting; audible loudspeaker output and system lock-screen presentation still depend on the host device.
 
 ## Deferred work and known limitations
 
-Downloads, widgets, routine sequencing, Mantra Mode, backend/API, authentication, cloud sync, sharing, subscriptions, analytics, AI, and production devotional recordings remain deferred. Playback currently covers only the five bundled fixtures; metadata-only rows remain discovery surfaces. Library data is local to the device and has no account or cross-device sync. Notification appearance and lock-screen controls depend on the host Android system and notification policy. Physical-device loudspeaker, TalkBack, and release certification are outside this phase. The lyrics excerpts are short traditional/public-domain-style developer fixtures with no proprietary translation or commercial recording.
+Downloads, widgets, routine sequencing, backend/API, authentication, cloud sync, sharing, subscriptions, analytics, AI, and production devotional recordings remain deferred. Playback currently covers only the five bundled fixtures; metadata-only rows remain discovery surfaces. Library data is local to the device and has no account or cross-device sync. Notification appearance and lock-screen controls depend on the host Android system and notification policy. Physical-device loudspeaker, TalkBack, and release certification are outside this phase. The lyrics excerpts are short traditional/public-domain-style developer fixtures with no proprietary translation or commercial recording.
 
-Phase 7 is developed on `feat/divyadhun-phase7-lyrics-aarti`; it is not merged to `main` until its validation and review are complete.
+Phase 8 is developed on `feat/divyadhun-phase8-mantra`; it is not merged to `main` until its validation and review are complete.
