@@ -77,3 +77,17 @@ import com.divyadhun.app.content.DeitySection
 }
 
 fun Language.other() = if (this == Language.ENGLISH) Language.HINDI else Language.ENGLISH
+
+@StringRes fun festivalNameRes(id: String) = when (id) {
+    "diwali" -> R.string.festival_diwali
+    "janmashtami" -> R.string.festival_janmashtami
+    "hanuman_jayanti" -> R.string.festival_hanuman_jayanti
+    else -> R.string.festival_unknown
+}
+
+@StringRes fun festivalDescriptionRes(id: String) = when (id) {
+    "diwali" -> R.string.festival_diwali_description
+    "janmashtami" -> R.string.festival_janmashtami_description
+    "hanuman_jayanti" -> R.string.festival_hanuman_jayanti_description
+    else -> R.string.festival_unknown_description
+}

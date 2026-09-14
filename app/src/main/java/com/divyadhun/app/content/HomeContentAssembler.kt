@@ -6,13 +6,16 @@ import com.divyadhun.app.domain.model.Track
 import com.divyadhun.app.domain.model.DailyBhaktiPlanner
 import com.divyadhun.app.domain.model.DailyBhaktiRoutine
 import com.divyadhun.app.domain.model.ListeningTime
+import com.divyadhun.app.domain.model.Festival
+import com.divyadhun.app.domain.model.FestivalCatalog
+import java.time.LocalDate
 
 /** Pure, deterministic assembly of the sections shown on Home. */
 class HomeContentAssembler(
     private val deities: List<Deity>,
     private val tracks: List<Track>
 ) {
-    fun assemble(preferredDeityIds: Set<String>, listeningTime: ListeningTime = ListeningTime.ANYTIME): HomeContent {
+    fun assemble(preferredDeityIds: Set<String>, listeningTime: ListeningTime = ListeningTime.ANYTIME, date: LocalDate = LocalDate.now()): HomeContent {
         val preferred = deities.filter { it.id in preferredDeityIds }
         val yourGods = if (preferred.isEmpty()) deities.take(MAX_YOUR_GODS) else preferred
         val preferredTracks = tracks.filter { it.deityId in preferredDeityIds }
@@ -26,7 +29,8 @@ class HomeContentAssembler(
             today = today,
             popularAartis = tracks.filter { it.category == DevotionalCategory.AARTI }.take(MAX_TRACKS),
             mantras = tracks.filter { it.category == DevotionalCategory.MANTRA }.take(MAX_TRACKS),
-            dailyRoutine = DailyBhaktiPlanner.plan(preferredDeityIds, listeningTime, tracks)
+            dailyRoutine = DailyBhaktiPlanner.plan(preferredDeityIds, listeningTime, tracks),
+            festivals = FestivalCatalog.upcoming(date)
         )
     }
 
@@ -42,5 +46,6 @@ data class HomeContent(
     val today: List<Track> = emptyList(),
     val popularAartis: List<Track> = emptyList(),
     val mantras: List<Track> = emptyList(),
-    val dailyRoutine: DailyBhaktiRoutine = DailyBhaktiRoutine("anytime_", ListeningTime.ANYTIME, emptyList())
+    val dailyRoutine: DailyBhaktiRoutine = DailyBhaktiRoutine("anytime_", ListeningTime.ANYTIME, emptyList()),
+    val festivals: List<Festival> = emptyList()
 )

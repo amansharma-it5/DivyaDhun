@@ -56,6 +56,7 @@ import com.divyadhun.app.content.DeityDetailViewModel
 import com.divyadhun.app.content.LyricsViewModel
 import com.divyadhun.app.content.MantraViewModel
 import com.divyadhun.app.content.DailyBhaktiViewModel
+import com.divyadhun.app.domain.model.FestivalCatalog
 import com.divyadhun.app.domain.model.DevotionalCategory
 import com.divyadhun.app.domain.model.Language
 import com.divyadhun.app.onboarding.OnboardingFlow
@@ -81,6 +82,7 @@ private const val TRACK_ROUTE = "track/{trackId}"
 private const val LYRICS_ROUTE = "lyrics/{trackId}"
 private const val MANTRA_ROUTE = "mantra/{trackId}"
 private const val DAILY_BHAKTI_ROUTE = "daily_bhakti"
+private const val FESTIVAL_ROUTE = "festival/{festivalId}"
 private const val PLAYER_ROUTE = "player"
 
 @Composable
@@ -157,7 +159,7 @@ private fun AppShell(shellState: ShellUiState, exploreViewModel: ExploreViewMode
         }
     }) { padding ->
         NavHost(navController = nav, startDestination = Destination.HOME.name, modifier = Modifier.padding(padding)) {
-            composable(Destination.HOME.name) { HomeScreen(homeState, shellState.preferences.language, { nav.navigate(Destination.EXPLORE.name) }, { nav.navigate(DAILY_BHAKTI_ROUTE) }, { nav.navigate("deity/$it") }, { nav.navigate("track/$it") }, playbackState, playbackController, libraryState.favoriteTrackIds, { id -> libraryViewModel.setFavorite(id, id !in libraryState.favoriteTrackIds) }, shellState.preferences.simpleMode) }
+            composable(Destination.HOME.name) { HomeScreen(homeState, shellState.preferences.language, { nav.navigate(Destination.EXPLORE.name) }, { nav.navigate(DAILY_BHAKTI_ROUTE) }, { nav.navigate("festival/$it") }, { nav.navigate("deity/$it") }, { nav.navigate("track/$it") }, playbackState, playbackController, libraryState.favoriteTrackIds, { id -> libraryViewModel.setFavorite(id, id !in libraryState.favoriteTrackIds) }, shellState.preferences.simpleMode) }
             composable(Destination.EXPLORE.name) { ExploreScreen(exploreState, shellState.preferences.language, { nav.navigate("deity/$it") }, { nav.navigate("category/${it.name}") }, { nav.navigate("track/$it") }, playbackState, playbackController, libraryState.favoriteTrackIds) { id -> libraryViewModel.setFavorite(id, id !in libraryState.favoriteTrackIds) } }
             composable(Destination.SEARCH.name) { SearchScreen(searchViewModel, searchState, shellState.preferences.language, { nav.navigate("track/$it") }, { nav.navigate("deity/$it") }, playbackState, playbackController, libraryState.favoriteTrackIds) { id -> libraryViewModel.setFavorite(id, id !in libraryState.favoriteTrackIds) } }
             composable(Destination.LIBRARY.name) {
@@ -198,6 +200,10 @@ private fun AppShell(shellState: ShellUiState, exploreViewModel: ExploreViewMode
             composable(DAILY_BHAKTI_ROUTE) {
                 val dailyViewModel: DailyBhaktiViewModel = viewModel()
                 DailyBhaktiScreen(dailyViewModel, homeState.content.dailyRoutine, homeState.tracks, shellState.preferences.language, playbackState, playbackController) { nav.popBackStack() }
+            }
+            composable(FESTIVAL_ROUTE, arguments = listOf(navArgument("festivalId") { type = NavType.StringType })) { backStackEntry ->
+                val festivalId = backStackEntry.arguments?.getString("festivalId").orEmpty()
+                FestivalDetailScreen(FestivalCatalog.byId(festivalId), exploreState.tracks, shellState.preferences.language, playbackState, playbackController, { nav.popBackStack() }, { nav.navigate("track/$it") })
             }
             composable(PLAYER_ROUTE) {
                 val queueTracks = playbackState.queue.mapNotNull { id -> exploreState.tracks.firstOrNull { it.id == id } }
