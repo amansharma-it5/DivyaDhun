@@ -2,7 +2,14 @@
 
 Your Daily Bhakti. Bhakti, bas ek tap mein.
 
-DivyaDhun is an Android-first devotional listening experience. **Phase 6 adds a local My Bhakti library on top of the Phase 5 player: favorites, ordered recent history, last played, and clear-history controls.** Production devotional recordings and cloud sync remain future work.
+DivyaDhun is an Android-first devotional listening experience. **Phase 7 adds a localized lyrics foundation and a calm, readable Aarti Mode on top of the Phase 6 library and Phase 5 player.** Production devotional recordings and cloud sync remain future work.
+
+## Phase 7 completed features
+
+- Traditional, rights-safe lyrics excerpts are available through the local content repository for selected demo tracks, with stable `lyricsId` references and missing-content handling.
+- Track Detail opens a reusable Lyrics screen; Aarti tracks use the focused Aarti Mode presentation with large Devanagari text, Romanized text, and an original English meaning.
+- Aarti Mode includes a keep-screen-awake control and synchronized playback controls when the selected track has a bundled developer fixture. Metadata-only tracks never show a fake play action.
+- Lyrics and Aarti Mode are localized in English and Hindi, support light/dark themes, large text, accessible labels, stable test tags, and normal back navigation.
 
 ## Phase 6 completed features
 
@@ -35,7 +42,7 @@ Playback is isolated in `playback`: `TrackMediaItemMapper` converts domain track
 
 ## Local catalog and demo audio
 
-The fixture contains 8 deities, 32 stable track IDs, and six categories: Aarti, Bhajan, Mantra, Chalisa, Stotra, and Meditation. Search normalizes case, whitespace, and punctuation and checks titles, deity names, category names, keywords, aliases, and curated Devanagari aliases such as `महादेव`, `हनुमान`, `राम`, and `कृष्ण`.
+The fixture contains 8 deities, 32 stable track IDs, and six categories: Aarti, Bhajan, Mantra, Chalisa, Stotra, and Meditation. Search normalizes case, whitespace, and punctuation and checks titles, deity names, category names, keywords, aliases, and curated Devanagari aliases such as `महादेव`, `हनुमान`, `राम`, and `कृष्ण`. Lyrics are a separate local map keyed by stable IDs, so presentation can evolve without coupling preferences to localized names.
 
 Five records have bundled developer-created demo tones under `app/src/main/res/raw/`:
 
@@ -62,10 +69,10 @@ Windows:
 
 The debug APK is `app/build/outputs/apk/debug/app-debug.apk`. Unit reports are under `app/build/test-results`; instrumentation reports are under `app/build/outputs/androidTest-results`; lint writes `app/build/reports/lint-results-debug.html`.
 
-The latest validation run passed 19 JVM unit tests and 10 connected emulator tests (Phase 2 through Phase 6 flows). `lintDebug` completed with zero errors and 13 non-critical warnings, and `assembleDebug` completed successfully. The emulator flow verified onboarding, local search, a playable demo result, the mini player, full-player controls, favorites, and history; audible loudspeaker output and system lock-screen presentation still depend on the host device.
+The latest Phase 7 validation run passed 20 JVM unit tests and 11 connected emulator tests (Phase 2 through Phase 7 flows). `lintDebug` completed with zero errors and the existing non-critical warnings, and `assembleDebug` completed successfully. The emulator flow verified onboarding, local search, a playable demo result, the mini player, full-player controls, favorites, history, and Aarti Mode lyrics/keep-awake navigation; audible loudspeaker output and system lock-screen presentation still depend on the host device.
 
 ## Deferred work and known limitations
 
-Lyrics UI, downloads, widgets, routine sequencing, Mantra/Aarti modes, backend/API, authentication, cloud sync, sharing, subscriptions, analytics, AI, and production devotional recordings remain deferred. Playback currently covers only the five bundled fixtures; metadata-only rows remain discovery surfaces. Library data is local to the device and has no account or cross-device sync. Notification appearance and lock-screen controls depend on the host Android system and notification policy. Physical-device loudspeaker, TalkBack, and release certification are outside this phase.
+Downloads, widgets, routine sequencing, Mantra Mode, backend/API, authentication, cloud sync, sharing, subscriptions, analytics, AI, and production devotional recordings remain deferred. Playback currently covers only the five bundled fixtures; metadata-only rows remain discovery surfaces. Library data is local to the device and has no account or cross-device sync. Notification appearance and lock-screen controls depend on the host Android system and notification policy. Physical-device loudspeaker, TalkBack, and release certification are outside this phase. The lyrics excerpts are short traditional/public-domain-style developer fixtures with no proprietary translation or commercial recording.
 
-Phase 6 is developed on `feat/divyadhun-phase6-library`; it is not merged to `main` until its validation and review are complete.
+Phase 7 is developed on `feat/divyadhun-phase7-lyrics-aarti`; it is not merged to `main` until its validation and review are complete.

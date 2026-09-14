@@ -15,6 +15,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.Role
@@ -63,7 +64,7 @@ import com.divyadhun.app.ui.theme.*
 @Composable fun DivyaButton(label: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
  Button(onClick, modifier = modifier.fillMaxWidth().heightIn(min = 52.dp), contentPadding = PaddingValues(horizontal = Space.lg, vertical = Space.md)) { Text(label) }
 }
-@Composable fun LocalizedText(text: LocalizedText, language: Language, modifier: Modifier = Modifier, style: TextStyle = MaterialTheme.typography.bodyLarge, color: Color = Color.Unspecified) = Text(if (language == Language.HINDI) text.hindi else text.english, modifier, style = style, color = color)
+@Composable fun LocalizedText(text: LocalizedText, language: Language, modifier: Modifier = Modifier, style: TextStyle = MaterialTheme.typography.bodyLarge, color: Color = Color.Unspecified, maxLines: Int = Int.MAX_VALUE, overflow: TextOverflow = TextOverflow.Clip) = Text(if (language == Language.HINDI) text.hindi else text.english, modifier, style = style, color = color, maxLines = maxLines, overflow = overflow)
 @Composable fun TrackRow(
  track: Track,
  language: Language,
@@ -90,7 +91,9 @@ import com.divyadhun.app.ui.theme.*
      track.title,
      language,
      modifier = Modifier.clickable(onClick = onClick).semantics { role = Role.Button }.testTag("track_title_${track.id}"),
-     style = MaterialTheme.typography.titleMedium
+     style = MaterialTheme.typography.titleMedium,
+     maxLines = 2,
+     overflow = TextOverflow.Ellipsis
     )
     LocalizedText(track.subtitle, language, color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.bodyMedium)
     if (current) Text(stringResource(if (playbackState.isPlaying) R.string.now_playing else R.string.pause), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
@@ -101,7 +104,7 @@ import com.divyadhun.app.ui.theme.*
      modifier = Modifier.size(48.dp).semantics { contentDescription = actionDescription }.testTag("play_${track.id}")
     ) { Icon(if (current && playbackState.isPlaying) Icons.Filled.Pause else Icons.Filled.PlayArrow, contentDescription = null) }
    } else if (!track.isPlayable) {
-    Text(stringResource(R.string.demo_audio_unavailable), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    Text(stringResource(R.string.demo_audio_unavailable), modifier = Modifier.widthIn(max = 144.dp), maxLines = 2, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
    }
    if (onFavorite != null) {
     IconButton(

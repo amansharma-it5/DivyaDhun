@@ -10,6 +10,7 @@ import com.divyadhun.app.data.UserPreferencesRepository
 import com.divyadhun.app.domain.model.Deity
 import com.divyadhun.app.domain.model.DevotionalCategory
 import com.divyadhun.app.domain.model.Track
+import com.divyadhun.app.domain.model.Lyrics
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -196,6 +197,32 @@ class TrackDetailViewModel(application: Application) : AndroidViewModel(applicat
         viewModelScope.launch {
             try { mutableState.value = TrackDetailUiState(content.getTrack(trackId), loaded = true) }
             catch (_: Exception) { mutableState.update { it.copy(loaded = true, error = true) } }
+        }
+    }
+}
+
+data class LyricsUiState(
+    val track: Track? = null,
+    val lyrics: Lyrics? = null,
+    val loaded: Boolean = false,
+    val error: Boolean = false
+)
+
+class LyricsViewModel(application: Application) : AndroidViewModel(application) {
+    private val content: ContentRepository = LocalContentRepository()
+    private val mutableState = MutableStateFlow(LyricsUiState())
+    val state = mutableState.asStateFlow()
+
+    fun load(trackId: String) {
+        if (state.value.loaded && state.value.track?.id == trackId) return
+        viewModelScope.launch {
+            try {
+                val track = content.getTrack(trackId)
+                val lyrics = track?.lyricsId?.let { id -> content.getLyrics(id) }
+                mutableState.value = LyricsUiState(track, lyrics, loaded = true)
+            } catch (_: Exception) {
+                mutableState.update { it.copy(loaded = true, error = true) }
+            }
         }
     }
 }

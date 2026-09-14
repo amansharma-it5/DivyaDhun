@@ -2,6 +2,7 @@ package com.divyadhun.app.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -255,7 +256,8 @@ fun TrackDetailScreen(
     playbackState: PlaybackState = PlaybackState(),
     playbackController: PlaybackController? = null,
     favoriteTrackIds: Set<String> = emptySet(),
-    onFavorite: (String) -> Unit = {}
+    onFavorite: (String) -> Unit = {},
+    onLyrics: (String) -> Unit = {}
 ) {
     LaunchedEffect(trackId) { viewModel.load(trackId) }
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -285,6 +287,12 @@ fun TrackDetailScreen(
                         MetadataChip(stringResource(R.string.language_label) + ": " + stringResource(if (track.language == Language.HINDI) R.string.language_hindi else R.string.language_english))
                         track.durationMs?.let { duration -> MetadataChip(stringResource(R.string.duration_label) + ": " + formatDuration(duration)) }
                         MetadataChip(stringResource(if (track.lyricsId == null) R.string.lyrics_unavailable else R.string.lyrics_available))
+                        track.lyricsId?.let {
+                            OutlinedButton(
+                                onClick = { onLyrics(track.id) },
+                                modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp).testTag("track_open_lyrics")
+                            ) { Text(stringResource(if (track.category == DevotionalCategory.AARTI) R.string.open_aarti_mode else R.string.read_lyrics)) }
+                        }
                         if (track.isPlayable && playbackController != null) {
                             val current = playbackState.currentTrackId == track.id
                             val playing = current && playbackState.isPlaying
@@ -317,20 +325,24 @@ fun NotFoundScreen(onBack: () -> Unit) {
 
 @Composable
 fun ContentList(title: Int, intro: Int, tag: String, leading: @Composable (() -> Unit)? = null, content: androidx.compose.foundation.lazy.LazyListScope.() -> Unit) {
-    LazyColumn(Modifier.fillMaxWidth().testTag(tag), contentPadding = PaddingValues(Space.lg), verticalArrangement = Arrangement.spacedBy(Space.lg)) {
-        item {
-            Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(Space.sm)) {
-                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                    leading?.invoke()
-                    Column(Modifier.weight(1f)) {
-                        Text(stringResource(R.string.brand_hindi), style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.primary)
-                        Text(stringResource(title), style = MaterialTheme.typography.headlineLarge)
-                    }
+    Box(Modifier.fillMaxWidth()) {
+        LazyColumn(
+            Modifier.fillMaxWidth().testTag(tag),
+            contentPadding = PaddingValues(Space.lg),
+            verticalArrangement = Arrangement.spacedBy(Space.lg)
+        ) {
+            item {
+                Column(Modifier.fillMaxWidth().padding(start = if (leading == null) 0.dp else 56.dp), verticalArrangement = Arrangement.spacedBy(Space.sm)) {
+                    Text(stringResource(R.string.brand_hindi), style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.primary)
+                    Text(stringResource(title), style = MaterialTheme.typography.headlineLarge)
+                    Text(stringResource(intro), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
-                Text(stringResource(intro), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
+            content()
         }
-        content()
+        if (leading != null) {
+            Box(Modifier.align(Alignment.TopStart).padding(start = Space.sm, top = Space.xs)) { leading() }
+        }
     }
 }
 
@@ -370,6 +382,7 @@ private fun CategoryCard(category: DevotionalCategory, count: Int, modifier: Mod
 
 @Composable
 fun SearchScreen(viewModel: SearchViewModel, state: SearchUiState, language: Language, onTrack: (String) -> Unit, onDeity: (String) -> Unit, playbackState: PlaybackState = PlaybackState(), playbackController: PlaybackController? = null, favoriteTrackIds: Set<String> = emptySet(), onFavorite: (String) -> Unit = {}) {
+    val queue = playableQueue(state.results)
     ContentList(R.string.search, R.string.search_intro, "screen_SEARCH") {
         item {
             OutlinedTextField(
@@ -401,7 +414,9 @@ fun SearchScreen(viewModel: SearchViewModel, state: SearchUiState, language: Lan
                 item { EmptyState(stringResource(R.string.no_results_title), stringResource(R.string.no_results_body)) }
             } else {
                 item { Text(pluralStringResource(R.plurals.search_result_count, state.results.size, state.results.size), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary) }
-                item { TrackGroup(state.results, language, playbackState, playbackController, onTrack, favoriteTrackIds, onFavorite) }
+                items(state.results, key = { it.id }) { track ->
+                    TrackRow(track, language, playbackState, playbackController, queue, onClick = { onTrack(track.id) }, isFavorite = track.id in favoriteTrackIds, onFavorite = { onFavorite(track.id) })
+                }
             }
         }
         if (state.error) item { Text(stringResource(R.string.preference_error), color = MaterialTheme.colorScheme.error) }
