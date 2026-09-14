@@ -7,8 +7,6 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.test.core.app.ApplicationProvider
-import com.divyadhun.app.data.UserPreferencesRepository
-import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -19,7 +17,7 @@ class Phase4PlaybackFlowTest {
     @Before
     fun resetPreferences() {
         val context = ApplicationProvider.getApplicationContext<android.content.Context>()
-        runBlocking { UserPreferencesRepository(context).resetForTest() }
+        resetDivyaDhunState(context)
         rule.activityRule.scenario.recreate()
         waitForTag("screen_ONBOARDING")
     }

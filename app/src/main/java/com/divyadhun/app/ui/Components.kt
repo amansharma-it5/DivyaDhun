@@ -6,6 +6,8 @@ import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -50,8 +52,8 @@ import com.divyadhun.app.ui.theme.*
   Text(label, Modifier.padding(horizontal = Space.sm, vertical = Space.xs), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSecondaryContainer)
  }
 }
-@Composable fun EmptyState(title: String, body: String) {
- Surface(color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = .5f), shape = MaterialTheme.shapes.large) {
+@Composable fun EmptyState(title: String, body: String, modifier: Modifier = Modifier) {
+ Surface(modifier = modifier, color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = .5f), shape = MaterialTheme.shapes.large) {
   Column(Modifier.fillMaxWidth().padding(Space.lg), verticalArrangement = Arrangement.spacedBy(Space.sm)) {
    Text(title, style = MaterialTheme.typography.titleLarge)
    Text(body, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -68,12 +70,15 @@ import com.divyadhun.app.ui.theme.*
  playbackState: PlaybackState = PlaybackState(),
  playbackController: PlaybackController? = null,
  playbackQueue: List<Track> = listOf(track),
- onClick: () -> Unit
+ onClick: () -> Unit,
+ isFavorite: Boolean = false,
+ onFavorite: (() -> Unit)? = null
 ) {
  val trackInfoDescription = stringResource(R.string.open_track_info)
  val current = playbackState.currentTrackId == track.id
  val title = if (language == Language.HINDI) track.title.hindi else track.title.english
  val actionDescription = stringResource(if (current && playbackState.isPlaying) R.string.pause_track else R.string.play_track, title)
+ val favoriteDescription = stringResource(if (isFavorite) R.string.unfavorite_track else R.string.favorite_track, title)
  Card(
   modifier = Modifier.fillMaxWidth().heightIn(min = 76.dp).clickable(onClick = onClick).semantics { contentDescription = trackInfoDescription; role = Role.Button }.testTag("track_${track.id}"),
   colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = .52f))
@@ -81,7 +86,12 @@ import com.divyadhun.app.ui.theme.*
   Row(Modifier.fillMaxWidth().padding(Space.md), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Space.md)) {
    TrackArtwork(track, Modifier.size(56.dp))
    Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Space.xs)) {
-    LocalizedText(track.title, language, style = MaterialTheme.typography.titleMedium)
+    LocalizedText(
+     track.title,
+     language,
+     modifier = Modifier.clickable(onClick = onClick).semantics { role = Role.Button }.testTag("track_title_${track.id}"),
+     style = MaterialTheme.typography.titleMedium
+    )
     LocalizedText(track.subtitle, language, color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.bodyMedium)
     if (current) Text(stringResource(if (playbackState.isPlaying) R.string.now_playing else R.string.pause), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
    }
@@ -93,7 +103,29 @@ import com.divyadhun.app.ui.theme.*
    } else if (!track.isPlayable) {
     Text(stringResource(R.string.demo_audio_unavailable), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
    }
+   if (onFavorite != null) {
+    IconButton(
+     onClick = onFavorite,
+     modifier = Modifier.size(48.dp).semantics { contentDescription = favoriteDescription }.testTag("favorite_${track.id}")
+    ) { Icon(if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder, contentDescription = null, tint = MaterialTheme.colorScheme.primary) }
+   }
    MetadataChip(stringResource(categoryNameRes(track.category)))
   }
+ }
+}
+
+@Composable
+fun FavoriteToggle(
+ trackTitle: String,
+ isFavorite: Boolean,
+ onClick: () -> Unit,
+ modifier: Modifier = Modifier
+) {
+ val favoriteDescription = stringResource(if (isFavorite) R.string.unfavorite_track else R.string.favorite_track, trackTitle)
+ IconButton(
+  onClick = onClick,
+  modifier = modifier.size(52.dp).semantics { contentDescription = favoriteDescription }
+ ) {
+  Icon(if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
  }
 }

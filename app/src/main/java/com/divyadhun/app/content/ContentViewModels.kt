@@ -202,6 +202,48 @@ class TrackDetailViewModel(application: Application) : AndroidViewModel(applicat
 
 data class PreferencesUiState(val preferences: UserPreferences = UserPreferences(), val loaded: Boolean = false, val error: Boolean = false)
 
+data class LibraryUiState(
+    val favoriteTrackIds: Set<String> = emptySet(),
+    val recentTrackIds: List<String> = emptyList(),
+    val lastPlayedTrackId: String? = null,
+    val loaded: Boolean = false,
+    val error: Boolean = false
+)
+
+class LibraryViewModel(application: Application) : AndroidViewModel(application) {
+    private val repository = UserPreferencesRepository(application)
+    private val mutableState = MutableStateFlow(LibraryUiState())
+    val state = mutableState.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            repository.preferences.collect { preferences ->
+                mutableState.value = LibraryUiState(
+                    favoriteTrackIds = preferences.favoriteTrackIds,
+                    recentTrackIds = preferences.recentTrackIds,
+                    lastPlayedTrackId = preferences.lastPlayedTrackId,
+                    loaded = true
+                )
+            }
+        }
+    }
+
+    fun setFavorite(trackId: String, favorite: Boolean) = update { repository.setFavoriteTrack(trackId, favorite) }
+    fun recordPlayed(trackId: String) = update { repository.recordPlayedTrack(trackId) }
+    fun clearHistory() = update { repository.clearHistory() }
+
+    private fun update(action: suspend () -> Unit) {
+        viewModelScope.launch {
+            try {
+                action()
+                mutableState.update { it.copy(error = false) }
+            } catch (_: Exception) {
+                mutableState.update { it.copy(error = true) }
+            }
+        }
+    }
+}
+
 class PreferencesViewModel(application: Application) : AndroidViewModel(application) {
     private val repository = UserPreferencesRepository(application)
     private val mutableState = MutableStateFlow(PreferencesUiState())

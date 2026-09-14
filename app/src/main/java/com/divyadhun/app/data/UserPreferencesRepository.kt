@@ -23,7 +23,10 @@ data class UserPreferences(
     val language: Language = Language.ENGLISH,
     val preferredDeityIds: Set<String> = emptySet(),
     val listeningTime: ListeningTime = ListeningTime.ANYTIME,
-    val theme: ThemeMode = ThemeMode.SYSTEM
+    val theme: ThemeMode = ThemeMode.SYSTEM,
+    val favoriteTrackIds: Set<String> = emptySet(),
+    val recentTrackIds: List<String> = emptyList(),
+    val lastPlayedTrackId: String? = null
 )
 
 class UserPreferencesRepository(private val context: Context) {
@@ -34,6 +37,9 @@ class UserPreferencesRepository(private val context: Context) {
         val preferredDeityIds = stringSetPreferencesKey("preferred_deity_ids")
         val listeningTime = stringPreferencesKey("listening_time")
         val theme = stringPreferencesKey("theme")
+        val favoriteTrackIds = stringSetPreferencesKey("favorite_track_ids")
+        val recentTrackIds = stringPreferencesKey("recent_track_ids")
+        val lastPlayedTrackId = stringPreferencesKey("last_played_track_id")
     }
 
     val preferences: Flow<UserPreferences> = context.userPreferencesDataStore.data
@@ -47,7 +53,10 @@ class UserPreferencesRepository(private val context: Context) {
                 language = Language.fromStored(values[Keys.language]),
                 preferredDeityIds = values[Keys.preferredDeityIds] ?: emptySet(),
                 listeningTime = ListeningTime.fromStored(values[Keys.listeningTime]),
-                theme = ThemeMode.fromStored(values[Keys.theme])
+                theme = ThemeMode.fromStored(values[Keys.theme]),
+                favoriteTrackIds = values[Keys.favoriteTrackIds] ?: emptySet(),
+                recentTrackIds = decodeIds(values[Keys.recentTrackIds]),
+                lastPlayedTrackId = values[Keys.lastPlayedTrackId]
             )
         }
 
@@ -67,5 +76,36 @@ class UserPreferencesRepository(private val context: Context) {
     suspend fun setListeningTime(time: ListeningTime) = context.userPreferencesDataStore.edit { it[Keys.listeningTime] = time.name }
     suspend fun setTheme(theme: ThemeMode) = context.userPreferencesDataStore.edit { it[Keys.theme] = theme.name }
 
+    suspend fun setFavoriteTrack(trackId: String, favorite: Boolean) = context.userPreferencesDataStore.edit { values ->
+        val updated = (values[Keys.favoriteTrackIds] ?: emptySet()).toMutableSet()
+        if (favorite) updated += trackId else updated -= trackId
+        values[Keys.favoriteTrackIds] = updated
+    }
+
+    suspend fun recordPlayedTrack(trackId: String, maxHistory: Int = MAX_RECENT_TRACKS) = context.userPreferencesDataStore.edit { values ->
+        val recent = listOf(trackId) + decodeIds(values[Keys.recentTrackIds]).filterNot { it == trackId }
+        values[Keys.recentTrackIds] = encodeIds(recent.take(maxHistory))
+        values[Keys.lastPlayedTrackId] = trackId
+    }
+
+    suspend fun clearHistory() = context.userPreferencesDataStore.edit { values ->
+        values.remove(Keys.recentTrackIds)
+        values.remove(Keys.lastPlayedTrackId)
+    }
+
     suspend fun resetForTest() = context.userPreferencesDataStore.edit { it.clear() }
+
+    companion object {
+        private const val MAX_RECENT_TRACKS = 20
+
+        internal fun encodeIds(ids: List<String>) = ids.joinToString(ID_SEPARATOR)
+
+        internal fun decodeIds(value: String?): List<String> = value
+            ?.split(ID_SEPARATOR)
+            ?.filter(String::isNotBlank)
+            ?.distinct()
+            ?: emptyList()
+
+        private const val ID_SEPARATOR = "|"
+    }
 }

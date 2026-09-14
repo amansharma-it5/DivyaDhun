@@ -110,7 +110,9 @@ fun FullPlayerScreen(
     state: PlaybackState,
     controller: PlaybackController,
     onBack: () -> Unit,
-    onSelectTrack: (Track) -> Unit
+    onSelectTrack: (Track) -> Unit,
+    isFavorite: Boolean = false,
+    onFavorite: () -> Unit = {}
 ) {
     val title = track?.let { if (language == Language.HINDI) it.title.hindi else it.title.english }
     var isDragging by remember { mutableStateOf(false) }
@@ -131,7 +133,7 @@ fun FullPlayerScreen(
     ) {
         item {
             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
-                IconButton(onClick = onBack, modifier = Modifier.size(48.dp).semantics { contentDescription = backDescription }) {
+                IconButton(onClick = onBack, modifier = Modifier.size(48.dp).semantics { contentDescription = backDescription }.testTag("back_button")) {
                     Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = null)
                 }
                 Column(Modifier.weight(1f)) {
@@ -148,7 +150,10 @@ fun FullPlayerScreen(
             Surface(color = MaterialTheme.colorScheme.primaryContainer, shape = MaterialTheme.shapes.large) {
                 Column(Modifier.fillMaxWidth().padding(20.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     TrackArtwork(track, Modifier.size(220.dp).testTag("player_artwork"))
-                    Text(title.orEmpty(), style = MaterialTheme.typography.headlineSmall, modifier = Modifier.testTag("player_title"))
+                    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                        Text(title.orEmpty(), style = MaterialTheme.typography.headlineSmall, modifier = Modifier.weight(1f).testTag("player_title"))
+                        FavoriteToggle(title.orEmpty(), isFavorite, onFavorite, Modifier.testTag("favorite_player"))
+                    }
                     Text(localizedSource(track, language), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     if (state.status == PlaybackStatus.ERROR) {
                         Text(stringResource(R.string.playback_error), color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.testTag("player_error"))

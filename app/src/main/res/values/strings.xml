@@ -25,8 +25,15 @@
         <item quantity="one">%1$d devotional track</item>
         <item quantity="other">%1$d devotional tracks</item>
     </plurals>
-    <string name="favorites_title">Favorites are coming soon</string>
-    <string name="favorites_body">Saved devotional audio will appear here in a later phase.</string>
+    <string name="favorites_title">Favorites</string>
+    <string name="favorites_empty_title">Your favorites will appear here</string>
+    <string name="favorites_empty_body">Tap the heart on any devotional track to save it.</string>
+    <string name="recently_played">Recently played</string>
+    <string name="recently_played_empty">Tracks you start will appear here.</string>
+    <string name="last_played">Last played</string>
+    <string name="clear_history">Clear history</string>
+    <string name="favorite_track">Add %1$s to favorites</string>
+    <string name="unfavorite_track">Remove %1$s from favorites</string>
     <string name="library_intro">A place for the prayers you love.</string>
     <string name="appearance">Appearance</string>
     <string name="system">System</string>
