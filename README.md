@@ -2,7 +2,14 @@
 
 Your Daily Bhakti. Bhakti, bas ek tap mein.
 
-DivyaDhun is an Android-first devotional listening experience. **Phase 8 adds a deterministic Mantra Mode on top of the Phase 7 lyrics foundation, Phase 6 library, and Phase 5 player.** Production devotional recordings and cloud sync remain future work.
+DivyaDhun is an Android-first devotional listening experience. **Phase 9 adds a deterministic, playable-only Daily Bhakti routine on top of Mantra Mode, the Phase 7 lyrics foundation, the Phase 6 library, and the Phase 5 player.** Production devotional recordings and cloud sync remain future work.
+
+## Phase 9 completed features
+
+- Home opens Daily Bhakti with a small routine selected from preferred Gods and the saved listening-time preference.
+- The planner is deterministic and filters out metadata-only tracks, so a routine never promises playback for an unavailable recording.
+- The routine screen supports explicit start/pause, previous, next, reset, current-track highlighting, and progress through the selected playable fixtures.
+- Daily Bhakti is localized in English and Hindi, supports light/dark themes, large text, accessible controls, and stable test tags.
 
 ## Phase 8 completed features
 
@@ -76,10 +83,10 @@ Windows:
 
 The debug APK is `app/build/outputs/apk/debug/app-debug.apk`. Unit reports are under `app/build/test-results`; instrumentation reports are under `app/build/outputs/androidTest-results`; lint writes `app/build/reports/lint-results-debug.html`.
 
-The latest Phase 8 validation run passed 23 JVM unit tests. The Phase 7 connected flow and Phase 8 Mantra Mode flow passed on the emulator; the complete Phase 2–7 suite is also covered by the preceding validation run. `lintDebug` completed with zero errors and the existing non-critical warnings, and `assembleDebug` completed successfully. Emulator flows verify onboarding, local search, playable demo playback, mini/full-player controls, favorites, history, Aarti Mode, and deterministic Mantra Mode counting; audible loudspeaker output and system lock-screen presentation still depend on the host device.
+The latest Phase 9 validation run passed 25 JVM unit tests and the Phase 9 Daily Bhakti emulator flow. Earlier phase connected flows remain covered by their validated runs. `lintDebug` completed with zero errors and the existing non-critical warnings, and `assembleDebug` completed successfully. Emulator flows verify onboarding, local search, playable demo playback, mini/full-player controls, favorites, history, Aarti Mode, Mantra Mode counting, and Daily Bhakti routine navigation; audible loudspeaker output and system lock-screen presentation still depend on the host device.
 
 ## Deferred work and known limitations
 
 Downloads, widgets, routine sequencing, backend/API, authentication, cloud sync, sharing, subscriptions, analytics, AI, and production devotional recordings remain deferred. Playback currently covers only the five bundled fixtures; metadata-only rows remain discovery surfaces. Library data is local to the device and has no account or cross-device sync. Notification appearance and lock-screen controls depend on the host Android system and notification policy. Physical-device loudspeaker, TalkBack, and release certification are outside this phase. The lyrics excerpts are short traditional/public-domain-style developer fixtures with no proprietary translation or commercial recording.
 
-Phase 8 is developed on `feat/divyadhun-phase8-mantra`; it is not merged to `main` until its validation and review are complete.
+Phase 9 is developed on `feat/divyadhun-phase9-daily-bhakti`; it is not merged to `main` until its validation and review are complete.
