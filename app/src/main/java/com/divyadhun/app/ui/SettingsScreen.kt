@@ -43,6 +43,7 @@ import com.divyadhun.app.domain.model.Deity
 import com.divyadhun.app.domain.model.Language
 import com.divyadhun.app.domain.model.ListeningTime
 import com.divyadhun.app.domain.model.Track
+import com.divyadhun.app.domain.model.FamilyMandirProfile
 import com.divyadhun.app.playback.PlaybackController
 import com.divyadhun.app.playback.PlaybackState
 import com.divyadhun.app.ui.theme.Space
@@ -58,6 +59,8 @@ fun LibraryScreen(
     onLanguage: (Language) -> Unit,
     onTime: (ListeningTime) -> Unit,
     onDailyReminder: (Boolean) -> Unit,
+    familyMandir: FamilyMandirProfile,
+    onFamilyMandir: (FamilyMandirProfile) -> Unit,
     onDeities: (Set<String>) -> Unit,
     onTrack: (String) -> Unit,
     onFavorite: (String) -> Unit,
@@ -67,6 +70,7 @@ fun LibraryScreen(
 ) {
     var showDeities by remember { mutableStateOf(false) }
     var showTime by remember { mutableStateOf(false) }
+    var showFamilyMandir by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val reminderPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted -> if (granted) onDailyReminder(true) }
     val favorites = tracks.filter { it.id in library.favoriteTrackIds }
@@ -107,6 +111,13 @@ fun LibraryScreen(
         }
         item { Text(stringResource(R.string.preferences), style = MaterialTheme.typography.titleLarge) }
         item {
+            PreferenceButton(
+                stringResource(R.string.family_mandir),
+                if (familyMandir.isConfigured) stringResource(R.string.family_mandir_configured) else stringResource(R.string.family_mandir_not_set),
+                "family_mandir_button"
+            ) { showFamilyMandir = true }
+        }
+        item {
             Column(verticalArrangement = Arrangement.spacedBy(Space.sm)) {
                 Text(stringResource(R.string.language), style = MaterialTheme.typography.titleMedium)
                 Row(horizontalArrangement = Arrangement.spacedBy(Space.sm)) {
@@ -143,6 +154,7 @@ fun LibraryScreen(
     }
     if (showDeities) DeityDialog(deities, state.preferences.preferredDeityIds, { onDeities(it) }, { showDeities = false })
     if (showTime) TimeDialog(state.preferences.listeningTime, onTime, { showTime = false })
+    if (showFamilyMandir) FamilyMandirDialog(familyMandir, onFamilyMandir) { showFamilyMandir = false }
 }
 
 @Composable private fun PreferenceButton(title: String, summary: String, tag: String, onClick: () -> Unit) {
@@ -172,4 +184,23 @@ fun LibraryScreen(
             OutlinedButton(onClick = { onSelected(time); onDismiss() }, modifier = Modifier.fillMaxWidth().testTag("setting_time_${time.name}")) { RadioButton(selected == time, onClick = null); Spacer(Modifier.width(Space.sm)); Text(stringResource(listeningTimeNameRes(time))) }
         } }
     }, confirmButton = {})
+}
+
+@Composable
+private fun FamilyMandirDialog(profile: FamilyMandirProfile, onSave: (FamilyMandirProfile) -> Unit, onDismiss: () -> Unit) {
+    var name by remember(profile) { mutableStateOf(profile.name) }
+    var members by remember(profile) { mutableStateOf(profile.memberNames.joinToString(", ")) }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.family_mandir)) },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(Space.sm)) {
+                Text(stringResource(R.string.family_mandir_body), style = MaterialTheme.typography.bodyMedium)
+                androidx.compose.material3.OutlinedTextField(name, { name = it }, label = { Text(stringResource(R.string.family_mandir_name)) }, singleLine = true, modifier = Modifier.fillMaxWidth().testTag("family_mandir_name"))
+                androidx.compose.material3.OutlinedTextField(members, { members = it }, label = { Text(stringResource(R.string.family_mandir_members)) }, supportingText = { Text(stringResource(R.string.family_mandir_members_hint)) }, modifier = Modifier.fillMaxWidth().testTag("family_mandir_members"))
+            }
+        },
+        confirmButton = { TextButton(onClick = { onSave(FamilyMandirProfile(name, members.split(",")).sanitized()); onDismiss() }, modifier = Modifier.testTag("family_mandir_save")) { Text(stringResource(R.string.save)) } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.back)) } }
+    )
 }

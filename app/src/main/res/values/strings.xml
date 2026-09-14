@@ -63,6 +63,14 @@
     <string name="dark">Dark</string>
     <string name="preference_error">Your preference could not be saved. Please try again.</string>
     <string name="preferences">Preferences</string>
+    <string name="family_mandir">Family Mandir</string>
+    <string name="family_mandir_not_set">Set up a local family space</string>
+    <string name="family_mandir_configured">Your local family space</string>
+    <string name="family_mandir_body">Create a small shared space on this device for your household. Cloud sync is not included.</string>
+    <string name="family_mandir_name">Mandir name</string>
+    <string name="family_mandir_members">Family members</string>
+    <string name="family_mandir_members_hint">Separate names with commas</string>
+    <string name="save">Save</string>
     <string name="language">Language</string>
     <string name="your_gods">Your Gods</string>
     <string name="listening_time">Listening Time</string>
