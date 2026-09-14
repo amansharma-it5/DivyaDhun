@@ -80,3 +80,25 @@ data class DevotionalCollection(
     val artworkKey: String,
     val artworkSource: ArtworkSource? = null
 )
+
+/** Device-local Family Mandir profile. It deliberately has no account or sync identity. */
+data class FamilyMandirProfile(
+    val name: String = "",
+    val memberNames: List<String> = emptyList()
+) {
+    val isConfigured: Boolean get() = name.isNotBlank() || memberNames.isNotEmpty()
+
+    fun sanitized(): FamilyMandirProfile = FamilyMandirProfile(
+        name = name.replace('|', ' ').trim().take(MAX_NAME_LENGTH),
+        memberNames = memberNames.map { it.replace('|', ' ').trim().take(MAX_MEMBER_LENGTH) }
+            .filter(String::isNotBlank)
+            .distinct()
+            .take(MAX_MEMBERS)
+    )
+
+    companion object {
+        private const val MAX_NAME_LENGTH = 60
+        private const val MAX_MEMBER_LENGTH = 40
+        private const val MAX_MEMBERS = 8
+    }
+}

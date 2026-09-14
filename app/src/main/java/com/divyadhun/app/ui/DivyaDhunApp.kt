@@ -168,6 +168,8 @@ private fun AppShell(shellState: ShellUiState, exploreViewModel: ExploreViewMode
                     onLanguage = { language -> preferencesViewModel.setLanguage(language); LocaleController.apply(context, language) },
                     onTime = preferencesViewModel::setListeningTime, onDeities = preferencesViewModel::setDeities,
                     onDailyReminder = preferencesViewModel::setDailyReminder,
+                    familyMandir = shellState.preferences.familyMandir,
+                    onFamilyMandir = preferencesViewModel::setFamilyMandir,
                     onTrack = { nav.navigate("track/$it") },
                     onFavorite = { id -> libraryViewModel.setFavorite(id, id !in libraryState.favoriteTrackIds) },
                     onClearHistory = libraryViewModel::clearHistory,

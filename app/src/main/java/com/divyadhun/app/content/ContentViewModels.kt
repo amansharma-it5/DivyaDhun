@@ -16,6 +16,7 @@ import com.divyadhun.app.domain.model.MantraProgress
 import com.divyadhun.app.domain.model.MantraProgression
 import com.divyadhun.app.domain.model.MantraSessionStatus
 import com.divyadhun.app.engagement.ReminderScheduler
+import com.divyadhun.app.domain.model.FamilyMandirProfile
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -337,6 +338,7 @@ class PreferencesViewModel(application: Application) : AndroidViewModel(applicat
         if (enabled) ReminderScheduler.schedule(getApplication(), state.value.preferences.listeningTime)
         else ReminderScheduler.cancel(getApplication())
     }
+    fun setFamilyMandir(profile: FamilyMandirProfile) = update { repository.setFamilyMandir(profile) }
     fun setLanguage(language: com.divyadhun.app.domain.model.Language) = update { repository.setLanguage(language) }
     fun setListeningTime(time: com.divyadhun.app.domain.model.ListeningTime) = update {
         repository.setListeningTime(time)
