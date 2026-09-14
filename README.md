@@ -2,7 +2,14 @@
 
 Your Daily Bhakti. Bhakti, bas ek tap mein.
 
-DivyaDhun is an Android-first devotional listening experience. **Phase 15 adds an honest device-local Family Mandir profile on top of the Phase 14 sharing foundation.** Production devotional recordings, backend credentials, and cloud infrastructure remain future work.
+DivyaDhun is an Android-first devotional listening experience. **Phase 16 completes a production-readiness hardening pass on top of the Phase 15 local Family Mandir foundation.** Production devotional recordings, backend credentials, and cloud infrastructure remain future work.
+
+## Phase 16 completed features
+
+- Manifest security is explicit: the app disallows cleartext traffic, uses non-exported local receivers/providers, declares only the permissions used by playback and opt-in reminders, and supplies Android 12+ data-extraction rules.
+- Local preference data and share-card cache files are excluded from backup and device transfer; no account data is silently copied between devices.
+- Opted-in daily reminders are restored after `BOOT_COMPLETED` through a short-lived background coroutine and the existing inexact scheduler.
+- Catalog and profile tests cover malformed relationships, stable IDs, persistence boundaries, and bounded local input. No release signing keys or publishing configuration were added.
 
 ## Phase 15 completed features
 
@@ -111,10 +118,10 @@ Windows:
 
 The debug APK is `app/build/outputs/apk/debug/app-debug.apk`. Unit reports are under `app/build/test-results`; instrumentation reports are under `app/build/outputs/androidTest-results`; lint writes `app/build/reports/lint-results-debug.html`.
 
-The latest Phase 15 validation run passed the JVM unit suite and the Phase 11 festival emulator flow. Earlier phase connected flows remain covered by their validated runs. `lintDebug` completed with zero errors and the existing non-critical warnings, and `assembleDebug` completed successfully. Emulator flows verify onboarding, local search, playable demo playback, mini/full-player controls, favorites, history, Aarti Mode, Mantra Mode counting, Daily Bhakti routine navigation, Simple Mode, and festival discovery; audible loudspeaker output and system lock-screen presentation still depend on the host device. Share-sheet delivery depends on the receiving apps installed on the host device and was not claimed without observing a completed share.
+The latest Phase 16 validation run passed 37 JVM unit tests and the Phase 11 festival emulator flow. Earlier phase connected flows remain covered by their validated runs. `lintDebug` completed with zero errors and 13 existing non-critical warnings, and `assembleDebug` completed successfully. Emulator flows verify onboarding, local search, playable demo playback, mini/full-player controls, favorites, history, Aarti Mode, Mantra Mode counting, Daily Bhakti routine navigation, Simple Mode, and festival discovery; audible loudspeaker output and system lock-screen presentation still depend on the host device. Share-sheet delivery depends on the receiving apps installed on the host device and was not claimed without observing a completed share.
 
 ## Deferred work and known limitations
 
 Downloads, widgets, backend/API implementation, authentication, cloud sync, subscriptions, analytics, AI, and production devotional recordings remain deferred. Remote catalog integration is intentionally blocked by the external dependency **production backend credentials and infrastructure**; the DTO, repository, cache, validation, and fallback seams are ready for it. Playback currently covers only the five bundled fixtures; metadata-only rows remain discovery surfaces. Library data and Family Mandir are local to the device and have no account or cross-device sync. Reminder delivery depends on user opt-in, Android notification permission, and system scheduling policy. Sharing is local-only through the platform Sharesheet. Physical-device loudspeaker, TalkBack, and release certification are outside this phase. The lyrics excerpts are short traditional/public-domain-style developer fixtures with no proprietary translation or commercial recording.
 
-Phase 15 is developed on `feat/divyadhun-phase15-family`; it is not merged to `main` until its validation and review are complete.
+Phase 16 is developed on `feat/divyadhun-phase16-hardening`; it is not merged to `main` until its validation and review are complete.
