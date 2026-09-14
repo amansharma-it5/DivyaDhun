@@ -42,11 +42,19 @@ val DivyaTypography = Typography(
  labelLarge = TextStyle(fontSize = 14.sp, lineHeight = 22.sp, fontWeight = FontWeight.Medium)
 )
 fun ThemeMode.usesDark(systemDark: Boolean) = this == ThemeMode.DARK || (this == ThemeMode.SYSTEM && systemDark)
-@Composable fun DivyaTheme(mode: ThemeMode = ThemeMode.SYSTEM, content: @Composable () -> Unit) {
+private val SimpleTypography = DivyaTypography.copy(
+ displaySmall = DivyaTypography.displaySmall.copy(fontSize = 40.sp, lineHeight = 48.sp),
+ headlineLarge = DivyaTypography.headlineLarge.copy(fontSize = 36.sp, lineHeight = 44.sp),
+ headlineSmall = DivyaTypography.headlineSmall.copy(fontSize = 28.sp, lineHeight = 38.sp),
+ titleLarge = DivyaTypography.titleLarge.copy(fontSize = 25.sp, lineHeight = 36.sp),
+ bodyLarge = DivyaTypography.bodyLarge.copy(fontSize = 19.sp, lineHeight = 30.sp),
+ bodyMedium = DivyaTypography.bodyMedium.copy(fontSize = 17.sp, lineHeight = 27.sp),
+ labelLarge = DivyaTypography.labelLarge.copy(fontSize = 16.sp, lineHeight = 25.sp)
+)
+@Composable fun DivyaTheme(mode: ThemeMode = ThemeMode.SYSTEM, simpleMode: Boolean = false, content: @Composable () -> Unit) {
  val dark = mode.usesDark(isSystemInDarkTheme())
  CompositionLocalProvider(LocalDevotionalColors provides DevotionalColors(Color(0xFFF59E0B), Color(0xFFD5A33B), if(dark) Color(0xFF9BD4A5) else Color(0xFF356B43))) {
-  MaterialTheme(colorScheme = if (dark) Dark else Light, typography = DivyaTypography,
+   MaterialTheme(colorScheme = if (dark) Dark else Light, typography = if (simpleMode) SimpleTypography else DivyaTypography,
    shapes = Shapes(small = RoundedCornerShape(12.dp), medium = RoundedCornerShape(20.dp), large = RoundedCornerShape(28.dp)), content = content)
  }
 }
-

@@ -36,6 +36,8 @@
     <string name="unfavorite_track">Remove %1$s from favorites</string>
     <string name="library_intro">A place for the prayers you love.</string>
     <string name="appearance">Appearance</string>
+    <string name="simple_mode">Simple Mode</string>
+    <string name="simple_mode_body">Larger type, larger touch targets, and a quieter Home.</string>
     <string name="system">System</string>
     <string name="light">Light</string>
     <string name="dark">Dark</string>

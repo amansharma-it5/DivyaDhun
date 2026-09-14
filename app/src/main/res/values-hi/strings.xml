@@ -36,6 +36,8 @@
     <string name="unfavorite_track">%1$s को पसंदीदा से हटाएँ</string>
     <string name="library_intro">आपकी प्रिय प्रार्थनाओं के लिए एक स्थान।</string>
     <string name="appearance">दिखावट</string>
+    <string name="simple_mode">सरल मोड</string>
+    <string name="simple_mode_body">बड़ा लेखन, बड़े स्पर्श क्षेत्र और शांत होम स्क्रीन।</string>
     <string name="system">सिस्टम</string>
     <string name="light">लाइट</string>
     <string name="dark">डार्क</string>

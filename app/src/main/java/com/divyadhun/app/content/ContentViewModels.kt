@@ -330,6 +330,7 @@ class PreferencesViewModel(application: Application) : AndroidViewModel(applicat
 
     init { viewModelScope.launch { repository.preferences.collect { mutableState.value = PreferencesUiState(it, loaded = true) } } }
     fun setTheme(theme: com.divyadhun.app.ThemeMode) = update { repository.setTheme(theme) }
+    fun setSimpleMode(enabled: Boolean) = update { repository.setSimpleMode(enabled) }
     fun setLanguage(language: com.divyadhun.app.domain.model.Language) = update { repository.setLanguage(language) }
     fun setListeningTime(time: com.divyadhun.app.domain.model.ListeningTime) = update { repository.setListeningTime(time) }
     fun setDeities(ids: Set<String>) = update { repository.setPreferredDeityIds(ids) }
