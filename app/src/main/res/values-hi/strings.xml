@@ -160,6 +160,14 @@
     <string name="mantra_complete_body">आपकी चुनी हुई संख्या पूरी हुई। कुछ क्षण शांत बैठें।</string>
     <string name="mantra_metadata_note">इस स्थानीय प्रविष्टि में अभी ऑडियो नहीं है। फिर भी आप ध्यानपूर्वक गिनती कर सकते हैं।</string>
     <string name="mantra_text_available">पारंपरिक पाठ बोलों के दृश्य में उपलब्ध है।</string>
+    <string name="daily_bhakti">दैनिक भक्ति</string>
+    <string name="daily_bhakti_intro">आपके चुने हुए देवताओं और सुनने के समय से बनी छोटी, बजने योग्य दिनचर्या।</string>
+    <string name="open_daily_bhakti">दैनिक भक्ति खोलें</string>
+    <string name="start_daily_bhakti">दैनिक भक्ति शुरू करें</string>
+    <string name="daily_bhakti_for_time">%1$s के लिए</string>
+    <string name="routine_progress">%2$d में से ट्रैक %1$d</string>
+    <string name="daily_bhakti_queue">आज की दिनचर्या</string>
+    <string name="no_playable_daily_bhakti">इस दिनचर्या के लिए अभी कोई बजने योग्य डेमो ट्रैक नहीं है।</string>
     <string name="view_deity">देवता देखें</string>
     <string name="view_category">प्रकार देखें</string>
     <string name="empty_category_title">यह संग्रह बढ़ रहा है</string>

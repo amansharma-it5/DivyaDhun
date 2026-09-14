@@ -160,6 +160,14 @@
     <string name="mantra_complete_body">Your chosen count is complete. Sit quietly for a moment.</string>
     <string name="mantra_metadata_note">This local catalog entry has no audio attached yet. You can still use the mindful count.</string>
     <string name="mantra_text_available">Traditional text is available in the lyrics view.</string>
+    <string name="daily_bhakti">Daily Bhakti</string>
+    <string name="daily_bhakti_intro">A small, playable routine shaped by your chosen Gods and listening time.</string>
+    <string name="open_daily_bhakti">Open Daily Bhakti</string>
+    <string name="start_daily_bhakti">Start Daily Bhakti</string>
+    <string name="daily_bhakti_for_time">For %1$s</string>
+    <string name="routine_progress">Track %1$d of %2$d</string>
+    <string name="daily_bhakti_queue">Today’s routine</string>
+    <string name="no_playable_daily_bhakti">There are no playable demo tracks for this routine yet.</string>
     <string name="view_deity">View deity</string>
     <string name="view_category">View category</string>
     <string name="empty_category_title">This collection is growing</string>

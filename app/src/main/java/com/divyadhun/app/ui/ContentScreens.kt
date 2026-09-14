@@ -66,6 +66,7 @@ fun HomeScreen(
     state: HomeUiState,
     language: Language,
     onExplore: () -> Unit,
+    onDailyBhakti: () -> Unit,
     onDeity: (String) -> Unit,
     onTrack: (String) -> Unit,
     playbackState: PlaybackState = PlaybackState(),
@@ -76,7 +77,7 @@ fun HomeScreen(
     if (!state.loaded) { LoadingState(); return }
     val content = state.content
     ContentList(title = R.string.namaste, intro = R.string.home_intro, tag = "screen_HOME") {
-        item { HomeHeroCard(onExplore) }
+        item { HomeHeroCard(onExplore, onDailyBhakti) }
         item { SectionHeader(stringResource(R.string.your_gods_section)) }
         item {
             if (content.yourGods.isEmpty()) EmptyState(stringResource(R.string.your_gods_section), stringResource(R.string.no_preference_deities))
@@ -96,7 +97,7 @@ fun HomeScreen(
 }
 
 @Composable
-private fun HomeHeroCard(onExplore: () -> Unit) {
+private fun HomeHeroCard(onExplore: () -> Unit, onDailyBhakti: () -> Unit) {
     Surface(
         modifier = Modifier.fillMaxWidth().testTag("home_hero"),
         color = MaterialTheme.colorScheme.primaryContainer,
@@ -110,6 +111,7 @@ private fun HomeHeroCard(onExplore: () -> Unit) {
             Text(stringResource(R.string.hero_title), style = MaterialTheme.typography.displaySmall)
             Text(stringResource(R.string.hero_body), style = MaterialTheme.typography.bodyLarge)
             DivyaButton(stringResource(R.string.explore_action), onExplore, Modifier.testTag("home_explore_cta"))
+            OutlinedButton(onClick = onDailyBhakti, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp).testTag("home_daily_bhakti_cta")) { Text(stringResource(R.string.open_daily_bhakti)) }
         }
     }
 }

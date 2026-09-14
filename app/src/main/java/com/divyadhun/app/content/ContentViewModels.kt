@@ -2,6 +2,7 @@ package com.divyadhun.app.content
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.divyadhun.app.data.ContentRepository
 import com.divyadhun.app.data.LocalContentRepository
@@ -45,7 +46,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                         deities = deities,
                         tracks = tracks,
                         preferredDeityIds = user.preferredDeityIds,
-                        content = assembler.assemble(user.preferredDeityIds),
+                        content = assembler.assemble(user.preferredDeityIds, user.listeningTime),
                         loaded = true
                     )
                 }
@@ -54,6 +55,18 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
+}
+
+data class DailyBhaktiSessionState(val currentIndex: Int = 0, val isRunning: Boolean = false)
+
+class DailyBhaktiViewModel : ViewModel() {
+    private val mutableState = MutableStateFlow(DailyBhaktiSessionState())
+    val state = mutableState.asStateFlow()
+
+    fun reset() { mutableState.value = DailyBhaktiSessionState() }
+    fun setRunning(running: Boolean) { mutableState.update { it.copy(isRunning = running) } }
+    fun next(size: Int) { if (size > 0) mutableState.update { it.copy(currentIndex = (it.currentIndex + 1).coerceAtMost(size - 1)) } }
+    fun previous() { mutableState.update { it.copy(currentIndex = (it.currentIndex - 1).coerceAtLeast(0)) } }
 }
 
 data class ExploreUiState(
