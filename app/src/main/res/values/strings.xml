@@ -56,6 +56,8 @@
     <string name="festival_janmashtami_description">A joyful remembrance of Krishna.</string>
     <string name="festival_hanuman_jayanti">Hanuman Jayanti</string>
     <string name="festival_hanuman_jayanti_description">A day to remember courage, service, and devotion.</string>
+    <string name="share_blessing">Share blessing</string>
+    <string name="share_blessing_chooser">Share with</string>
     <string name="system">System</string>
     <string name="light">Light</string>
     <string name="dark">Dark</string>

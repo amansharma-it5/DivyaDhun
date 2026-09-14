@@ -2,7 +2,14 @@
 
 Your Daily Bhakti. Bhakti, bas ek tap mein.
 
-DivyaDhun is an Android-first devotional listening experience. **Phase 13 adds an opt-in daily reminder foundation with Android 13 notification permission handling and inexact, listening-time-based scheduling on top of the Phase 12 remote-content boundary.** Production devotional recordings, backend credentials, and cloud infrastructure remain future work.
+DivyaDhun is an Android-first devotional listening experience. **Phase 14 adds locally generated blessing cards and an explicit Android Sharesheet action on top of the Phase 13 engagement foundation.** Production devotional recordings, backend credentials, and cloud infrastructure remain future work.
+
+## Phase 14 completed features
+
+- Track Detail offers an explicit Share blessing action with localized English/Hindi copy.
+- DivyaDhun generates an original branded PNG locally in the app cache using safe colors, typography, devotional symbols, and catalog metadata.
+- Sharing uses a non-exported `FileProvider` and the Android Sharesheet; the app never auto-sends or auto-posts anything.
+- No remote artwork, downloaded media, social SDK, or commercial content was introduced.
 
 ## Phase 13 completed features
 
@@ -98,10 +105,10 @@ Windows:
 
 The debug APK is `app/build/outputs/apk/debug/app-debug.apk`. Unit reports are under `app/build/test-results`; instrumentation reports are under `app/build/outputs/androidTest-results`; lint writes `app/build/reports/lint-results-debug.html`.
 
-The latest Phase 13 validation run passed 33 JVM unit tests and the Phase 11 festival emulator flow. Earlier phase connected flows remain covered by their validated runs. `lintDebug` completed with zero errors and the existing non-critical warnings, and `assembleDebug` completed successfully. Emulator flows verify onboarding, local search, playable demo playback, mini/full-player controls, favorites, history, Aarti Mode, Mantra Mode counting, Daily Bhakti routine navigation, Simple Mode, and festival discovery; audible loudspeaker output and system lock-screen presentation still depend on the host device. Notification delivery depends on Android notification permission and was not claimed without observing it on-device.
+The latest Phase 14 validation run passed the JVM unit suite and the Phase 11 festival emulator flow. Earlier phase connected flows remain covered by their validated runs. `lintDebug` completed with zero errors and the existing non-critical warnings, and `assembleDebug` completed successfully. Emulator flows verify onboarding, local search, playable demo playback, mini/full-player controls, favorites, history, Aarti Mode, Mantra Mode counting, Daily Bhakti routine navigation, Simple Mode, and festival discovery; audible loudspeaker output and system lock-screen presentation still depend on the host device. Share-sheet delivery depends on the receiving apps installed on the host device and was not claimed without observing a completed share.
 
 ## Deferred work and known limitations
 
-Downloads, widgets, backend/API implementation, authentication, cloud sync, sharing, subscriptions, analytics, AI, and production devotional recordings remain deferred. Remote catalog integration is intentionally blocked by the external dependency **production backend credentials and infrastructure**; the DTO, repository, cache, validation, and fallback seams are ready for it. Playback currently covers only the five bundled fixtures; metadata-only rows remain discovery surfaces. Library data is local to the device and has no account or cross-device sync. Reminder delivery depends on user opt-in, Android notification permission, and system scheduling policy. Physical-device loudspeaker, TalkBack, and release certification are outside this phase. The lyrics excerpts are short traditional/public-domain-style developer fixtures with no proprietary translation or commercial recording.
+Downloads, widgets, backend/API implementation, authentication, cloud sync, subscriptions, analytics, AI, and production devotional recordings remain deferred. Remote catalog integration is intentionally blocked by the external dependency **production backend credentials and infrastructure**; the DTO, repository, cache, validation, and fallback seams are ready for it. Playback currently covers only the five bundled fixtures; metadata-only rows remain discovery surfaces. Library data is local to the device and has no account or cross-device sync. Reminder delivery depends on user opt-in, Android notification permission, and system scheduling policy. Sharing is local-only through the platform Sharesheet. Physical-device loudspeaker, TalkBack, and release certification are outside this phase. The lyrics excerpts are short traditional/public-domain-style developer fixtures with no proprietary translation or commercial recording.
 
-Phase 13 is developed on `feat/divyadhun-phase13-engagement`; it is not merged to `main` until its validation and review are complete.
+Phase 14 is developed on `feat/divyadhun-phase14-sharing`; it is not merged to `main` until its validation and review are complete.
