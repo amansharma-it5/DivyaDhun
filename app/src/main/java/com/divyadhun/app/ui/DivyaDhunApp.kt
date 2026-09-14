@@ -93,7 +93,7 @@ fun DivyaDhunApp(model: ShellViewModel) {
         else SystemBarStyle.light(android.graphics.Color.TRANSPARENT, android.graphics.Color.TRANSPARENT)
         (context as? ComponentActivity)?.enableEdgeToEdge(statusBarStyle = style, navigationBarStyle = style)
     }
-    DivyaTheme(shellState.theme) {
+    DivyaTheme(shellState.theme, simpleMode = shellState.preferences.simpleMode) {
         if (!shellState.loaded) {
             Surface(Modifier.fillMaxSize()) { Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator() } }
         } else {
@@ -157,11 +157,11 @@ private fun AppShell(shellState: ShellUiState, exploreViewModel: ExploreViewMode
         }
     }) { padding ->
         NavHost(navController = nav, startDestination = Destination.HOME.name, modifier = Modifier.padding(padding)) {
-            composable(Destination.HOME.name) { HomeScreen(homeState, shellState.preferences.language, { nav.navigate(Destination.EXPLORE.name) }, { nav.navigate(DAILY_BHAKTI_ROUTE) }, { nav.navigate("deity/$it") }, { nav.navigate("track/$it") }, playbackState, playbackController, libraryState.favoriteTrackIds) { id -> libraryViewModel.setFavorite(id, id !in libraryState.favoriteTrackIds) } }
+            composable(Destination.HOME.name) { HomeScreen(homeState, shellState.preferences.language, { nav.navigate(Destination.EXPLORE.name) }, { nav.navigate(DAILY_BHAKTI_ROUTE) }, { nav.navigate("deity/$it") }, { nav.navigate("track/$it") }, playbackState, playbackController, libraryState.favoriteTrackIds, { id -> libraryViewModel.setFavorite(id, id !in libraryState.favoriteTrackIds) }, shellState.preferences.simpleMode) }
             composable(Destination.EXPLORE.name) { ExploreScreen(exploreState, shellState.preferences.language, { nav.navigate("deity/$it") }, { nav.navigate("category/${it.name}") }, { nav.navigate("track/$it") }, playbackState, playbackController, libraryState.favoriteTrackIds) { id -> libraryViewModel.setFavorite(id, id !in libraryState.favoriteTrackIds) } }
             composable(Destination.SEARCH.name) { SearchScreen(searchViewModel, searchState, shellState.preferences.language, { nav.navigate("track/$it") }, { nav.navigate("deity/$it") }, playbackState, playbackController, libraryState.favoriteTrackIds) { id -> libraryViewModel.setFavorite(id, id !in libraryState.favoriteTrackIds) } }
             composable(Destination.LIBRARY.name) {
-                LibraryScreen(preferencesState, libraryState, exploreState.tracks, exploreState.deities, preferencesViewModel::setTheme,
+                LibraryScreen(preferencesState, libraryState, exploreState.tracks, exploreState.deities, preferencesViewModel::setTheme, preferencesViewModel::setSimpleMode,
                     onLanguage = { language -> preferencesViewModel.setLanguage(language); LocaleController.apply(context, language) },
                     onTime = preferencesViewModel::setListeningTime, onDeities = preferencesViewModel::setDeities,
                     onTrack = { nav.navigate("track/$it") },

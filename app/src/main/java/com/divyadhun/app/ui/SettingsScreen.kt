@@ -17,6 +17,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.Switch
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -47,6 +48,7 @@ fun LibraryScreen(
     tracks: List<Track>,
     deities: List<Deity>,
     onTheme: (ThemeMode) -> Unit,
+    onSimpleMode: (Boolean) -> Unit,
     onLanguage: (Language) -> Unit,
     onTime: (ListeningTime) -> Unit,
     onDeities: (Set<String>) -> Unit,
@@ -98,6 +100,15 @@ fun LibraryScreen(
             PreferenceButton(stringResource(R.string.listening_time), stringResource(listeningTimeNameRes(state.preferences.listeningTime)), "setting_time") { showTime = true }
         }
         item { Text(stringResource(R.string.appearance), style = MaterialTheme.typography.titleLarge) }
+        item {
+            Row(Modifier.fillMaxWidth().heightIn(min = 64.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Space.xs)) {
+                    Text(stringResource(R.string.simple_mode), style = MaterialTheme.typography.titleMedium)
+                    Text(stringResource(R.string.simple_mode_body), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+                Switch(checked = state.preferences.simpleMode, onCheckedChange = onSimpleMode, modifier = Modifier.testTag("simple_mode_toggle"))
+            }
+        }
         items(ThemeMode.entries.toList(), key = { it.name }) { mode ->
             val label = when (mode) { ThemeMode.SYSTEM -> R.string.system; ThemeMode.LIGHT -> R.string.light; ThemeMode.DARK -> R.string.dark }
             OutlinedButton(onClick = { onTheme(mode) }, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp).testTag("theme_" + mode.name).semantics { selected = state.preferences.theme == mode }) {

@@ -72,7 +72,8 @@ fun HomeScreen(
     playbackState: PlaybackState = PlaybackState(),
     playbackController: PlaybackController? = null,
     favoriteTrackIds: Set<String> = emptySet(),
-    onFavorite: (String) -> Unit = {}
+    onFavorite: (String) -> Unit = {},
+    simpleMode: Boolean = false
 ) {
     if (!state.loaded) { LoadingState(); return }
     val content = state.content
@@ -85,10 +86,12 @@ fun HomeScreen(
                 items(content.yourGods, key = { it.id }) { deity -> DeityShortcut(deity) { onDeity(deity.id) } }
             }
         }
-        item { SectionHeader(stringResource(R.string.recommended_for_you)) }
-        item { TrackGroup(content.recommended, language, playbackState, playbackController, onTrack, favoriteTrackIds, onFavorite) }
-        item { SectionHeader(stringResource(R.string.featured_today)) }
-        item { TrackGroup(content.today, language, playbackState, playbackController, onTrack, favoriteTrackIds, onFavorite) }
+        if (!simpleMode) {
+            item { SectionHeader(stringResource(R.string.recommended_for_you)) }
+            item { TrackGroup(content.recommended, language, playbackState, playbackController, onTrack, favoriteTrackIds, onFavorite) }
+            item { SectionHeader(stringResource(R.string.featured_today)) }
+            item { TrackGroup(content.today, language, playbackState, playbackController, onTrack, favoriteTrackIds, onFavorite) }
+        }
         item { SectionHeader(stringResource(R.string.popular_aartis)) }
         item { TrackGroup(content.popularAartis, language, playbackState, playbackController, onTrack, favoriteTrackIds, onFavorite) }
         item { SectionHeader(stringResource(R.string.mantras_section)) }
