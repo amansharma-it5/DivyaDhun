@@ -279,7 +279,8 @@ fun TrackDetailScreen(
     favoriteTrackIds: Set<String> = emptySet(),
     onFavorite: (String) -> Unit = {},
     onLyrics: (String) -> Unit = {},
-    onMantra: (String) -> Unit = {}
+    onMantra: (String) -> Unit = {},
+    onShare: (Track) -> Unit = {}
 ) {
     LaunchedEffect(trackId) { viewModel.load(trackId) }
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -309,6 +310,10 @@ fun TrackDetailScreen(
                         MetadataChip(stringResource(R.string.language_label) + ": " + stringResource(if (track.language == Language.HINDI) R.string.language_hindi else R.string.language_english))
                         track.durationMs?.let { duration -> MetadataChip(stringResource(R.string.duration_label) + ": " + formatDuration(duration)) }
                         MetadataChip(stringResource(if (track.lyricsId == null) R.string.lyrics_unavailable else R.string.lyrics_available))
+                        OutlinedButton(
+                            onClick = { onShare(track) },
+                            modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp).testTag("track_share_action")
+                        ) { Text(stringResource(R.string.share_blessing)) }
                         if (track.category == DevotionalCategory.MANTRA) {
                             OutlinedButton(
                                 onClick = { onMantra(track.id) },

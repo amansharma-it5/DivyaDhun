@@ -64,6 +64,7 @@ import com.divyadhun.app.onboarding.OnboardingViewModel
 import com.divyadhun.app.ui.theme.DivyaTheme
 import com.divyadhun.app.ui.theme.usesDark
 import com.divyadhun.app.playback.Media3PlaybackController
+import com.divyadhun.app.sharing.ShareBlessingCard
 
 enum class Destination {
     HOME, EXPLORE, SEARCH, LIBRARY;
@@ -186,7 +187,7 @@ private fun AppShell(shellState: ShellUiState, exploreViewModel: ExploreViewMode
             composable(TRACK_ROUTE, arguments = listOf(navArgument("trackId") { type = NavType.StringType })) { backStackEntry ->
                 val trackId = backStackEntry.arguments?.getString("trackId").orEmpty()
                 val trackViewModel: TrackDetailViewModel = viewModel()
-                TrackDetailScreen(trackViewModel, trackId, shellState.preferences.language, { nav.popBackStack() }, { nav.navigate("deity/$it") }, { nav.navigate("category/${it.name}") }, playbackState, playbackController, libraryState.favoriteTrackIds, { id -> libraryViewModel.setFavorite(id, id !in libraryState.favoriteTrackIds) }, { nav.navigate("lyrics/$it") }, { nav.navigate("mantra/$it") })
+                TrackDetailScreen(trackViewModel, trackId, shellState.preferences.language, { nav.popBackStack() }, { nav.navigate("deity/$it") }, { nav.navigate("category/${it.name}") }, playbackState, playbackController, libraryState.favoriteTrackIds, { id -> libraryViewModel.setFavorite(id, id !in libraryState.favoriteTrackIds) }, { nav.navigate("lyrics/$it") }, { nav.navigate("mantra/$it") }, { track -> ShareBlessingCard.share(context, track, shellState.preferences.language) })
             }
             composable(LYRICS_ROUTE, arguments = listOf(navArgument("trackId") { type = NavType.StringType })) { backStackEntry ->
                 val trackId = backStackEntry.arguments?.getString("trackId").orEmpty()

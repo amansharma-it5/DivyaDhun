@@ -56,6 +56,8 @@
     <string name="festival_janmashtami_description">कृष्ण की आनंदमयी स्मृति।</string>
     <string name="festival_hanuman_jayanti">हनुमान जयंती</string>
     <string name="festival_hanuman_jayanti_description">साहस, सेवा और भक्ति को स्मरण करने का दिन।</string>
+    <string name="share_blessing">भक्ति साझा करें</string>
+    <string name="share_blessing_chooser">इनके साथ साझा करें</string>
     <string name="system">सिस्टम</string>
     <string name="light">लाइट</string>
     <string name="dark">डार्क</string>
