@@ -29,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
@@ -123,7 +124,7 @@ private fun MantraProgressCard(
     }
     Surface(color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = .52f), shape = MaterialTheme.shapes.large) {
         Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Text(stringResource(R.string.mantra_progress, completed, target), style = MaterialTheme.typography.headlineSmall, modifier = Modifier.testTag("mantra_progress"))
+            Text(pluralStringResource(R.plurals.mantra_progress, target, completed, target), style = MaterialTheme.typography.headlineSmall, modifier = Modifier.testTag("mantra_progress"))
             LinearProgressIndicator(progress = { progress }, modifier = Modifier.fillMaxWidth().testTag("mantra_progress_bar"))
             Button(onClick = onToggle, enabled = status != MantraSessionStatus.COMPLETE, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp).testTag("mantra_toggle_running")) { Text(stringResource(actionLabel)) }
             Button(onClick = onIncrement, enabled = status == MantraSessionStatus.RUNNING, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp).testTag("mantra_count_repetition")) { Text(stringResource(R.string.mantra_count_repetition)) }

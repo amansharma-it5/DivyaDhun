@@ -2,6 +2,7 @@ package com.divyadhun.app
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTextInput
@@ -32,8 +33,10 @@ class Phase3FlowTest {
         waitForTag("screen_EXPLORE")
         rule.onNodeWithTag("category_AARTI").performClick()
         waitForTag("screen_CATEGORY_AARTI")
+        rule.onNodeWithTag("screen_CATEGORY_AARTI").performScrollToNode(hasTestTag("track_hanuman_aarti"))
         rule.onNodeWithTag("track_hanuman_aarti").performClick()
         waitForTag("screen_TRACK_hanuman_aarti")
+        rule.onNodeWithTag("screen_TRACK_hanuman_aarti").performScrollToNode(hasTestTag("track_view_deity"))
         rule.onNodeWithTag("track_view_deity").performClick()
         waitForTag("screen_DEITY_hanuman")
         rule.onNodeWithTag("deity_category_AARTI").assertIsDisplayed()
@@ -69,6 +72,7 @@ class Phase3FlowTest {
         rule.onNodeWithTag("onboarding_finish").performClick()
         waitForTag("screen_HOME")
         rule.onNodeWithTag("home_hero").assertIsDisplayed()
+        rule.onNodeWithTag("screen_HOME").performScrollToNode(hasText("Shiv"))
         rule.onNodeWithText("Shiv").assertIsDisplayed()
     }
 

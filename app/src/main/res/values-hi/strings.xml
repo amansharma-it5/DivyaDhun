@@ -180,7 +180,10 @@
     <string name="mantra_mode_intro">सरल गिनती के साथ अपनी गति से मंत्र दोहराएँ।</string>
     <string name="open_mantra_mode">मंत्र मोड खोलें</string>
     <string name="mantra_choose_count">जप की संख्या चुनें</string>
-    <string name="mantra_progress">%1$d में से %2$d जप</string>
+    <plurals name="mantra_progress">
+        <item quantity="one">%1$d में से %2$d जप</item>
+        <item quantity="other">%1$d में से %2$d जप</item>
+    </plurals>
     <string name="mantra_start">गिनती शुरू करें</string>
     <string name="mantra_pause">गिनती रोकें</string>
     <string name="mantra_resume">गिनती फिर शुरू करें</string>
