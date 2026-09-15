@@ -101,12 +101,14 @@ class LocalContentRepository : ContentRepository {
         )
     )
 
-    private fun track(id: String, english: String, hindi: String, subEnglish: String, subHindi: String, deityId: String, category: DevotionalCategory, aliases: Set<String>, audioResource: String? = null, lyricsId: String? = null) = Track(
+    private fun track(id: String, english: String, hindi: String, subEnglish: String, subHindi: String, deityId: String, category: DevotionalCategory, aliases: Set<String>, audioResource: String? = null, lyricsId: String? = null, sourceEnglish: String? = null, sourceHindi: String? = null) = Track(
         id = id,
         title = LocalizedText(english, hindi),
         subtitle = LocalizedText(subEnglish, subHindi),
-        artistOrSource = if (audioResource == null) LocalizedText("Traditional", "पारंपरिक")
-        else LocalizedText("DivyaDhun Demo", "दिव्यधुन डेमो"),
+        artistOrSource = LocalizedText(
+            sourceEnglish ?: if (audioResource == null) "Traditional" else "DivyaDhun Demo",
+            sourceHindi ?: if (audioResource == null) "पारंपरिक" else "दिव्यधुन डेमो"
+        ),
         deityId = deityId,
         category = category,
         artworkKey = deityId,

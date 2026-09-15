@@ -65,6 +65,19 @@ class RemoteContentRepositoryTest {
         assertEquals("remote_shiv", repository.getTracks().single().id)
     }
 
+    @Test fun cleartextRemoteAudioIsRejectedAndUsesLocalFallback() = runBlocking {
+        val repository = RemoteContentRepository(RemoteContentDataSource {
+            sampleCatalog().copy(tracks = listOf(sampleCatalog().tracks.single().copy(audioUrl = "http://cdn.example.test/shiv.ogg")))
+        })
+
+        repository.getTracks()
+
+        assertEquals(ContentSource.LOCAL_FALLBACK, repository.status.value.source)
+        assertTrue(repository.status.value.errorMessage.orEmpty().contains("HTTPS"))
+        assertEquals(32, repository.getTracks().size)
+        assertEquals(null, repository.getTrack("hanuman_chalisa")?.audioSource)
+    }
+
     private fun sampleCatalog() = RemoteCatalogDto(
         version = "2026.09",
         deities = listOf(

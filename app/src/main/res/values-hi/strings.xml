@@ -108,7 +108,7 @@
     <string name="demo_audio_unavailable">डेमो ऑडियो उपलब्ध नहीं है</string>
     <string name="play_track">%1$s चलाएँ</string>
     <string name="pause_track">%1$s रोकें</string>
-    <string name="playback_error">यह डेमो ट्रैक नहीं चल सका।</string>
+    <string name="playback_error">यह ट्रैक नहीं चल सका।</string>
     <string name="source_label">स्रोत</string>
     <string name="full_player_title">अभी चल रहा है</string>
     <string name="player_no_selection">यहाँ देखने के लिए कोई भक्तिमय ट्रैक चुनें।</string>

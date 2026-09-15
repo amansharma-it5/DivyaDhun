@@ -108,7 +108,7 @@
     <string name="demo_audio_unavailable">Demo audio unavailable</string>
     <string name="play_track">Play %1$s</string>
     <string name="pause_track">Pause %1$s</string>
-    <string name="playback_error">Unable to play this demo track.</string>
+    <string name="playback_error">Unable to play this track.</string>
     <string name="source_label">Source</string>
     <string name="full_player_title">Now playing</string>
     <string name="player_no_selection">Choose a playable devotional track to see it here.</string>

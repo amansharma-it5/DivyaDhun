@@ -46,4 +46,12 @@ class LocalContentRepositoryTest {
         assertTrue(withLyrics.all { track -> repository.getLyrics(track.lyricsId!!)?.id == track.lyricsId })
         assertEquals(null, repository.getLyrics("missing-lyrics"))
     }
+
+    @Test fun localCatalogDoesNotEmbedThePhase18RemoteStreamingFixture() = runBlocking {
+        val tracks = repository.getTracks()
+        val hanumanChalisa = tracks.single { it.id == "hanuman_chalisa" }
+
+        assertEquals(null, hanumanChalisa.audioSource)
+        assertTrue(tracks.none { it.audioSource is com.divyadhun.app.domain.model.AudioSource.RemoteUrl })
+    }
 }
