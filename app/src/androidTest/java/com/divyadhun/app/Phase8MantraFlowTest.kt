@@ -41,13 +41,24 @@ class Phase8MantraFlowTest {
         rule.onNodeWithTag("track_open_mantra").performClick()
         waitForTag("screen_MANTRA_om_namah_shivaya")
         rule.onNodeWithTag("mantra_target_21").performClick()
+        rule.onNodeWithTag("screen_MANTRA_om_namah_shivaya").performScrollToNode(hasTestTag("mantra_toggle_running"))
         rule.onNodeWithTag("mantra_toggle_running").performClick()
         rule.onNodeWithTag("mantra_count_repetition").performClick()
         rule.onNodeWithTag("mantra_progress").assertTextEquals("1 of 21 repetitions")
         rule.onNodeWithTag("mantra_toggle_running").performClick()
+        rule.onNodeWithTag("screen_MANTRA_om_namah_shivaya").performScrollToNode(hasTestTag("mantra_reset"))
         rule.onNodeWithTag("mantra_reset").performClick()
-        rule.onNodeWithTag("mantra_progress").assertTextEquals("0 of 21 repetitions")
+        waitForProgress("0 of 21 repetitions")
         rule.onNodeWithTag("mantra_progress").assertIsDisplayed()
+    }
+
+    private fun waitForProgress(expected: String) {
+        rule.waitUntil(5000) {
+            runCatching {
+                rule.onNodeWithTag("mantra_progress").assertTextEquals(expected)
+                true
+            }.getOrDefault(false)
+        }
     }
 
     private fun waitForTag(tag: String) {

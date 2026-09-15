@@ -180,7 +180,10 @@
     <string name="mantra_mode_intro">Repeat a mantra at your own pace with a simple count.</string>
     <string name="open_mantra_mode">Open Mantra Mode</string>
     <string name="mantra_choose_count">Choose a repetition count</string>
-    <string name="mantra_progress">%1$d of %2$d repetitions</string>
+    <plurals name="mantra_progress">
+        <item quantity="one">%1$d of %2$d repetition</item>
+        <item quantity="other">%1$d of %2$d repetitions</item>
+    </plurals>
     <string name="mantra_start">Start counting</string>
     <string name="mantra_pause">Pause counting</string>
     <string name="mantra_resume">Resume counting</string>

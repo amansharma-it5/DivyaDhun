@@ -54,7 +54,7 @@ class Phase6LibraryFlowTest {
         rule.onNodeWithTag("screen_LIBRARY").performScrollToNode(hasTestTag("favorite_hanuman_mantra"))
         rule.onAllNodesWithTag("favorite_hanuman_mantra").assertCountEquals(2)
         rule.onNodeWithTag("clear_history").performClick()
-        rule.onNodeWithTag("screen_LIBRARY").performScrollToNode(hasTestTag("recently_played_empty"))
+        waitForScrolledTag("recently_played_empty")
         rule.onNodeWithTag("recently_played_empty").assertIsDisplayed()
     }
 
@@ -79,6 +79,15 @@ class Phase6LibraryFlowTest {
     private fun waitForTag(tag: String) {
         rule.waitUntil(15000) {
             runCatching { rule.onAllNodesWithTag(tag, useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() }.getOrDefault(false)
+        }
+    }
+
+    private fun waitForScrolledTag(tag: String) {
+        rule.waitUntil(5000) {
+            runCatching {
+                rule.onNodeWithTag("screen_LIBRARY").performScrollToNode(hasTestTag(tag))
+                true
+            }.getOrDefault(false)
         }
     }
 }
