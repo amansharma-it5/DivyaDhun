@@ -25,7 +25,11 @@ class TrackMediaItemMapper(private val context: Context) {
                 if (resourceId == 0) return null
                 Uri.parse("android.resource://${context.packageName}/$resourceId")
             }
-            is AudioSource.RemoteUrl -> Uri.parse(source.url)
+            is AudioSource.RemoteUrl -> {
+                val remoteUrl = source.url.trim()
+                if (!remoteUrl.startsWith("https://", ignoreCase = true)) return null
+                Uri.parse(remoteUrl)
+            }
         }
         return MediaItem.Builder()
             .setMediaId(track.id)

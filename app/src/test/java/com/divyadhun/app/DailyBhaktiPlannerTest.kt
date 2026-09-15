@@ -16,10 +16,10 @@ class DailyBhaktiPlannerTest {
         assertEquals(listOf("om_namah_shivaya"), routine.trackIds)
     }
 
-    @Test fun routineFallsBackToAllPlayableTracksAndExcludesMetadata() = runBlocking {
+    @Test fun routineFallsBackToAllPlayableTracksAndIncludesRemoteFixture() = runBlocking {
         val routine = DailyBhaktiPlanner.plan(setOf("unknown"), ListeningTime.ANYTIME, LocalContentRepository().getTracks())
         assertTrue(routine.trackIds.isNotEmpty())
-        assertTrue(routine.trackIds.none { it == "hanuman_chalisa" })
+        assertTrue(routine.trackIds.contains("hanuman_chalisa"))
         assertTrue(routine.trackIds.size <= 3)
     }
 }

@@ -32,7 +32,7 @@ class Media3PlaybackController(context: Context) : PlaybackController {
     private val listener = object : Player.Listener {
         override fun onEvents(player: Player, events: Player.Events) = publish(player)
         override fun onPlayerError(error: PlaybackException) {
-            mutableState.value = mutableState.value.copy(status = PlaybackStatus.ERROR, isPlaying = false, errorMessage = "Unable to play this demo track.")
+            mutableState.value = mutableState.value.copy(status = PlaybackStatus.ERROR, isPlaying = false, errorMessage = "Unable to play this track.")
         }
     }
 
@@ -115,7 +115,7 @@ class Media3PlaybackController(context: Context) : PlaybackController {
                 Player.REPEAT_MODE_ALL -> RepeatMode.ALL
                 else -> RepeatMode.OFF
             },
-            errorMessage = if (status == PlaybackStatus.ERROR) "Unable to play this demo track." else null
+            errorMessage = if (status == PlaybackStatus.ERROR) "Unable to play this track." else null
         )
     }
 
