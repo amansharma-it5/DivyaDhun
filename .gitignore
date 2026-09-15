@@ -14,3 +14,6 @@ keystore.properties
 logs/
 validation-outputs/
 build/audio-ingest/
+
+__pycache__/
+*.pyc
