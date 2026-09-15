@@ -104,8 +104,6 @@
     <string name="next">Next</string>
     <string name="stop">Stop</string>
     <string name="now_playing">Now playing</string>
-    <string name="demo_audio">DivyaDhun Demo Audio</string>
-    <string name="demo_audio_unavailable">Demo audio unavailable</string>
     <string name="availability_metadata_only">Metadata only</string>
     <string name="availability_bundled_demo">Demo audio</string>
     <string name="availability_remote_stream">Stream online</string>

@@ -104,8 +104,6 @@
     <string name="next">अगला</string>
     <string name="stop">रोकें</string>
     <string name="now_playing">अभी चल रहा है</string>
-    <string name="demo_audio">दिव्यधुन डेमो ऑडियो</string>
-    <string name="demo_audio_unavailable">डेमो ऑडियो उपलब्ध नहीं है</string>
     <string name="availability_metadata_only">केवल जानकारी</string>
     <string name="availability_bundled_demo">डेमो ऑडियो</string>
     <string name="availability_remote_stream">ऑनलाइन चलाएँ</string>
