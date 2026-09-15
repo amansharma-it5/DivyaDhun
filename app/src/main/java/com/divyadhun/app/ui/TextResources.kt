@@ -3,6 +3,7 @@ package com.divyadhun.app.ui
 import androidx.annotation.StringRes
 import com.divyadhun.app.R
 import com.divyadhun.app.domain.model.DevotionalCategory
+import com.divyadhun.app.domain.model.ContentAvailability
 import com.divyadhun.app.domain.model.Language
 import com.divyadhun.app.domain.model.ListeningTime
 import com.divyadhun.app.content.DeitySection
@@ -47,6 +48,13 @@ import com.divyadhun.app.content.DeitySection
     DevotionalCategory.CHALISA -> R.string.category_chalisa_description
     DevotionalCategory.STOTRA -> R.string.category_stotra_description
     DevotionalCategory.MEDITATION -> R.string.category_meditation_description
+}
+
+@StringRes fun availabilityNameRes(availability: ContentAvailability) = when (availability) {
+    ContentAvailability.METADATA_ONLY -> R.string.availability_metadata_only
+    ContentAvailability.BUNDLED_DEMO -> R.string.availability_bundled_demo
+    ContentAvailability.REMOTE_PRODUCTION -> R.string.availability_remote_stream
+    ContentAvailability.UNAVAILABLE -> R.string.availability_unavailable
 }
 
 @StringRes fun deityInvocationRes(id: String) = when (id) {

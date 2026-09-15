@@ -104,7 +104,7 @@ import com.divyadhun.app.ui.theme.*
      modifier = Modifier.size(48.dp).semantics { contentDescription = actionDescription }.testTag("play_${track.id}")
     ) { Icon(if (current && playbackState.isPlaying) Icons.Filled.Pause else Icons.Filled.PlayArrow, contentDescription = null) }
    } else if (!track.isPlayable) {
-    Text(stringResource(R.string.demo_audio_unavailable), modifier = Modifier.widthIn(max = 144.dp), maxLines = 2, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    Text(stringResource(availabilityNameRes(track.availability)), modifier = Modifier.widthIn(max = 144.dp), maxLines = 2, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
    }
    if (onFavorite != null) {
     IconButton(
