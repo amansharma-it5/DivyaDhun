@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import mimetypes
 import os
 import shutil
 import subprocess
@@ -118,7 +119,16 @@ def _uploader_command():
     if wrangler := shutil.which("wrangler"):
         return lambda bucket, key, path: [wrangler, "r2", "object", "put", f"{bucket}/{key}", "--file", path]
     if aws := shutil.which("aws"):
-        return lambda bucket, key, path: [aws, "s3", "cp", path, f"s3://{bucket}/{key}"]
+        endpoint = os.environ.get("R2_ENDPOINT", "").strip()
+        account_id = os.environ.get("R2_ACCOUNT_ID", "").strip()
+        endpoint = endpoint or (f"https://{account_id}.r2.cloudflarestorage.com" if account_id else "")
+        if not endpoint:
+            return None
+        return lambda bucket, key, path: [
+            aws, "s3", "cp", path, f"s3://{bucket}/{key}",
+            "--endpoint-url", endpoint,
+            "--content-type", mimetypes.guess_type(path)[0] or "application/octet-stream",
+        ]
     return None
 
 
@@ -126,6 +136,8 @@ def _verify_url(url: str) -> None:
     try:
         response = urlopen(Request(url, method="HEAD"), timeout=20)
         print(f"  HTTP {response.status}; Content-Type={response.headers.get('Content-Type')}; Content-Length={response.headers.get('Content-Length')}; Accept-Ranges={response.headers.get('Accept-Ranges')}")
+        range_response = urlopen(Request(url, headers={"Range": "bytes=0-1"}), timeout=20)
+        print(f"  Range probe HTTP {range_response.status}; Content-Range={range_response.headers.get('Content-Range')}")
     except Exception as error:  # pragma: no cover - network is intentionally optional
         print(f"  verification failed: {error}")
 

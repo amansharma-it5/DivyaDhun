@@ -15,7 +15,9 @@ The upload command is a dry run unless `--upload` is explicitly supplied. It
 requires `wrangler` or the AWS CLI and a configured `R2_BUCKET`; credentials are
 read from the process environment or the authenticated CLI session and are
 never written to reports. `UNKNOWN` and `NOT_APPROVED` rights statuses are
-always blocked from upload.
+always blocked from upload. The AWS-compatible path also requires `R2_ENDPOINT`
+or `R2_ACCOUNT_ID`, preventing an accidental upload to an unrelated AWS
+endpoint.
 
 The scanner uses `ffprobe` when available and falls back to safe WAV inspection.
 Missing ffprobe metadata is reported for review rather than treated as proof of
