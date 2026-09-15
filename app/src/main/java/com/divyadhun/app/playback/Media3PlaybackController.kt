@@ -13,6 +13,8 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -22,10 +24,13 @@ class Media3PlaybackController(context: Context) : PlaybackController {
     private val appContext = context.applicationContext
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private val mapper = TrackMediaItemMapper(appContext)
+    private val connectivity = ConnectivityMonitor(appContext)
     private val mutableState = MutableStateFlow(PlaybackState())
     private var controller: MediaController? = null
     private var connectionJob: Job? = null
     private var pendingAction: ((MediaController) -> Unit)? = null
+    private var lastTrack: com.divyadhun.app.domain.model.Track? = null
+    private var lastQueue: List<com.divyadhun.app.domain.model.Track> = emptyList()
 
     override val state = mutableState.asStateFlow()
 
@@ -37,6 +42,12 @@ class Media3PlaybackController(context: Context) : PlaybackController {
     }
 
     init {
+        connectivity.start()
+        scope.launch {
+            connectivity.available.collect { available ->
+                mutableState.update { it.copy(networkAvailable = available) }
+            }
+        }
         val token = SessionToken(appContext, ComponentName(appContext, PlaybackService::class.java))
         val future = MediaController.Builder(appContext, token).buildAsync()
         connectionJob = scope.launch(Dispatchers.IO) {
@@ -60,9 +71,20 @@ class Media3PlaybackController(context: Context) : PlaybackController {
     }
 
     override fun playTrack(track: com.divyadhun.app.domain.model.Track, queue: List<com.divyadhun.app.domain.model.Track>) {
+        lastTrack = track
+        lastQueue = queue
         val playable = playableQueue(queue).ifEmpty { playableQueue(listOf(track)) }
         val mapped = playable.mapNotNull { candidate -> mapper.map(candidate)?.let { candidate to it } }
-        if (mapped.isEmpty()) return
+        if (mapped.isEmpty()) {
+            mutableState.value = PlaybackState(
+                currentTrackId = track.id,
+                queue = playable.map { it.id },
+                status = PlaybackStatus.ERROR,
+                errorMessage = "This track is not available for playback.",
+                networkAvailable = connectivity.available.value
+            )
+            return
+        }
         val start = mapped.indexOfFirst { it.first.id == track.id }.coerceAtLeast(0)
         withController { mediaController ->
             mediaController.setMediaItems(mapped.map { it.second }, start, 0L)
@@ -74,7 +96,10 @@ class Media3PlaybackController(context: Context) : PlaybackController {
     override fun pause() = withController { it.pause() }
     override fun resume() = withController { it.play() }
     override fun togglePlayPause() = withController { if (it.isPlaying) it.pause() else it.play() }
-    override fun seekTo(positionMs: Long) = withController { it.seekTo(positionMs.coerceAtLeast(0L)) }
+    override fun seekTo(positionMs: Long) = withController {
+        val duration = it.duration.takeIf { value -> value > 0L } ?: Long.MAX_VALUE
+        it.seekTo(positionMs.coerceIn(0L, duration))
+    }
     override fun skipNext() = withController { if (it.hasNextMediaItem()) it.seekToNextMediaItem() }
     override fun skipPrevious() = withController { if (it.hasPreviousMediaItem()) it.seekToPreviousMediaItem() else it.seekTo(0L) }
     override fun toggleRepeatMode() = withController {
@@ -86,6 +111,11 @@ class Media3PlaybackController(context: Context) : PlaybackController {
         publish(it)
     }
     override fun stop() = withController { it.stop(); it.clearMediaItems() }
+
+    override fun retry() {
+        val track = lastTrack ?: return
+        playTrack(track, lastQueue.ifEmpty { listOf(track) })
+    }
 
     private fun withController(action: (MediaController) -> Unit) {
         val connected = controller
@@ -115,12 +145,14 @@ class Media3PlaybackController(context: Context) : PlaybackController {
                 Player.REPEAT_MODE_ALL -> RepeatMode.ALL
                 else -> RepeatMode.OFF
             },
-            errorMessage = if (status == PlaybackStatus.ERROR) "Unable to play this track." else null
+            errorMessage = if (status == PlaybackStatus.ERROR) "Unable to play this track." else null,
+            networkAvailable = connectivity.available.value
         )
     }
 
     override fun release() {
         connectionJob?.cancel()
+        connectivity.stop()
         controller?.removeListener(listener)
         controller?.release()
         controller = null

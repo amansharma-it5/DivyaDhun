@@ -19,11 +19,13 @@ import androidx.compose.material.icons.filled.SkipPrevious
 import androidx.compose.material.icons.filled.SkipNext
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -70,7 +72,17 @@ fun MiniPlayer(
         tonalElevation = 3.dp
     ) {
         Column {
-            LinearProgressIndicator(progress = { progress }, modifier = Modifier.fillMaxWidth().height(2.dp))
+            if (state.status == PlaybackStatus.LOADING) {
+                LinearProgressIndicator(modifier = Modifier.fillMaxWidth().height(2.dp))
+            } else {
+                LinearProgressIndicator(progress = { progress }, modifier = Modifier.fillMaxWidth().height(2.dp))
+            }
+            if (state.status == PlaybackStatus.ERROR) {
+                Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Text(stringResource(R.string.playback_error), Modifier.weight(1f), color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.labelMedium)
+                    TextButton(onClick = controller::retry) { Text(stringResource(R.string.retry_playback)) }
+                }
+            }
             Row(
                 modifier = Modifier.fillMaxWidth().clickable(onClick = onOpen).padding(horizontal = 12.dp, vertical = 6.dp),
                 verticalAlignment = Alignment.CenterVertically,
@@ -79,10 +91,19 @@ fun MiniPlayer(
                 TrackArtwork(track, Modifier.size(42.dp))
                 Column(Modifier.weight(1f)) {
                     Text(
-                        stringResource(if (state.status == PlaybackStatus.ERROR) R.string.playback_error else R.string.now_playing),
+                        stringResource(
+                            when (state.status) {
+                                PlaybackStatus.ERROR -> R.string.playback_error
+                                PlaybackStatus.LOADING -> R.string.buffering
+                                else -> R.string.now_playing
+                            }
+                        ),
                         style = MaterialTheme.typography.labelSmall,
                         color = if (state.status == PlaybackStatus.ERROR) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
-                    )
+                )
+                if (state.status == PlaybackStatus.LOADING) {
+                    CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
+                }
                     Text(title, style = MaterialTheme.typography.titleSmall, maxLines = 1)
                 }
                 IconButton(
@@ -156,7 +177,15 @@ fun FullPlayerScreen(
                     }
                     Text(localizedSource(track, language), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     if (state.status == PlaybackStatus.ERROR) {
-                        Text(stringResource(R.string.playback_error), color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.testTag("player_error"))
+                        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                            Text(stringResource(R.string.playback_error), color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f).testTag("player_error"))
+                            TextButton(onClick = controller::retry) { Text(stringResource(R.string.retry_playback)) }
+                        }
+                    } else if (state.status == PlaybackStatus.LOADING) {
+                        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                            CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
+                            Text(stringResource(if (state.networkAvailable) R.string.buffering else R.string.network_unavailable), Modifier.padding(start = 8.dp), style = MaterialTheme.typography.bodyMedium)
+                        }
                     }
                     val duration = state.durationMs.coerceAtLeast(0L)
                     Slider(

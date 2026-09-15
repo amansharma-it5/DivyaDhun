@@ -21,7 +21,8 @@ data class PlaybackState(
     val queue: List<String> = emptyList(),
     val currentIndex: Int = -1,
     val repeatMode: RepeatMode = RepeatMode.OFF,
-    val errorMessage: String? = null
+    val errorMessage: String? = null,
+    val networkAvailable: Boolean = true
 )
 
 interface PlaybackController {
@@ -36,6 +37,7 @@ interface PlaybackController {
     fun skipPrevious()
     fun toggleRepeatMode()
     fun stop()
+    fun retry()
     fun release()
 }
 
