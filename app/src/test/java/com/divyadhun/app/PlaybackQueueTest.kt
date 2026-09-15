@@ -1,6 +1,7 @@
 package com.divyadhun.app
 
 import com.divyadhun.app.data.LocalContentRepository
+import com.divyadhun.app.domain.model.AudioSource
 import com.divyadhun.app.playback.playableQueue
 import com.divyadhun.app.playback.queueStartIndex
 import com.divyadhun.app.playback.RepeatMode
@@ -33,5 +34,13 @@ class PlaybackQueueTest {
         assertEquals(RepeatMode.ALL, nextRepeatMode(RepeatMode.OFF))
         assertEquals(RepeatMode.ONE, nextRepeatMode(RepeatMode.ALL))
         assertEquals(RepeatMode.OFF, nextRepeatMode(RepeatMode.ONE))
+    }
+
+    @Test
+    fun mixedQueueKeepsRemoteAndBundledSourcesButSkipsMetadataOnly() = runBlocking {
+        val metadataOnly = LocalContentRepository().getTrack("hanuman_chalisa")!!
+        val remote = metadataOnly.copy(audioSource = AudioSource.RemoteUrl("https://cdn.example.test/hanuman.m4a"))
+        val bundled = LocalContentRepository().getTrack("hanuman_mantra")!!
+        assertEquals(listOf(remote.id, bundled.id), playableQueue(listOf(remote, metadataOnly, bundled)).map { it.id })
     }
 }

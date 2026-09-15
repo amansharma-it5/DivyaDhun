@@ -111,6 +111,9 @@
     <string name="play_track">Play %1$s</string>
     <string name="pause_track">Pause %1$s</string>
     <string name="playback_error">Unable to play this track.</string>
+    <string name="retry_playback">Try again</string>
+    <string name="buffering">Buffering…</string>
+    <string name="network_unavailable">No network connection</string>
     <string name="source_label">Source</string>
     <string name="full_player_title">Now playing</string>
     <string name="player_no_selection">Choose a playable devotional track to see it here.</string>

@@ -111,6 +111,9 @@
     <string name="play_track">%1$s चलाएँ</string>
     <string name="pause_track">%1$s रोकें</string>
     <string name="playback_error">यह ट्रैक नहीं चल सका।</string>
+    <string name="retry_playback">फिर कोशिश करें</string>
+    <string name="buffering">बफर हो रहा है…</string>
+    <string name="network_unavailable">नेटवर्क उपलब्ध नहीं है</string>
     <string name="source_label">स्रोत</string>
     <string name="full_player_title">अभी चल रहा है</string>
     <string name="player_no_selection">यहाँ देखने के लिए कोई भक्तिमय ट्रैक चुनें।</string>
