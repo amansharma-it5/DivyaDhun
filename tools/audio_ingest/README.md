@@ -1,0 +1,23 @@
+# DivyaDhun audio ingestion tool
+
+This tool reads only an explicitly supplied source directory. It never renames,
+moves, deletes, or overwrites source audio. Generated inventories, staged copies,
+and upload plans belong in a separate output directory (the default is
+`build/audio-ingest/`, which is ignored by Git).
+
+```powershell
+python -m tools.audio_ingest scan --source "D:\DivyaDhun Audio" --output build/audio-ingest --base-url https://audio.divyadhun.com --stage
+python -m tools.audio_ingest validate --manifest build/audio-ingest/PRODUCTION_CONTENT_DRAFT.json
+python -m tools.audio_ingest upload --manifest build/audio-ingest/PRODUCTION_CONTENT_DRAFT.json --staging-dir build/audio-ingest/staged
+```
+
+The upload command is a dry run unless `--upload` is explicitly supplied. It
+requires `wrangler` or the AWS CLI and a configured `R2_BUCKET`; credentials are
+read from the process environment or the authenticated CLI session and are
+never written to reports. `UNKNOWN` and `NOT_APPROVED` rights statuses are
+always blocked from upload.
+
+The scanner uses `ffprobe` when available and falls back to safe WAV inspection.
+Missing ffprobe metadata is reported for review rather than treated as proof of
+quality. Loudness is not changed automatically and source masters remain
+untouched.
