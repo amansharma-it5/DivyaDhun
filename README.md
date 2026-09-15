@@ -2,7 +2,16 @@
 
 Your Daily Bhakti. Bhakti, bas ek tap mein.
 
-DivyaDhun is an Android-first devotional listening experience. **Phase 16 completes a production-readiness hardening pass on top of the Phase 15 local Family Mandir foundation.** Production devotional recordings, backend credentials, and cloud infrastructure remain future work.
+DivyaDhun is an Android-first devotional listening experience. **Phase 17 completes the release-candidate QA and stabilization pass on top of the Phase 16 hardening work.** Production devotional recordings, backend credentials, and cloud infrastructure remain future work.
+
+## Phase 17 RC status
+
+- The connected Android suite is deterministic on the checked-in Medium_Phone API 36 AVD: three consecutive full-suite runs passed all 15 instrumentation tests.
+- RC fixes remove lazy-list viewport assumptions from Compose flows, wait for asynchronous history state transitions, prevent duplicate Android 13 locale recreation, and use a proper plural resource for mantra progress.
+- `lintDebug` reports zero errors and 11 intentionally accepted dependency-freshness warnings; no implementation warnings remain.
+- `assembleRelease` produces an unsigned release APK. No production keystore, signing secret, commercial audio, or remote artwork was added.
+- Manual emulator evidence covers onboarding, Hindi, settings, navigation, playback controls, dark mode, and large-font layout. Physical-device speaker, lock-screen, TalkBack, and production-content verification remain pending; see [docs/PHYSICAL_DEVICE_QA.md](docs/PHYSICAL_DEVICE_QA.md).
+- Release handoff, content ingestion, backend requirements, and blockers are documented in `docs/PRODUCTION_CONTENT_CONTRACT.md`, `docs/PRODUCTION_BACKEND_HANDOFF.md`, and `docs/RELEASE_BLOCKERS.md`.
 
 ## Phase 16 completed features
 
@@ -118,10 +127,10 @@ Windows:
 
 The debug APK is `app/build/outputs/apk/debug/app-debug.apk`. Unit reports are under `app/build/test-results`; instrumentation reports are under `app/build/outputs/androidTest-results`; lint writes `app/build/reports/lint-results-debug.html`.
 
-The latest Phase 16 validation run passed 37 JVM unit tests and the Phase 11 festival emulator flow. Earlier phase connected flows remain covered by their validated runs. `lintDebug` completed with zero errors and 13 existing non-critical warnings, and `assembleDebug` completed successfully. Emulator flows verify onboarding, local search, playable demo playback, mini/full-player controls, favorites, history, Aarti Mode, Mantra Mode counting, Daily Bhakti routine navigation, Simple Mode, and festival discovery; audible loudspeaker output and system lock-screen presentation still depend on the host device. Share-sheet delivery depends on the receiving apps installed on the host device and was not claimed without observing a completed share.
+The Phase 17 RC validation passed 37 JVM unit tests and three consecutive complete connected suites (15 instrumentation tests per run). `lintDebug` completed with zero errors and 11 dependency-freshness warnings, and both debug and unsigned release compilation completed successfully. Emulator flows verify onboarding, local search, playable demo playback, mini/full-player controls, favorites, history, Aarti Mode, Mantra Mode counting, Daily Bhakti routine navigation, Simple Mode, and festival discovery; audible loudspeaker output, system lock-screen presentation, and TalkBack certification still depend on a physical-device pass. Share-sheet delivery depends on the receiving apps installed on the host device and remains a manual-device check.
 
 ## Deferred work and known limitations
 
-Downloads, widgets, backend/API implementation, authentication, cloud sync, subscriptions, analytics, AI, and production devotional recordings remain deferred. Remote catalog integration is intentionally blocked by the external dependency **production backend credentials and infrastructure**; the DTO, repository, cache, validation, and fallback seams are ready for it. Playback currently covers only the five bundled fixtures; metadata-only rows remain discovery surfaces. Library data and Family Mandir are local to the device and have no account or cross-device sync. Reminder delivery depends on user opt-in, Android notification permission, and system scheduling policy. Sharing is local-only through the platform Sharesheet. Physical-device loudspeaker, TalkBack, and release certification are outside this phase. The lyrics excerpts are short traditional/public-domain-style developer fixtures with no proprietary translation or commercial recording.
+Downloads, widgets, backend/API implementation, authentication, cloud sync, subscriptions, analytics, AI, and production devotional recordings remain deferred. Remote catalog integration is intentionally blocked by the external dependency **production backend credentials and infrastructure**; the DTO, repository, cache, validation, and fallback seams are ready for it. Playback currently covers only the five bundled fixtures; metadata-only rows remain discovery surfaces. Library data and Family Mandir are local to the device and have no account or cross-device sync. Reminder delivery depends on user opt-in, Android notification permission, and system scheduling policy. Sharing is local-only through the platform Sharesheet. Physical-device loudspeaker, lock-screen, TalkBack, and release signing certification are pending the checklist in `docs/PHYSICAL_DEVICE_QA.md`. The lyrics excerpts are short traditional/public-domain-style developer fixtures with no proprietary translation or commercial recording.
 
 Phase 16 was developed on `feat/divyadhun-phase16-hardening` and merged into `main` after validation.
