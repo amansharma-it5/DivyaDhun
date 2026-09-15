@@ -4,6 +4,8 @@ import com.divyadhun.app.data.ContentSource
 import com.divyadhun.app.data.RemoteCatalogDto
 import com.divyadhun.app.data.RemoteContentDataSource
 import com.divyadhun.app.data.RemoteContentRepository
+import com.divyadhun.app.data.InMemoryRemoteCatalogCache
+import com.divyadhun.app.data.RemoteCatalogMergePolicy
 import com.divyadhun.app.data.RemoteDeityDto
 import com.divyadhun.app.data.RemoteLyricsDto
 import com.divyadhun.app.data.RemoteTrackDto
@@ -78,6 +80,32 @@ class RemoteContentRepositoryTest {
         assertEquals(null, repository.getTrack("hanuman_chalisa")?.audioSource)
     }
 
+    @Test fun validCatalogIsCachedAndUsedWhenTheNextFetchIsOffline() = runBlocking {
+        val cache = InMemoryRemoteCatalogCache()
+        val first = RemoteContentRepository(RemoteContentDataSource { sampleCatalog() }, cache = cache)
+        first.getTracks()
+
+        val offline = RemoteContentRepository(RemoteContentDataSource { error("offline") }, cache = cache)
+        assertEquals("remote_shiv", offline.getTracks().single().id)
+        assertEquals(ContentSource.CACHED, offline.status.value.source)
+        assertEquals("2026.09", offline.status.value.catalogVersion)
+    }
+
+    @Test fun mergePolicyPrefersRemoteItemsAndKeepsStableFallbackOrder() {
+        val primary = listOf(sampleDeity("shiv"))
+        val fallback = listOf(sampleDeity("hanuman"), sampleDeity("shiv"))
+        assertEquals(listOf("shiv", "hanuman"), RemoteCatalogMergePolicy.mergeDeities(primary, fallback).map { it.id })
+    }
+
+    @Test fun m4aAndAacRemoteAudioUrlsAreAccepted() = runBlocking {
+        listOf("https://cdn.example.test/shiv.m4a", "https://cdn.example.test/shiv.aac").forEach { url ->
+            val repository = RemoteContentRepository(RemoteContentDataSource {
+                sampleCatalog().copy(tracks = listOf(sampleCatalog().tracks.single().copy(audioUrl = url)))
+            })
+            assertTrue(repository.getTracks().single().isPlayable)
+        }
+    }
+
     private fun sampleCatalog() = RemoteCatalogDto(
         version = "2026.09",
         deities = listOf(
@@ -111,5 +139,14 @@ class RemoteContentRepositoryTest {
             )
         ),
         lyrics = listOf(RemoteLyricsDto("remote_lyrics", "ॐ नमः शिवाय", "Om Namah Shivaya", "A salutation to Shiva"))
+    )
+
+    private fun sampleDeity(id: String) = com.divyadhun.app.domain.model.Deity(
+        id = id,
+        nameKey = "deity_$id",
+        descriptionKey = "deity_${id}_description",
+        artworkKey = id,
+        aliases = setOf(id),
+        supportedCategories = setOf(DevotionalCategory.MANTRA)
     )
 }

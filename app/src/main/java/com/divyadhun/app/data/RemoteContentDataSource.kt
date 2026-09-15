@@ -74,6 +74,7 @@ object UnavailableRemoteContentDataSource : RemoteContentDataSource {
 
 enum class ContentSource {
     REMOTE,
+    CACHED,
     LOCAL_FALLBACK
 }
 
@@ -83,18 +84,46 @@ data class ContentRepositoryStatus(
     val errorMessage: String? = null
 )
 
+/** Small persistence seam for the last catalog that passed validation. */
+interface RemoteCatalogCache {
+    suspend fun read(): RemoteCatalogDto?
+    suspend fun write(catalog: RemoteCatalogDto)
+}
+
+/** Useful for tests and process-local hosts that do not have a disk cache yet. */
+class InMemoryRemoteCatalogCache(initial: RemoteCatalogDto? = null) : RemoteCatalogCache {
+    private var snapshot: RemoteCatalogDto? = initial
+
+    override suspend fun read(): RemoteCatalogDto? = snapshot
+    override suspend fun write(catalog: RemoteCatalogDto) { snapshot = catalog }
+}
+
+/** Stable overlay semantics for a future remote-plus-local catalog strategy. */
+object RemoteCatalogMergePolicy {
+    fun mergeDeities(primary: List<Deity>, fallback: List<Deity>): List<Deity> =
+        (primary + fallback).distinctBy { it.id }
+
+    fun mergeTracks(primary: List<Track>, fallback: List<Track>): List<Track> =
+        (primary + fallback).distinctBy { it.id }
+}
+
 /**
  * Remote-capable repository with a single in-memory snapshot and a deterministic local fallback.
  * No call is made until the first repository read or an explicit [refresh].
  */
 class RemoteContentRepository(
     private val dataSource: RemoteContentDataSource,
-    private val fallback: ContentRepository = LocalContentRepository()
+    private val fallback: ContentRepository = LocalContentRepository(),
+    private val cache: RemoteCatalogCache? = null
 ) : ContentRepository {
+    private data class SearchEntry<T>(val value: T, val haystack: String)
+
     private data class Catalog(
         val deities: List<Deity>,
         val tracks: List<Track>,
-        val lyrics: Map<String, Lyrics>
+        val lyrics: Map<String, Lyrics>,
+        val trackSearchIndex: List<SearchEntry<Track>> = emptyList(),
+        val deitySearchIndex: List<SearchEntry<Deity>> = emptyList()
     )
 
     private val loadMutex = Mutex()
@@ -106,19 +135,33 @@ class RemoteContentRepository(
     suspend fun refresh(): ContentRepositoryStatus = loadMutex.withLock {
         try {
             val remote = dataSource.fetchCatalog()
-            val mapped = remote.toDomainCatalog()
+            val mapped = remote.toDomainCatalog().indexed()
             cachedCatalog = mapped
             cachedRemoteVersion = remote.version.trim()
+            runCatching { cache?.write(remote) }
             mutableStatus.value = ContentRepositoryStatus(
                 source = ContentSource.REMOTE,
                 catalogVersion = cachedRemoteVersion
             )
         } catch (error: Exception) {
+            var loadedFromCache = false
             if (cachedCatalog == null) {
-                cachedCatalog = fallback.toCatalog()
+                val cached = runCatching { cache?.read() }.getOrNull()
+                if (cached != null) {
+                    runCatching {
+                        cachedCatalog = cached.toDomainCatalog().indexed()
+                        cachedRemoteVersion = cached.version.trim()
+                        loadedFromCache = true
+                    }
+                }
+                if (cachedCatalog == null) cachedCatalog = fallback.toCatalog().indexed()
             }
             mutableStatus.value = ContentRepositoryStatus(
-                source = if (cachedRemoteVersion == null) ContentSource.LOCAL_FALLBACK else ContentSource.REMOTE,
+                source = when {
+                    loadedFromCache -> ContentSource.CACHED
+                    cachedRemoteVersion == null -> ContentSource.LOCAL_FALLBACK
+                    else -> ContentSource.REMOTE
+                },
                 catalogVersion = cachedRemoteVersion,
                 errorMessage = error.message ?: error::class.simpleName
             )
@@ -142,25 +185,13 @@ class RemoteContentRepository(
     override suspend fun search(query: String): List<Track> {
         val normalized = normalize(query)
         if (normalized.isBlank()) return emptyList()
-        val current = catalog()
-        val deityAliases = current.deities.associate { it.id to it.aliases }
-        return current.tracks.filter { track ->
-            val haystack = listOf(
-                track.id, track.title.english, track.title.hindi, track.subtitle.english, track.subtitle.hindi,
-                track.artistOrSource.english, track.artistOrSource.hindi, track.deityId, track.category.name,
-                *track.keywords.toTypedArray(), *track.aliases.toTypedArray(),
-                *(deityAliases[track.deityId]?.toTypedArray() ?: emptyArray())
-            ).joinToString(" ", transform = ::normalize)
-            haystack.contains(normalized)
-        }
+        return catalog().trackSearchIndex.filter { it.haystack.contains(normalized) }.map { it.value }
     }
 
     override suspend fun searchDeities(query: String): List<Deity> {
         val normalized = normalize(query)
         if (normalized.isBlank()) return emptyList()
-        return catalog().deities.filter { deity ->
-            (listOf(deity.id) + deity.aliases).joinToString(" ", transform = ::normalize).contains(normalized)
-        }
+        return catalog().deitySearchIndex.filter { it.haystack.contains(normalized) }.map { it.value }
     }
 
     private suspend fun ContentRepository.toCatalog(): Catalog {
@@ -169,7 +200,7 @@ class RemoteContentRepository(
             .distinct()
             .mapNotNull { id -> getLyrics(id)?.let { id to it } }
             .toMap()
-        return Catalog(getDeities(), loadedTracks, loadedLyrics)
+        return Catalog(getDeities(), loadedTracks, loadedLyrics).indexed()
     }
 
     private fun RemoteCatalogDto.toDomainCatalog(): Catalog {
@@ -221,7 +252,23 @@ class RemoteContentRepository(
                 meaning = lyric.meaning.requireText("meaning")
             )
         }
-        return Catalog(mappedDeities, mappedTracks, mappedLyrics)
+        return Catalog(mappedDeities, mappedTracks, mappedLyrics).indexed()
+    }
+
+    private fun Catalog.indexed(): Catalog {
+        val deityAliases = deities.associate { it.id to it.aliases }
+        val trackIndex = tracks.map { track ->
+            SearchEntry(track, listOf(
+                track.id, track.title.english, track.title.hindi, track.subtitle.english, track.subtitle.hindi,
+                track.artistOrSource.english, track.artistOrSource.hindi, track.deityId, track.category.name,
+                *track.keywords.toTypedArray(), *track.aliases.toTypedArray(),
+                *(deityAliases[track.deityId]?.toTypedArray() ?: emptyArray())
+            ).joinToString(" ", transform = ::normalize))
+        }
+        val deityIndex = deities.map { deity ->
+            SearchEntry(deity, (listOf(deity.id) + deity.aliases).joinToString(" ", transform = ::normalize))
+        }
+        return copy(trackSearchIndex = trackIndex, deitySearchIndex = deityIndex)
     }
 
     private fun parseCategory(value: String): DevotionalCategory =

@@ -332,9 +332,9 @@ fun TrackDetailScreen(
                                 onClick = { if (playing) playbackController.pause() else if (current) playbackController.resume() else playbackController.playTrack(track) },
                                 modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp).testTag("track_play_action")
                             ) { Text(stringResource(if (playing) R.string.pause else if (current) R.string.resume else R.string.play)) }
-                            Text(stringResource(R.string.demo_audio), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
+                            Text(stringResource(availabilityNameRes(track.availability)), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
                         } else {
-                            Text(stringResource(R.string.demo_audio_unavailable), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text(stringResource(availabilityNameRes(track.availability)), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                         OutlinedButton(onClick = { onDeity(track.deityId) }, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp).testTag("track_view_deity")) { Text(stringResource(R.string.view_deity)) }
                         OutlinedButton(onClick = { onCategory(track.category) }, modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp).testTag("track_view_category")) { Text(stringResource(R.string.view_category)) }
