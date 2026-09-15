@@ -9,12 +9,6 @@ import com.divyadhun.app.domain.model.Lyrics
 import java.util.Locale
 
 class LocalContentRepository : ContentRepository {
-    /** Single production-style streaming fixture used by the Phase 18A smoke test. */
-    private companion object {
-        const val R2_HANUMAN_CHALISA_URL =
-            "https://pub-867b1331c5b9468db9b3fce509773119.r2.dev/audio/hanuman/Hanuman%20Chalisa.mp3"
-    }
-
     private val deities = listOf(
         Deity("hanuman", "deity_hanuman", "deity_hanuman_description", "hanuman", setOf("hanuman", "bajrangbali", "bajrang bali", "pawanputra", "हनुमान"), setOf(DevotionalCategory.AARTI, DevotionalCategory.BHAJAN, DevotionalCategory.MANTRA, DevotionalCategory.CHALISA)),
         Deity("shiv", "deity_shiv", "deity_shiv_description", "shiv", setOf("shiv", "shiva", "mahadev", "mahadeva", "bholenath", "शिव", "महादेव"), setOf(DevotionalCategory.AARTI, DevotionalCategory.BHAJAN, DevotionalCategory.MANTRA, DevotionalCategory.STOTRA)),
@@ -27,7 +21,7 @@ class LocalContentRepository : ContentRepository {
     )
 
     private val tracks = listOf(
-        track("hanuman_chalisa", "Hanuman Chalisa", "हनुमान चालीसा", "A timeless prayer", "एक शाश्वत प्रार्थना", "hanuman", DevotionalCategory.CHALISA, setOf("hanuman", "bajrangbali", "हनुमान"), remoteAudioUrl = R2_HANUMAN_CHALISA_URL, lyricsId = "hanuman_chalisa"),
+        track("hanuman_chalisa", "Hanuman Chalisa", "हनुमान चालीसा", "A timeless prayer", "एक शाश्वत प्रार्थना", "hanuman", DevotionalCategory.CHALISA, setOf("hanuman", "bajrangbali", "हनुमान"), lyricsId = "hanuman_chalisa"),
         track("hanuman_aarti", "Aarti Kije Hanuman Lala Ki", "आरती कीजै हनुमान लला की", "Traditional prayer", "पारंपरिक प्रार्थना", "hanuman", DevotionalCategory.AARTI, setOf("aarti", "hanuman", "हनुमान"), lyricsId = "hanuman_aarti"),
         track("bajrang_baan", "Bajrang Baan", "बजरंग बाण", "Traditional prayer", "पारंपरिक प्रार्थना", "hanuman", DevotionalCategory.BHAJAN, setOf("bajrang baan", "bajrangbali")),
         track("hanuman_mantra", "Hanuman Mantra", "हनुमान मंत्र", "DivyaDhun Demo Audio", "दिव्यधुन डेमो ऑडियो", "hanuman", DevotionalCategory.MANTRA, setOf("mantra", "pawanputra"), "demo_hanuman_dhun"),
@@ -107,20 +101,18 @@ class LocalContentRepository : ContentRepository {
         )
     )
 
-    private fun track(id: String, english: String, hindi: String, subEnglish: String, subHindi: String, deityId: String, category: DevotionalCategory, aliases: Set<String>, audioResource: String? = null, remoteAudioUrl: String? = null, lyricsId: String? = null) = Track(
+    private fun track(id: String, english: String, hindi: String, subEnglish: String, subHindi: String, deityId: String, category: DevotionalCategory, aliases: Set<String>, audioResource: String? = null, lyricsId: String? = null, sourceEnglish: String? = null, sourceHindi: String? = null) = Track(
         id = id,
         title = LocalizedText(english, hindi),
         subtitle = LocalizedText(subEnglish, subHindi),
-        artistOrSource = if (audioResource == null && remoteAudioUrl == null) LocalizedText("Traditional", "पारंपरिक")
-        else LocalizedText("DivyaDhun Demo", "दिव्यधुन डेमो"),
+        artistOrSource = LocalizedText(
+            sourceEnglish ?: if (audioResource == null) "Traditional" else "DivyaDhun Demo",
+            sourceHindi ?: if (audioResource == null) "पारंपरिक" else "दिव्यधुन डेमो"
+        ),
         deityId = deityId,
         category = category,
         artworkKey = deityId,
-        audioSource = when {
-            remoteAudioUrl != null -> AudioSource.RemoteUrl(remoteAudioUrl)
-            audioResource != null -> AudioSource.BundledResource(audioResource)
-            else -> null
-        },
+        audioSource = audioResource?.let(AudioSource::BundledResource),
         lyricsId = lyricsId,
         keywords = setOf(category.name.lowercase(Locale.ROOT), deityId),
         aliases = aliases

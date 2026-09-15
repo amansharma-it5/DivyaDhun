@@ -1,7 +1,6 @@
 package com.divyadhun.app
 
 import com.divyadhun.app.data.LocalContentRepository
-import com.divyadhun.app.domain.model.AudioSource
 import com.divyadhun.app.domain.model.DevotionalCategory
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
@@ -48,14 +47,11 @@ class LocalContentRepositoryTest {
         assertEquals(null, repository.getLyrics("missing-lyrics"))
     }
 
-    @Test fun onlyHanumanChalisaUsesThePhase18RemoteStreamingFixture() = runBlocking {
+    @Test fun localCatalogDoesNotEmbedThePhase18RemoteStreamingFixture() = runBlocking {
         val tracks = repository.getTracks()
         val hanumanChalisa = tracks.single { it.id == "hanuman_chalisa" }
 
-        assertEquals(
-            AudioSource.RemoteUrl("https://pub-867b1331c5b9468db9b3fce509773119.r2.dev/audio/hanuman/Hanuman%20Chalisa.mp3"),
-            hanumanChalisa.audioSource
-        )
-        assertTrue(tracks.filter { it.id != "hanuman_chalisa" }.none { it.audioSource is AudioSource.RemoteUrl })
+        assertEquals(null, hanumanChalisa.audioSource)
+        assertTrue(tracks.none { it.audioSource is com.divyadhun.app.domain.model.AudioSource.RemoteUrl })
     }
 }

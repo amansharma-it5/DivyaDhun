@@ -185,7 +185,7 @@ class RemoteContentRepository(
                 artworkKey = deity.artworkKey.requireText("artworkKey"),
                 aliases = deity.aliases.map(String::trim).filter(String::isNotEmpty).toSet(),
                 supportedCategories = deity.supportedCategories.map(::parseCategory).toSet(),
-                artworkSource = deity.artworkUrl?.validatedArtworkUrl()?.let(ArtworkSource::RemoteUrl)
+                artworkSource = deity.artworkUrl?.let(RemoteContentUrlPolicy::requireArtworkUrl)?.let(ArtworkSource::RemoteUrl)
             )
         }
         require(mappedDeities.map { it.id }.toSet().size == mappedDeities.size) { "Remote deity IDs are duplicated" }
@@ -204,8 +204,8 @@ class RemoteContentRepository(
                 language = parseLanguage(track.language),
                 durationMs = track.durationMs?.takeIf { it >= 0L },
                 artworkKey = track.artworkKey.requireText("artworkKey"),
-                artworkSource = track.artworkUrl?.validatedArtworkUrl()?.let(ArtworkSource::RemoteUrl),
-                audioSource = track.audioUrl?.validatedAudioUrl()?.let(AudioSource::RemoteUrl),
+                artworkSource = track.artworkUrl?.let(RemoteContentUrlPolicy::requireArtworkUrl)?.let(ArtworkSource::RemoteUrl),
+                audioSource = track.audioUrl?.let(RemoteContentUrlPolicy::requireAudioUrl)?.let(AudioSource::RemoteUrl),
                 lyricsId = track.lyricsId?.trim()?.takeIf(String::isNotEmpty),
                 keywords = track.keywords.map(String::trim).filter(String::isNotEmpty).toSet(),
                 aliases = track.aliases.map(String::trim).filter(String::isNotEmpty).toSet()
@@ -237,10 +237,6 @@ class RemoteContentRepository(
     }
 
     private fun String.requireText(field: String) = trim().also { require(it.isNotEmpty()) { "Remote $field is blank" } }
-    private fun String.validatedAudioUrl() = trim().takeIf { it.startsWith("https://", ignoreCase = true) }
-        ?: error("Remote audio URL must use HTTPS")
-    private fun String.validatedArtworkUrl() = trim().takeIf { it.startsWith("https://", ignoreCase = true) }
-        ?: error("Remote artwork URL must use HTTPS")
     private fun normalize(value: String) = value.lowercase(Locale.ROOT)
         .replace(Regex("[^\\p{L}\\p{N}]+"), " ")
         .trim()

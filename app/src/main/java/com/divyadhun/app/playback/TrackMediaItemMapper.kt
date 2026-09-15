@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import com.divyadhun.app.R
+import com.divyadhun.app.data.RemoteContentUrlPolicy
 import com.divyadhun.app.domain.model.AudioSource
 import com.divyadhun.app.domain.model.Track
 
@@ -26,8 +27,7 @@ class TrackMediaItemMapper(private val context: Context) {
                 Uri.parse("android.resource://${context.packageName}/$resourceId")
             }
             is AudioSource.RemoteUrl -> {
-                val remoteUrl = source.url.trim()
-                if (!remoteUrl.startsWith("https://", ignoreCase = true)) return null
+                val remoteUrl = RemoteContentUrlPolicy.validateAudioUrl(source.url) ?: return null
                 Uri.parse(remoteUrl)
             }
         }

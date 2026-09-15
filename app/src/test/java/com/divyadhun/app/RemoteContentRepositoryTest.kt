@@ -75,7 +75,7 @@ class RemoteContentRepositoryTest {
         assertEquals(ContentSource.LOCAL_FALLBACK, repository.status.value.source)
         assertTrue(repository.status.value.errorMessage.orEmpty().contains("HTTPS"))
         assertEquals(32, repository.getTracks().size)
-        assertTrue(repository.getTrack("hanuman_chalisa")?.audioSource is com.divyadhun.app.domain.model.AudioSource.RemoteUrl)
+        assertEquals(null, repository.getTrack("hanuman_chalisa")?.audioSource)
     }
 
     private fun sampleCatalog() = RemoteCatalogDto(
