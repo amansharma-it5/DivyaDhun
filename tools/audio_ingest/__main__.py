@@ -230,7 +230,7 @@ def _existing_object(base_url: str, object_key: str, local_path: str) -> str:
 
 def _uploader_command():
     if wrangler := shutil.which("wrangler"):
-        return lambda bucket, key, path: [wrangler, "r2", "object", "put", f"{bucket}/{key}", "--file", path, "--content-type", mimetypes.guess_type(path)[0] or "application/octet-stream"]
+        return lambda bucket, key, path: [wrangler, "r2", "object", "put", f"{bucket}/{key}", "--file", path, "--content-type", mimetypes.guess_type(path)[0] or "application/octet-stream", "--remote"]
     if aws := shutil.which("aws"):
         endpoint = os.environ.get("R2_ENDPOINT", "").strip()
         account_id = os.environ.get("R2_ACCOUNT_ID", "").strip()

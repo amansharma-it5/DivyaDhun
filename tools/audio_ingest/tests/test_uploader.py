@@ -4,10 +4,17 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
 
-from tools.audio_ingest.__main__ import _verify_url
+from tools.audio_ingest.__main__ import _uploader_command, _verify_url
 
 
 class UploaderVerificationTest(unittest.TestCase):
+    def test_wrangler_upload_command_explicitly_targets_remote_r2(self):
+        with patch("tools.audio_ingest.__main__.shutil.which", return_value="wrangler.cmd"):
+            command = _uploader_command()("divyadhun-audio", "audio/track.mp3", "track.mp3")
+        self.assertIn("--remote", command)
+        self.assertIn("--content-type", command)
+        self.assertIn("audio/mpeg", command)
+
     def test_verify_url_checks_mime_length_and_byte_range(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "track.mp3"
