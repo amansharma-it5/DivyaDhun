@@ -7,16 +7,23 @@ from pathlib import Path
 from tools.audio_ingest.pipeline import (
     build_audio_url,
     build_manifest,
+    build_publishable_manifest,
+    build_remote_catalog,
     build_upload_plan,
     detect_duplicates,
     scan_directory,
     sha256_file,
     slugify,
     validate_manifest,
+    clean_display_text,
 )
 
 
 class PipelineTest(unittest.TestCase):
+    def test_display_text_removes_download_site_noise_without_touching_source(self):
+        self.assertEqual("Hanuman Chalisa", clean_display_text("09 Hanuman Chalisa - RiskyJaTT.CoM"))
+        self.assertEqual("Anuradha Paudwal", clean_display_text("Anuradha Paudwal (KoshalWorld.Com)"))
+
     def test_slugging_is_deterministic_and_safe(self):
         self.assertEqual("hanuman-chalisa-mp3", slugify("Hanuman  Chalisa!.mp3"))
         self.assertEqual("untitled", slugify(" हिन्दी "))
@@ -78,6 +85,57 @@ class PipelineTest(unittest.TestCase):
             plan = build_upload_plan(manifest, directory)
             self.assertEqual("BLOCKED_RIGHTS", plan[0]["status"])
 
+    def test_user_confirmed_license_is_explicit_and_review_stays_blocked(self):
+        manifest = build_manifest([{
+            "originalFilename": "Hanuman Chalisa.mp3",
+            "extension": ".mp3",
+            "metadataTitle": "Hanuman Chalisa",
+            "metadataArtist": "Licensed recording",
+            "deityId": "hanuman",
+            "category": "CHALISA",
+            "objectKey": "audio/hanuman/hanuman-chalisa.mp3",
+            "durationMs": 1000,
+            "sha256": "abc",
+            "valid": True,
+            "needsReview": True,
+            "rightsStatus": "LICENSED",
+            "rightsEvidence": "USER_CONFIRMED",
+        }], "https://audio.divyadhun.com")
+        self.assertEqual("LICENSED", manifest["tracks"][0]["rightsStatus"])
+        self.assertEqual("USER_CONFIRMED", manifest["tracks"][0]["rightsEvidence"])
+        self.assertEqual([], build_publishable_manifest([{
+            "originalFilename": "Hanuman Chalisa.mp3", "extension": ".mp3", "metadataTitle": "Hanuman Chalisa",
+            "metadataArtist": "Licensed recording", "deityId": "hanuman", "category": "CHALISA",
+            "objectKey": "audio/hanuman/hanuman-chalisa.mp3", "durationMs": 1000, "sha256": "abc",
+            "valid": True, "needsReview": True, "rightsStatus": "LICENSED",
+        }], "https://audio.divyadhun.com")["tracks"])
+
+    def test_remote_catalog_adapter_preserves_metadata_without_local_paths(self):
+        manifest = {"catalogVersion": "v1", "tracks": [{
+            "id": "hanuman_chalisa", "titleEnglish": "Hanuman Chalisa", "titleHindi": "",
+            "source": "Licensed recording", "artist": "Traditional source", "deityId": "hanuman",
+            "category": "CHALISA", "language": "HINDI", "durationMs": 1000,
+            "audioUrl": "https://audio.divyadhun.com/audio/hanuman/hanuman-chalisa.mp3",
+            "lyricsId": None, "rightsStatus": "LICENSED", "rightsEvidence": "USER_CONFIRMED",
+            "availability": "STAGED",
+        }]}
+        catalog = build_remote_catalog(manifest)
+        self.assertEqual("v1", catalog["version"])
+        self.assertEqual("Hanuman Chalisa", catalog["tracks"][0]["titleHindi"])
+        self.assertNotIn("sourcePath", json.dumps(catalog))
+
+    def test_scan_marks_exact_duplicates_without_deleting_sources(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "Hanuman Chalisa.mp3").write_bytes(b"same")
+            (root / "Hanuman Chalisa copy.mp3").write_bytes(b"same")
+            records = scan_directory(root, ffprobe="missing-ffprobe", rights_status="LICENSED", rights_evidence="USER_CONFIRMED")
+            self.assertEqual(2, len(records))
+            self.assertEqual(1, sum(bool(item.get("duplicateOf")) for item in records))
+            self.assertEqual(2, len({item["trackId"] for item in records}))
+            self.assertTrue((root / "Hanuman Chalisa.mp3").exists())
+            self.assertTrue((root / "Hanuman Chalisa copy.mp3").exists())
+
     def test_validator_rejects_http_and_duplicate_ids(self):
         manifest = {"tracks": [
             {"id": "same", "titleEnglish": "A", "deityId": "hanuman", "category": "AARTI", "rightsStatus": "LICENSED", "audioObjectKey": "a.mp3", "audioUrl": "http://bad"},
@@ -99,6 +157,36 @@ class PipelineTest(unittest.TestCase):
         }]}
         result = validate_manifest(manifest)
         self.assertTrue(any("unsafe audio object key" in error for error in result["errors"]))
+
+    def test_validator_requires_duration_for_publishable_metadata(self):
+        manifest = {"tracks": [{
+            "id": "missing_duration",
+            "titleEnglish": "A",
+            "deityId": "hanuman",
+            "category": "AARTI",
+            "rightsStatus": "LICENSED",
+            "audioObjectKey": "audio/hanuman/a.mp3",
+            "audioUrl": "https://audio.example/a.mp3",
+        }]}
+        result = validate_manifest(manifest)
+        self.assertTrue(any("durationMs is required" in error for error in result["errors"]))
+
+    def test_review_record_can_report_missing_duration_without_becoming_publishable(self):
+        manifest = build_manifest([{
+            "originalFilename": "Hanuman Aarti.mp3", "extension": ".mp3", "metadataTitle": "Hanuman Aarti",
+            "metadataArtist": "Licensed recording", "deityId": "hanuman", "category": "AARTI",
+            "objectKey": "audio/hanuman/hanuman-aarti.mp3", "durationMs": None, "sha256": "abc",
+            "valid": True, "needsReview": True, "rightsStatus": "LICENSED",
+        }], "https://audio.divyadhun.com")
+        result = validate_manifest(manifest)
+        self.assertFalse(result["errors"])
+        self.assertTrue(any("durationMs is missing" in warning for warning in result["warnings"]))
+        self.assertFalse(build_publishable_manifest([{
+            "originalFilename": "Hanuman Aarti.mp3", "extension": ".mp3", "metadataTitle": "Hanuman Aarti",
+            "metadataArtist": "Licensed recording", "deityId": "hanuman", "category": "AARTI",
+            "objectKey": "audio/hanuman/hanuman-aarti.mp3", "durationMs": None, "sha256": "abc",
+            "valid": True, "needsReview": True, "rightsStatus": "LICENSED",
+        }], "https://audio.divyadhun.com")["tracks"])
 
 
 if __name__ == "__main__":

@@ -23,13 +23,13 @@ KNOWN_DEITIES = {
     "saraswati", "vishnu", "kali", "shani",
 }
 _DEITY_ALIASES = {
-    "hanuman": ("hanuman", "bajrang", "bajrangbali", "pawanputra", "हनुमान"),
-    "shiv": ("shiv", "shiva", "mahadev", "bholenath", "शिव", "महादेव"),
-    "krishna": ("krishna", "kanha", "kanhaiya", "gopal", "कृष्ण"),
-    "ram": ("ram", "rama", "shriram", "shri-ram", "राम"),
-    "ganesh": ("ganesh", "ganapati", "विनायक", "गणेश"),
-    "durga": ("durga", "ambe", "jagdambe", "दुर्गा"),
-    "lakshmi": ("lakshmi", "mahalakshmi", "लक्ष्मी"),
+    "hanuman": ("hanuman", "bajrang", "bajrangbali", "pawanputra", "salasar", "हनुमान"),
+    "shiv": ("shiv", "shiva", "mahadev", "bholenath", "bhole", "shankar", "kanwar", "कांवड़", "शिव", "महादेव"),
+    "krishna": ("krishna", "kanha", "kanhaiya", "gopal", "govind", "madhav", "bihari", "sanware", "कृष्ण"),
+    "ram": ("ram", "rama", "shriram", "shri-ram", "ramayan", "raghunath", "राम"),
+    "ganesh": ("ganesh", "ganapati", "ganesha", "vinayak", "विनायक", "गणेश"),
+    "durga": ("durga", "ambe", "ambey", "jagdambe", "sherawali", "navratri", "जगदम्बे", "दुर्गा"),
+    "lakshmi": ("lakshmi", "laxmi", "mahalakshmi", "लक्ष्मी"),
     "sai": ("sai", "saibaba", "sai-baba", "साईं"),
     "saraswati": ("saraswati", "सरस्वती"),
     "vishnu": ("vishnu", "विष्णु"),
@@ -39,11 +39,23 @@ _DEITY_ALIASES = {
 _CATEGORY_ALIASES = {
     "AARTI": ("aarti", "आरती"),
     "BHAJAN": ("bhajan", "भजन"),
-    "MANTRA": ("mantra", "मंत्र", "dhun"),
+    "MANTRA": ("mantra", "मंत्र", "dhun", "jaap", "jap", "chant", "chanting"),
     "CHALISA": ("chalisa", "चालीसा"),
     "STOTRA": ("stotra", "स्तोत्र", "stotram"),
     "MEDITATION": ("meditation", "ध्यान"),
 }
+
+_SITE_SUFFIX = re.compile(r"(?:\s*[-–—]\s*|\s*\()?(?:riskyjatt|koshalworld|djpunjab|pagalworld|gaana|\.com)[^)]*\)?\s*$", re.IGNORECASE)
+_NUMERIC_PREFIX = re.compile(r"^\s*\d+[\s._-]*")
+
+
+def clean_display_text(value: str | None, fallback: str = "") -> str:
+    """Remove obvious download-site noise without changing the source file."""
+    text = str(value or "").replace("_", " ").replace("\\", " ").strip()
+    text = _SITE_SUFFIX.sub("", text)
+    text = _NUMERIC_PREFIX.sub("", text)
+    text = re.sub(r"\s{2,}", " ", text).strip(" -_()")
+    return text or fallback
 
 
 def slugify(value: str) -> str:
@@ -137,6 +149,11 @@ def _metadata_for_probe(probe: dict[str, Any], path: Path) -> dict[str, Any]:
         "title": tags.get("title") or path.stem,
         "artist": tags.get("artist") or tags.get("album_artist"),
         "album": tags.get("album"),
+        "trackNumber": tags.get("tracknumber") or tags.get("track"),
+        "embeddedArtwork": any(
+            item.get("codec_type") == "video" and item.get("disposition", {}).get("attached_pic") == 1
+            for item in probe.get("streams", [])
+        ),
     }
 
 
@@ -147,10 +164,14 @@ def _int_or_none(value: Any) -> int | None:
         return None
 
 
-def infer_metadata(relative_path: str, title: str) -> dict[str, Any]:
-    searchable = f"{relative_path} {title}".lower()
+def infer_metadata(relative_path: str, title: str, album: str | None = None) -> dict[str, Any]:
+    searchable = f"{relative_path} {title} {album or ''}".lower()
     deity_id = next((deity for deity, aliases in _DEITY_ALIASES.items() if any(alias.lower() in searchable for alias in aliases)), None)
     category = next((category for category, aliases in _CATEGORY_ALIASES.items() if any(alias.lower() in searchable for alias in aliases)), None)
+    if category is None and any(token in searchable for token in ("amritwani", "amritvani", "vandana", "katha", "bhajan")):
+        category = "BHAJAN"
+    if category is None and "dhyan" in searchable:
+        category = "MEDITATION"
     return {
         "deityId": deity_id,
         "category": category,
@@ -167,7 +188,7 @@ def _object_key(deity_id: str | None, title: str, extension: str) -> str:
     return f"audio/{deity}/{slugify(title)}{extension.lower()}"
 
 
-def scan_directory(source: str | Path, ffprobe: str | None = None) -> list[dict[str, Any]]:
+def scan_directory(source: str | Path, ffprobe: str | None = None, rights_status: str = "UNKNOWN", rights_evidence: str | None = None) -> list[dict[str, Any]]:
     """Read an explicit source directory without writing to it or scanning elsewhere."""
     root = Path(source).expanduser().resolve()
     if not root.is_dir():
@@ -186,7 +207,9 @@ def scan_directory(source: str | Path, ffprobe: str | None = None) -> list[dict[
             errors.append("zero-byte file")
         if executable and not errors:
             probe, probe_errors = _probe_with_ffprobe(path, executable)
-            errors.extend(probe_errors)
+            unavailable = [detail for detail in probe_errors if detail.lower().startswith("ffprobe unavailable")]
+            warnings.extend(unavailable)
+            errors.extend(detail for detail in probe_errors if detail not in unavailable)
             media = _metadata_for_probe(probe, path) if probe else {}
         elif extension == ".wav" and not errors:
             media, probe_errors = _probe_wav(path)
@@ -198,8 +221,13 @@ def scan_directory(source: str | Path, ffprobe: str | None = None) -> list[dict[
         media.setdefault("title", path.stem)
         if media.get("durationMs") is not None and media["durationMs"] <= 0:
             errors.append("duration is zero or negative")
-        inferred = infer_metadata(relative, media["title"])
-        object_key = _object_key(inferred["deityId"], media["title"], extension)
+        elif media.get("durationMs") is None and not errors:
+            warnings.append("duration metadata is unavailable; review before publishing")
+        clean_title = clean_display_text(media["title"], path.stem)
+        clean_artist = clean_display_text(media.get("artist"), "Licensed recording")
+        clean_album = clean_display_text(media.get("album"))
+        inferred = infer_metadata(relative, clean_title, clean_album)
+        object_key = _object_key(inferred["deityId"], clean_title, extension)
         records.append({
             "originalFilename": path.name,
             "relativePath": relative,
@@ -212,17 +240,63 @@ def scan_directory(source: str | Path, ffprobe: str | None = None) -> list[dict[
             "bitrate": media.get("bitrate"),
             "sampleRate": media.get("sampleRate"),
             "channels": media.get("channels"),
-            "metadataTitle": media.get("title"),
-            "metadataArtist": media.get("artist"),
-            "metadataAlbum": media.get("album"),
+            "metadataTitle": clean_title,
+            "metadataArtist": clean_artist,
+            "metadataAlbum": clean_album,
+            "trackNumber": media.get("trackNumber"),
+            "embeddedArtwork": bool(media.get("embeddedArtwork", False)),
             "deityId": inferred["deityId"],
             "category": inferred["category"],
             "objectKey": object_key,
             "valid": not errors,
             "errors": errors,
             "warnings": warnings,
-            "needsReview": inferred["needsReview"] or not media.get("artist"),
+            "needsReview": inferred["needsReview"] or clean_artist == "Licensed recording" or media.get("durationMs") is None,
+            "rightsStatus": rights_status.upper(),
+            "rightsEvidence": rights_evidence,
         })
+    _assign_duplicate_and_collision_metadata(records)
+    return records
+
+
+def _assign_duplicate_and_collision_metadata(records: list[dict[str, Any]]) -> None:
+    """Mark exact duplicates and make object keys/IDs deterministic without deleting files."""
+    by_hash: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for record in records:
+        if record.get("valid") and record.get("sha256"):
+            by_hash[str(record["sha256"])].append(record)
+    for group in by_hash.values():
+        group.sort(key=lambda item: str(item.get("relativePath", "")).lower())
+        canonical = group[0]
+        for duplicate in group[1:]:
+            duplicate["duplicateOf"] = canonical.get("relativePath")
+            duplicate["valid"] = False
+            duplicate.setdefault("errors", []).append("exact duplicate of canonical source")
+            duplicate["needsReview"] = True
+    key_counts: dict[str, int] = defaultdict(int)
+    id_counts: dict[str, int] = defaultdict(int)
+    for record in records:
+        base_key = str(record.get("objectKey", ""))
+        stem, extension = os.path.splitext(base_key)
+        key_counts[base_key] += 1
+        if key_counts[base_key] > 1:
+            suffix = str(record.get("sha256", ""))[:8] or str(key_counts[base_key])
+            record["objectKey"] = f"{stem}-{suffix}-{key_counts[base_key]}{extension}"
+        base_id = f"{record.get('deityId') or 'unknown'}_{slugify(str(record.get('metadataTitle') or 'untitled')).replace('-', '_')}"
+        id_counts[base_id] += 1
+        record["trackId"] = base_id if id_counts[base_id] == 1 else f"{base_id}_{str(record.get('sha256', ''))[:8] or 'copy'}_{id_counts[base_id]}"
+
+
+def prepare_streaming_records(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Choose a lossless copy or an AAC derivative without modifying source masters."""
+    for record in records:
+        extension = str(record.get("extension", "")).lower()
+        bitrate = record.get("bitrate")
+        should_transcode = extension in {".wav", ".flac"} or (isinstance(bitrate, int) and bitrate > 192_000)
+        record["streamingAction"] = "TRANSCODE_AAC_M4A" if should_transcode else "COPY_ORIGINAL"
+        if should_transcode:
+            key = str(record.get("objectKey", ""))
+            record["objectKey"] = f"{os.path.splitext(key)[0]}.m4a"
     return records
 
 
@@ -247,10 +321,10 @@ def build_manifest(records: Iterable[dict[str, Any]], base_url: str | None = Non
     normalized_base = normalize_base_url(base_url)
     tracks: list[dict[str, Any]] = []
     for record in records:
-        title = str(record.get("metadataTitle") or Path(str(record.get("originalFilename", "untitled"))).stem).strip()
+        title = clean_display_text(str(record.get("metadataTitle") or Path(str(record.get("originalFilename", "untitled"))).stem))
         deity_id = record.get("deityId")
         category = record.get("category")
-        track_id = f"{deity_id or 'unknown'}_{slugify(title).replace('-', '_')}"
+        track_id = str(record.get("trackId") or f"{deity_id or 'unknown'}_{slugify(title).replace('-', '_')}")
         object_key = record.get("objectKey") or _object_key(deity_id, title, record.get("extension", ".m4a"))
         tracks.append({
             "id": track_id,
@@ -258,23 +332,85 @@ def build_manifest(records: Iterable[dict[str, Any]], base_url: str | None = Non
             "titleHindi": "",
             "deityId": deity_id or "",
             "category": category or "",
-            "artist": record.get("metadataArtist") or "",
-            "source": "",
+            "artist": record.get("metadataArtist") or "Licensed recording",
+            "source": record.get("metadataArtist") or "Licensed recording",
             "language": "HINDI",
             "durationMs": record.get("durationMs"),
             "audioObjectKey": object_key,
             "audioUrl": build_audio_url(normalized_base, object_key),
             "artworkUrl": None,
             "lyricsId": None,
-            "rightsStatus": record.get("rightsStatus", "UNKNOWN"),
+            "rightsStatus": str(record.get("rightsStatus", "UNKNOWN")).upper(),
+            "rightsEvidence": record.get("rightsEvidence"),
             "licenseReference": record.get("licenseReference"),
             "attribution": record.get("attribution") or record.get("metadataArtist"),
             "sha256": record.get("sha256"),
-            "availability": "STAGED" if record.get("valid", True) else "UNAVAILABLE",
+            "availability": "STAGED" if record.get("valid", True) and not record.get("duplicateOf") else "UNAVAILABLE",
             "needsReview": bool(record.get("needsReview", True)),
             "originalFilename": record.get("originalFilename"),
         })
     return {"schemaVersion": 1, "catalogVersion": catalog_version, "tracks": tracks}
+
+
+def build_publishable_manifest(records: Iterable[dict[str, Any]], base_url: str | None = None, catalog_version: str = "draft") -> dict[str, Any]:
+    """Return only records safe for a validated production catalog snapshot."""
+    eligible = [record for record in records if (
+        record.get("valid")
+        and not record.get("duplicateOf")
+        and not record.get("needsReview")
+        and record.get("deityId")
+        and record.get("category")
+        and record.get("durationMs")
+        and str(record.get("rightsStatus", "")).upper() in APPROVED_RIGHTS
+    )]
+    return build_manifest(eligible, base_url, catalog_version)
+
+
+def build_remote_catalog(manifest: dict[str, Any], catalog_version: str | None = None) -> dict[str, Any]:
+    """Adapt the validated manifest to the app's versioned RemoteCatalogDto wire shape."""
+    tracks = manifest.get("tracks", [])
+    deity_ids = sorted({str(track.get("deityId")) for track in tracks if track.get("deityId")})
+    deities = [{
+        "id": deity_id,
+        "nameKey": f"deity_{deity_id}",
+        "descriptionKey": f"deity_{deity_id}_description",
+        "artworkKey": deity_id,
+        "aliases": [],
+        "supportedCategories": sorted({str(track.get("category")) for track in tracks if track.get("deityId") == deity_id and track.get("category")}),
+    } for deity_id in deity_ids]
+    remote_tracks = []
+    for track in tracks:
+        title = str(track.get("titleEnglish") or "").strip()
+        subtitle = str(track.get("source") or "Licensed recording").strip()
+        artist = str(track.get("artist") or track.get("source") or "Licensed recording").strip()
+        remote_tracks.append({
+            "id": track.get("id"),
+            "titleEnglish": title,
+            "titleHindi": track.get("titleHindi") or title,
+            "subtitleEnglish": subtitle,
+            "subtitleHindi": subtitle,
+            "artistEnglish": artist,
+            "artistHindi": artist,
+            "deityId": track.get("deityId"),
+            "category": track.get("category"),
+            "language": track.get("language", "HINDI"),
+            "durationMs": track.get("durationMs"),
+            "artworkKey": track.get("deityId") or "default",
+            "audioUrl": track.get("audioUrl"),
+            "lyricsId": track.get("lyricsId"),
+            "keywords": [],
+            "aliases": [],
+            "rightsStatus": track.get("rightsStatus"),
+            "rightsEvidence": track.get("rightsEvidence"),
+            "availability": track.get("availability"),
+        })
+    return {
+        "schemaVersion": 1,
+        "version": catalog_version or manifest.get("catalogVersion", "draft"),
+        "deities": deities,
+        "tracks": remote_tracks,
+        "lyrics": [],
+    }
 
 
 def validate_manifest(manifest: dict[str, Any], known_deities: set[str] | None = None) -> dict[str, list[str]]:
@@ -293,7 +429,7 @@ def validate_manifest(manifest: dict[str, Any], known_deities: set[str] | None =
             errors.append(f"{prefix} must be an object")
             continue
         for field in required:
-            if not str(track.get(field, "")).strip():
+            if not str(track.get(field, "")).strip() and not track.get("needsReview"):
                 errors.append(f"{prefix}.{field} is required")
         track_id = str(track.get("id", ""))
         if track_id in ids:
@@ -315,7 +451,12 @@ def validate_manifest(manifest: dict[str, Any], known_deities: set[str] | None =
         if rights not in RIGHTS_STATUSES:
             errors.append(f"invalid or missing rights status: {rights or '<blank>'}")
         duration = track.get("durationMs")
-        if duration is not None:
+        if duration is None:
+            if track.get("needsReview"):
+                warnings.append(f"{prefix}.durationMs is missing and needs review")
+            else:
+                errors.append(f"{prefix}.durationMs is required")
+        else:
             try:
                 if int(duration) <= 0:
                     errors.append(f"{prefix}.durationMs must be positive")
@@ -326,7 +467,7 @@ def validate_manifest(manifest: dict[str, Any], known_deities: set[str] | None =
             parsed = urlparse(str(url))
             if parsed.scheme.lower() != "https" or not parsed.netloc:
                 errors.append(f"{prefix}.audioUrl must be an HTTPS URL")
-        elif rights in APPROVED_RIGHTS:
+        elif rights in APPROVED_RIGHTS and not track.get("needsReview"):
             errors.append(f"{prefix}.audioUrl is required for approved rights")
         if rights == "UNKNOWN":
             warnings.append(f"{prefix} remains RIGHTS_UNKNOWN and cannot be published")
@@ -350,9 +491,15 @@ def build_upload_plan(manifest: dict[str, Any], staging_dir: str | Path) -> list
         reason = ""
         if rights not in APPROVED_RIGHTS:
             status, reason = "BLOCKED_RIGHTS", f"rightsStatus={rights}"
+        elif not key or root not in staged.parents:
+            status, reason = "BLOCKED_PATH", "staged path escapes staging directory"
+        elif track.get("needsReview"):
+            status, reason = "BLOCKED_REVIEW", "metadata needs review"
+        elif track.get("availability") == "UNAVAILABLE":
+            status, reason = "BLOCKED_UNAVAILABLE", "source is invalid or duplicate"
         elif not staged.is_file():
             status, reason = "MISSING_STAGED_FILE", "staged file does not exist"
-        plan.append({"id": track.get("id"), "localStagedFile": str(staged), "objectKey": key, "status": status, "reason": reason})
+        plan.append({"id": track.get("id"), "localStagedFile": str(staged), "objectKey": key, "status": status, "reason": reason, "sha256": track.get("sha256")})
     return plan
 
 
@@ -365,17 +512,31 @@ def write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
         writer.writerows(rows)
 
 
-def stage_valid_files(records: Iterable[dict[str, Any]], output_dir: str | Path) -> list[dict[str, Any]]:
+def stage_valid_files(records: Iterable[dict[str, Any]], output_dir: str | Path, ffmpeg: str | None = None) -> list[dict[str, Any]]:
     destination = Path(output_dir).expanduser().resolve()
     staged: list[dict[str, Any]] = []
     for record in records:
-        if not record.get("valid"):
+        if not record.get("valid") or record.get("duplicateOf"):
             continue
         source = Path(str(record["sourcePath"])).resolve()
         target = (destination / str(record["objectKey"])).resolve()
         target.parent.mkdir(parents=True, exist_ok=True)
         if source == target or source in target.parents:
             raise ValueError("staging output must not be inside the source file")
-        shutil.copy2(source, target)
-        staged.append({"sourcePath": str(source), "stagedPath": str(target), "objectKey": record["objectKey"]})
+        if record.get("streamingAction") == "TRANSCODE_AAC_M4A":
+            if not ffmpeg:
+                raise ValueError(f"ffmpeg is required to create a streaming derivative for {source.name}")
+            command = [ffmpeg, "-v", "error", "-y", "-i", str(source), "-map", "0:a:0", "-vn", "-c:a", "aac", "-b:a", "128k", "-movflags", "+faststart"]
+            channels = record.get("channels")
+            if channels == 1:
+                command.extend(["-ac", "1"])
+            elif channels == 2:
+                command.extend(["-ac", "2"])
+            command.append(str(target))
+            result = subprocess.run(command, capture_output=True, text=True, timeout=300, check=False)
+            if result.returncode != 0:
+                raise ValueError(f"ffmpeg failed for {source.name}: {result.stderr.strip()}")
+        else:
+            shutil.copy2(source, target)
+        staged.append({"sourcePath": str(source), "stagedPath": str(target), "objectKey": record["objectKey"], "action": record.get("streamingAction", "COPY_ORIGINAL")})
     return staged

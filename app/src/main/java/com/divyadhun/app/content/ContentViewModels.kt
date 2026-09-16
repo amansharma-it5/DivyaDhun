@@ -5,7 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.divyadhun.app.data.ContentRepository
-import com.divyadhun.app.data.LocalContentRepository
+import com.divyadhun.app.data.ContentRepositoryProvider
 import com.divyadhun.app.data.UserPreferences
 import com.divyadhun.app.data.UserPreferencesRepository
 import com.divyadhun.app.domain.model.Deity
@@ -32,7 +32,7 @@ data class HomeUiState(
 )
 
 class HomeViewModel(application: Application) : AndroidViewModel(application) {
-    private val content: ContentRepository = LocalContentRepository()
+    private val content: ContentRepository = ContentRepositoryProvider.get(application)
     private val preferences = UserPreferencesRepository(application)
     private val mutableState = MutableStateFlow(HomeUiState())
     val state = mutableState.asStateFlow()
@@ -80,7 +80,7 @@ data class ExploreUiState(
 )
 
 class ExploreViewModel(application: Application) : AndroidViewModel(application) {
-    private val content: ContentRepository = LocalContentRepository()
+    private val content: ContentRepository = ContentRepositoryProvider.get(application)
     private val mutableState = MutableStateFlow(ExploreUiState())
     val state = mutableState.asStateFlow()
 
@@ -110,7 +110,7 @@ data class SearchUiState(
 )
 
 class SearchViewModel(application: Application) : AndroidViewModel(application) {
-    private val content: ContentRepository = LocalContentRepository()
+    private val content: ContentRepository = ContentRepositoryProvider.get(application)
     private val mutableState = MutableStateFlow(SearchUiState())
     val state = mutableState.asStateFlow()
 
@@ -145,7 +145,7 @@ data class DeityDetailUiState(
 )
 
 class DeityDetailViewModel(application: Application) : AndroidViewModel(application) {
-    private val content: ContentRepository = LocalContentRepository()
+    private val content: ContentRepository = ContentRepositoryProvider.get(application)
     private val mutableState = MutableStateFlow(DeityDetailUiState())
     val state = mutableState.asStateFlow()
 
@@ -192,7 +192,7 @@ data class ContentUiState(
 )
 
 class CategoryViewModel(application: Application) : AndroidViewModel(application) {
-    private val content: ContentRepository = LocalContentRepository()
+    private val content: ContentRepository = ContentRepositoryProvider.get(application)
     private val mutableState = MutableStateFlow(ContentUiState())
     val state = mutableState.asStateFlow()
     fun load(category: DevotionalCategory) {
@@ -207,7 +207,7 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
 data class TrackDetailUiState(val track: Track? = null, val loaded: Boolean = false, val error: Boolean = false)
 
 class TrackDetailViewModel(application: Application) : AndroidViewModel(application) {
-    private val content: ContentRepository = LocalContentRepository()
+    private val content: ContentRepository = ContentRepositoryProvider.get(application)
     private val mutableState = MutableStateFlow(TrackDetailUiState())
     val state = mutableState.asStateFlow()
     fun load(trackId: String) {
@@ -227,7 +227,7 @@ data class LyricsUiState(
 )
 
 class LyricsViewModel(application: Application) : AndroidViewModel(application) {
-    private val content: ContentRepository = LocalContentRepository()
+    private val content: ContentRepository = ContentRepositoryProvider.get(application)
     private val mutableState = MutableStateFlow(LyricsUiState())
     val state = mutableState.asStateFlow()
 
@@ -254,7 +254,7 @@ data class MantraUiState(
 )
 
 class MantraViewModel(application: Application) : AndroidViewModel(application) {
-    private val content: ContentRepository = LocalContentRepository()
+    private val content: ContentRepository = ContentRepositoryProvider.get(application)
     private val mutableState = MutableStateFlow(MantraUiState())
     val state = mutableState.asStateFlow()
 

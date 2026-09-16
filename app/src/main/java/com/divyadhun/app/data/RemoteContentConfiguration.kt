@@ -11,11 +11,14 @@ import java.net.URI
  */
 data class RemoteContentConfiguration(
     val audioBaseUrl: String? = null,
-    val artworkBaseUrl: String? = null
+    val artworkBaseUrl: String? = null,
+    val catalogUrl: String? = null
 ) {
     fun audioUrl(objectKey: String): String? = resolve(audioBaseUrl, objectKey)
 
     fun artworkUrl(objectKey: String): String? = resolve(artworkBaseUrl, objectKey)
+
+    fun catalogUrl(): String? = catalogUrl?.let(RemoteContentUrlPolicy::validateHttpsUrl)
 
     private fun resolve(baseUrl: String?, objectKey: String): String? {
         val base = baseUrl?.trim()?.takeIf(String::isNotEmpty) ?: return null
