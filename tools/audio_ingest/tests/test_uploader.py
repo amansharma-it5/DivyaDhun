@@ -4,7 +4,7 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
 
-from tools.audio_ingest.__main__ import _uploader_command, _verify_url
+from tools.audio_ingest.__main__ import _HTTP_USER_AGENT, _uploader_command, _verify_url
 
 
 class UploaderVerificationTest(unittest.TestCase):
@@ -31,6 +31,8 @@ class UploaderVerificationTest(unittest.TestCase):
             with patch("tools.audio_ingest.__main__.urlopen", side_effect=[head, ranged]) as urlopen:
                 _verify_url("https://audio.example/track.mp3", str(path))
             self.assertEqual(2, urlopen.call_count)
+            self.assertEqual(_HTTP_USER_AGENT, urlopen.call_args_list[0].args[0].get_header("User-agent"))
+            self.assertEqual(_HTTP_USER_AGENT, urlopen.call_args_list[1].args[0].get_header("User-agent"))
 
     def test_verify_url_fails_closed_on_wrong_content_length(self):
         with tempfile.TemporaryDirectory() as directory:

@@ -11,6 +11,8 @@ import sys
 from pathlib import Path
 from urllib.request import Request, urlopen
 
+_HTTP_USER_AGENT = "DivyaDhun-Phase19/1.0"
+
 from .pipeline import (
     build_manifest,
     build_metadata_review_report,
@@ -209,7 +211,7 @@ def _existing_object(base_url: str, object_key: str, local_path: str) -> str:
     """Return SAME, CONFLICT, or MISSING without downloading an existing object."""
     url = base_url.rstrip("/") + "/" + object_key
     try:
-        response = urlopen(Request(url, method="HEAD"), timeout=20)
+        response = urlopen(Request(url, method="HEAD", headers={"User-Agent": _HTTP_USER_AGENT}), timeout=20)
     except Exception as error:
         status = getattr(error, "code", None)
         if status == 404:
@@ -249,7 +251,7 @@ def _verify_url(url: str, expected_path: str | None = None) -> None:
     expected_size = os.path.getsize(expected_path) if expected_path else None
     expected_type = mimetypes.guess_type(expected_path)[0] if expected_path else None
     try:
-        response = urlopen(Request(url, method="HEAD"), timeout=20)
+        response = urlopen(Request(url, method="HEAD", headers={"User-Agent": _HTTP_USER_AGENT}), timeout=20)
         content_type = (response.headers.get("Content-Type") or "").split(";", 1)[0].strip().lower()
         content_length = response.headers.get("Content-Length")
         if not 200 <= response.status < 300:
@@ -261,7 +263,7 @@ def _verify_url(url: str, expected_path: str | None = None) -> None:
         if (response.headers.get("Accept-Ranges") or "").lower() != "bytes":
             raise RuntimeError("HTTP response does not advertise byte ranges")
         print(f"  HTTP {response.status}; Content-Type={response.headers.get('Content-Type')}; Content-Length={content_length}; Accept-Ranges={response.headers.get('Accept-Ranges')}")
-        range_response = urlopen(Request(url, headers={"Range": "bytes=0-1"}), timeout=20)
+        range_response = urlopen(Request(url, headers={"Range": "bytes=0-1", "User-Agent": _HTTP_USER_AGENT}), timeout=20)
         content_range = range_response.headers.get("Content-Range") or ""
         if range_response.status != 206 or not content_range.startswith("bytes 0-1/"):
             raise RuntimeError(f"range probe did not return bytes 0-1 (HTTP {range_response.status}, Content-Range={content_range!r})")
