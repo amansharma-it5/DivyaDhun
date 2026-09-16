@@ -1,0 +1,612 @@
+{
+  "__default": {
+    "researchStatus": "SEARCHED_UNRESOLVED",
+    "researchConfidence": "UNRESOLVED",
+    "researchFinding": "No conclusive exact-recording web match was found.",
+    "researchNotes": "Exact-title and artist web searches were performed. No catalog assignment is made without exact-version confirmation and human review."
+  },
+  "shiv_hey_shambhu_baba_mere_bhole_naath": {
+    "researchStatus": "PROBABLE_REVIEW",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateDeityId": "shiv",
+    "researchCandidateCategory": "BHAJAN",
+    "researchCandidateArtist": "Gulshan Kumar",
+    "researchAlbum": "Shiv Mahima",
+    "researchFinding": "Exact title and Gulshan Kumar match; Shiv Mahima context",
+    "researchSources": ["https://www.youtube.com/watch?v=i6rDYxNpubk", "https://desibhajan.com/he-shambhu-baba-mere-bholenath-lyrics/"]
+  },
+  "unknown_aaj_hai_jagrata": {
+    "researchStatus": "PROBABLE_REVIEW",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateDeityId": "durga",
+    "researchCandidateCategory": "BHAJAN",
+    "researchCandidateArtist": "Master Saleem",
+    "researchAlbum": "Aaj Hai Jagrata",
+    "researchFinding": "Master Saleem album/title association; deity candidate comes from album context and needs confirmation",
+    "researchSources": ["https://en.wikipedia.org/wiki/Master_Saleem"]
+  },
+  "shiv_aao_mahima_gaayen_bhole_nath_ki": {
+    "researchStatus": "PROBABLE_REVIEW",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateDeityId": "shiv",
+    "researchCandidateCategory": "BHAJAN",
+    "researchCandidateArtist": "Anuradha Paudwal",
+    "researchFinding": "Exact title, singer, and Shiv-bhajan context match",
+    "researchSources": ["https://www.bhajansangrah.in/lyrics/bhajan-shiv-shankar-Anuradha-Paudwal-Aao-Mahima-Gaayen-Bholenath-Ki-en"]
+  },
+  "durga_main_to_aata_raha": {
+    "researchStatus": "PROBABLE_REVIEW",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateDeityId": "durga",
+    "researchCandidateCategory": "BHAJAN",
+    "researchCandidateArtist": "Anuradha Paudwal",
+    "researchFinding": "Exact title/artist association found in devotional catalog search; exact local version remains for human review",
+    "researchSources": ["https://www.djjohal.com/song/main-to-aata-raha-anuradha-paudwal.html"]
+  },
+  "ram_aarti_shree_ramayan_ji_ki_3": {
+    "researchStatus": "PROBABLE_REVIEW_BUT_MEDIA_INVALID",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateDeityId": "ram",
+    "researchCandidateCategory": "AARTI",
+    "researchCandidateArtist": "Anuradha Paudwal",
+    "researchAlbum": "Aarti",
+    "researchDurationMs": "378000",
+    "researchFinding": "Exact title and Anuradha Paudwal catalog matches exist, but local source is zero-byte; web duration is not assigned",
+    "researchSources": ["https://starzspeak.com/post/3976/anuradha-paudwal-aarti-shree-ramayan-ji-ki-lyrics", "https://www.tagtuner.com/music/albums/Anuradha-Paudwal/Aarti/album-v2713a"]
+  },
+  "unknown_aaungi_aaungi_main_agle_baras_phir_aaungi": {
+    "researchStatus": "PROBABLE_REVIEW",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateDeityId": "durga",
+    "researchCandidateCategory": "BHAJAN",
+    "researchCandidateArtist": "Anuradha Paudwal",
+    "researchAlbum": "Jai Jagjannee",
+    "researchFinding": "Exact official catalog match; album is Mata devotional context",
+    "researchSources": ["https://music.apple.com/us/song/1696092134", "https://www.youtube.com/watch?v=6ImnwrOa00I"]
+  },
+  "unknown_aisi_subah_na_aaye": {
+    "researchStatus": "PROBABLE_REVIEW",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateDeityId": "shiv",
+    "researchCandidateCategory": "BHAJAN",
+    "researchCandidateArtist": "Anuradha Paudwal",
+    "researchFinding": "Exact title and Shiv-bhajan context; one catalog lists a co-singer",
+    "researchSources": ["https://sarasbhajan.com/aisi-subah-na-aaye-lyrics/", "https://open.spotify.com/track/015udGZqStSmT6rnsZdtvu"]
+  },
+  "unknown_asin_udhde_aasre_tere": {
+    "researchStatus": "PROBABLE_REVIEW_NON_DEVOTIONAL_CONTEXT",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateArtist": "Kanth Kaler",
+    "researchFinding": "Exact title/artist match, but search evidence identifies Punjabi music and does not establish a supported deity/category",
+    "researchSources": ["https://www.allmusic.com/artist/kanth-kaler-mn0004145897", "https://songbpm.com/%40kanth-kaler"]
+  },
+  "unknown_bairi_bansuriya": {
+    "researchStatus": "PROBABLE_REVIEW",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateDeityId": "krishna",
+    "researchCandidateCategory": "BHAJAN",
+    "researchCandidateArtist": "Anuradha Paudwal",
+    "researchAlbum": "Hari Hari Govind Bol",
+    "researchFinding": "Exact track appears in the same Anuradha Paudwal devotional album tracklist",
+    "researchSources": ["https://music.amazon.in/albums/B074W2VVD4"]
+  },
+  "unknown_balle_balle": {
+    "researchStatus": "AMBIGUOUS_VERSION",
+    "researchConfidence": "UNRESOLVED",
+    "researchFinding": "Search results identify secular Punjabi soundtrack versions as well as devotional album listings; local recording cannot be identified precisely",
+    "researchSources": ["https://en.wikipedia.org/wiki/Mel_Karade_Rabba", "https://www.imdb.com/title/tt1694561/soundtrack/"]
+  },
+  "unknown_bavan_shakti_peeth_aarti": {
+    "researchStatus": "SEARCHED_UNRESOLVED",
+    "researchConfidence": "UNRESOLVED",
+    "researchFinding": "No exact recording-level source established; Shakti context is not assigned to a supported deity",
+    "researchSources": []
+  },
+  "unknown_bhagtaan_di_toli": {
+    "researchStatus": "SEARCHED_UNRESOLVED",
+    "researchConfidence": "UNRESOLVED",
+    "researchFinding": "No exact recording-level source established",
+    "researchSources": []
+  },
+  "shiv_bum_bhole_kailash_nath": {
+    "researchStatus": "PROBABLE_REVIEW",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateDeityId": "shiv",
+    "researchCandidateCategory": "BHAJAN",
+    "researchCandidateArtist": "Gulshan Kumar",
+    "researchAlbum": "Shiv Mahima",
+    "researchFinding": "Exact title, artist, and album match",
+    "researchSources": ["https://riskyjatt.io/music/song/107188/Bum-Bhole-Kailash-Nath-Gulshan-Kumar-mp3-song.html", "https://www.djjohal.com/album/5043/shiv-mahima.html"]
+  },
+  "shiv_chal_kanwariya": {
+    "researchStatus": "PROBABLE_REVIEW",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateDeityId": "shiv",
+    "researchCandidateCategory": "BHAJAN",
+    "researchCandidateArtist": "Gulshan Kumar",
+    "researchAlbum": "Shiv Mahima",
+    "researchFinding": "Exact Shiv devotional title and Gulshan Kumar/Shiv Mahima context",
+    "researchSources": ["https://www.tseries.com/chal-kanwariya-shiv-ke-dham", "https://sarasbhajan.com/chal-kanwariya-chal-kanwariya-lyrics/"]
+  },
+  "unknown_choti_choti_gaiyan_chote_chote_gwal": {
+    "researchStatus": "PROBABLE_REVIEW",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateDeityId": "krishna",
+    "researchCandidateCategory": "BHAJAN",
+    "researchFinding": "Exact traditional bhajan text and Krishna context; local credited artist does not match web result",
+    "researchSources": ["https://www.bhaktibharat.com/en/bhajan/choti-choti-gaiyan-chote-chote-gwal", "https://bhajansonline.blogspot.com/2008/04/krishna-chhoti-chhoti-gaiya-chhote.html"]
+  },
+  "unknown_dhan_dhan_baba_vadbhag_singh": {
+    "researchStatus": "PROBABLE_REVIEW_UNSUPPORTED_DEITY",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateCategory": "BHAJAN",
+    "researchCandidateArtist": "Gurdev Chahal",
+    "researchFinding": "Exact title/artist Shabad match; no supported DivyaDhun deity ID is assigned",
+    "researchSources": ["https://www.youtube.com/watch?v=HKiMHfGfAU8", "https://open.spotify.com/artist/2LG1KHvlbzHIrv8UyaBc2N"]
+  },
+  "unknown_dhan_dhan_guru_ravidas_ji": {
+    "researchStatus": "PROBABLE_REVIEW_UNSUPPORTED_DEITY",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateCategory": "BHAJAN",
+    "researchCandidateArtist": "Kanth Kaler",
+    "researchFinding": "Exact title/artist catalog match; Guru Ravidas is not silently mapped to a supported deity",
+    "researchSources": ["https://music.apple.com/us/song/1602644481", "https://mr-punjab.com/dhan-dhan-guru-ravidas-ji-album/53980"]
+  },
+  "unknown_dharti_gagan_mein_hoti_hai": {
+    "researchStatus": "PROBABLE_REVIEW_UNSUPPORTED_DEITY",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateCategory": "BHAJAN",
+    "researchCandidateArtist": "Suresh Wadkar; Anuradha Paudwal",
+    "researchAlbum": "Jai Maa Vaishno Devi",
+    "researchFinding": "Exact song and album match; Vaishno Devi context is not silently mapped to Durga",
+    "researchSources": ["https://open.spotify.com/track/1oA62JhUTzSI2L3zy8aPXc", "https://www.tseries.com/music/jai-maa-vaishno-devi"]
+  },
+  "unknown_ganga_je_ki_aarti": {
+    "researchStatus": "PROBABLE_REVIEW_UNSUPPORTED_DEITY",
+    "researchConfidence": "PROBABLE",
+    "researchFinding": "Aarti/Ganga title context found, but Ganga is not a supported deity ID",
+    "researchSources": ["https://nepalisongslyrics.com/aarti-ganga-ji-ki-lyrics-anuradha-paudwal/"]
+  },
+  "hanuman_hanuman_chalisa": {
+    "researchStatus": "AMBIGUOUS_VERSION",
+    "researchConfidence": "UNRESOLVED",
+    "researchCandidateDeityId": "hanuman",
+    "researchCandidateCategory": "CHALISA",
+    "researchFinding": "Many exact-title renditions exist; search does not establish the local recording artist, which remains a blocker",
+    "researchSources": ["https://en.wikipedia.org/wiki/Hanuman_Chalisa", "https://www.tseries.com/videos/tseriesbhakti/PLFFBD1EADC5836B35"]
+  },
+  "krishna_hari_hari_govind_bol": {
+    "researchStatus": "PROBABLE_REVIEW",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateDeityId": "krishna",
+    "researchCandidateCategory": "BHAJAN",
+    "researchCandidateArtist": "Anuradha Paudwal",
+    "researchAlbum": "Hari Hari Govind Bol",
+    "researchFinding": "Exact official song/catalog match",
+    "researchSources": ["https://www.youtube.com/watch?v=C9aNqxZZb0k", "https://music.amazon.in/albums/B074W2VVD4"]
+  },
+  "krishna_he_krishna_govind_hare_murare": {
+    "researchStatus": "PROBABLE_REVIEW",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateDeityId": "krishna",
+    "researchCandidateCategory": "BHAJAN",
+    "researchCandidateArtist": "Anuradha Paudwal",
+    "researchAlbum": "Hari Hari Govind Bol",
+    "researchFinding": "Exact official song/catalog match",
+    "researchSources": ["https://www.youtube.com/watch?v=crC7AGc3FHE", "https://music.apple.com/us/song/1174253828"]
+  },
+  "shiv_hey_bhole_shankar": {
+    "researchStatus": "AMBIGUOUS_VERSION",
+    "researchConfidence": "UNRESOLVED",
+    "researchCandidateDeityId": "shiv",
+    "researchCandidateCategory": "BHAJAN",
+    "researchCandidateArtist": "Gulshan Kumar",
+    "researchFinding": "Search evidence is for the similarly titled Hey Bhole Shankar Padharo; exact local version is not confirmed",
+    "researchSources": ["https://bharatlyrics.com/hey-bhole-shankar-padharo-lyrics/", "https://www.hindilyrics4u.com/song/hey_bhole_shankar_padharo.htm"]
+  },
+  "shiv_hey_shambhu_baba_mere_bholenath": {
+    "researchStatus": "PROBABLE_REVIEW",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateDeityId": "shiv",
+    "researchCandidateCategory": "BHAJAN",
+    "researchCandidateArtist": "Anuradha Paudwal",
+    "researchFinding": "Exact title and Anuradha Paudwal Shiv-bhajan match",
+    "researchSources": ["https://www.bhajansangrah.in/lyrics/shiv-shiv-shankar-Anuradha-Paudwal-Hey-Shambhu-Baba-Mere-Bhole-Naath-en", "https://www.shazam.com/song/1184822931/hey-shambhu-baba-mere-bholenath?tab=lyrics"]
+  },
+  "shiv_main_to_shiv_ki_pujarin_banungi": {
+    "researchStatus": "PROBABLE_REVIEW",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateDeityId": "shiv",
+    "researchCandidateCategory": "BHAJAN",
+    "researchCandidateArtist": "Gulshan Kumar",
+    "researchAlbum": "Shiv Mahima",
+    "researchFinding": "Exact title, Shiv context, and Shiv Mahima/Gulshan Kumar association found",
+    "researchSources": ["https://www.bhajansangrah.in/lyrics/main-to-shiv-ki-pujaran-banungi", "https://music.amazon.co.uk/albums/B0C5HGTDP5"]
+  },
+  "unknown_hui_aank_nam_aur_ye_dil_muskuraya": {
+    "researchStatus": "AMBIGUOUS_NON_DEVOTIONAL_CONTEXT",
+    "researchConfidence": "UNRESOLVED",
+    "researchFinding": "Exact song appears as a film track from Saathi; no supported deity/category is assigned",
+    "researchSources": ["https://mahfil.in/hui-aankh-nam-saathi-1991", "https://ndtv.in/bollywood/hui-aankh-nam-aur-yeh-dil-muskuraya-song-actress-varsha-usgaonkar-complete-look-has-changed-see-her-photos-4185897/amp/1"]
+  },
+  "unknown_jaare_ja_ja_re_badra": {
+    "researchStatus": "PROBABLE_REVIEW",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateDeityId": "krishna",
+    "researchCandidateCategory": "BHAJAN",
+    "researchCandidateArtist": "Anuradha Paudwal",
+    "researchAlbum": "Hari Hari Govind Bol",
+    "researchFinding": "Exact track appears in the same Anuradha Paudwal devotional album tracklist",
+    "researchSources": ["https://music.amazon.in/albums/B074W2VVD4", "https://audiomack.com/anuradhapaudwal/song/jaare-ja-ja-re-badra-3152146"]
+  },
+  "unknown_jai_gange_mata": {
+    "researchStatus": "PROBABLE_REVIEW_UNSUPPORTED_DEITY",
+    "researchConfidence": "PROBABLE",
+    "researchFinding": "Exact title/artist aarti match; Ganga is not silently mapped to a supported deity",
+    "researchSources": ["https://lyricsgoo.com/anuradha-paudwal-jai-gange-mata-lyrics/", "https://www.washingtonbanglaradio.com/content/aarti-indian-hindu-devotional-songs-anuradha-paudwal-indian-hindi-arti-arati-songs-vol-3/"]
+  },
+  "unknown_jai_gange_mata_2b92f621_2": {
+    "researchStatus": "PROBABLE_REVIEW_UNSUPPORTED_DEITY",
+    "researchConfidence": "PROBABLE",
+    "researchFinding": "Exact title match found, but local artist/version differs from indexed examples and Ganga is unsupported",
+    "researchSources": ["https://lyricsgoo.com/anuradha-paudwal-jai-gange-mata-lyrics/"]
+  },
+  "unknown_jai_kaali": {
+    "researchStatus": "SEARCHED_UNRESOLVED",
+    "researchConfidence": "UNRESOLVED",
+    "researchCandidateDeityId": "kali",
+    "researchCandidateCategory": "BHAJAN",
+    "researchFinding": "Title provides a Kali candidate, but no exact recording/artist source was established",
+    "researchSources": []
+  },
+  "unknown_jai_parvati_mata": {
+    "researchStatus": "PROBABLE_REVIEW_UNSUPPORTED_DEITY",
+    "researchConfidence": "PROBABLE",
+    "researchFinding": "Exact Parvati aarti context found; Parvati is not a supported deity ID",
+    "researchSources": ["https://www.youtube.com/watch?v=HHWtxqdq-F0", "https://music.amazon.com.au/tracks/B074W4FSWQ"]
+  },
+  "unknown_jai_santoshi_mata": {
+    "researchStatus": "PROBABLE_REVIEW_UNSUPPORTED_DEITY",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateArtist": "Anuradha Paudwal",
+    "researchFinding": "Exact title/Anuradha Paudwal aarti match; Santoshi Mata is not a supported deity ID",
+    "researchSources": ["https://www.bhajansangrah.in/lyrics/durga-durga-Anuradha-Paudwal-Jai-Santoshi-Mata-en", "https://audiomack.com/anuradhapaudwal/song/jai-santoshi-mata-8152875"]
+  },
+  "unknown_jai_santoshi_mata_07af8726_3": {
+    "researchStatus": "AMBIGUOUS_VERSION",
+    "researchConfidence": "UNRESOLVED",
+    "researchFinding": "Exact title has several indexed renditions; local Raksha Bhandari version not independently matched",
+    "researchSources": ["https://www.bhajansangrah.in/lyrics/durga-durga-Anuradha-Paudwal-Jai-Santoshi-Mata-en"]
+  },
+  "unknown_jai_santoshi_mata_6758e97b_4": {
+    "researchStatus": "AMBIGUOUS_VERSION",
+    "researchConfidence": "UNRESOLVED",
+    "researchFinding": "Exact title has several indexed renditions; local Anuradha Paudwal file version is not resolved",
+    "researchSources": ["https://www.bhajansangrah.in/lyrics/durga-durga-Anuradha-Paudwal-Jai-Santoshi-Mata-en"]
+  },
+  "unknown_jai_santoshi_mata_b3c4500c_2": {
+    "researchStatus": "AMBIGUOUS_VERSION",
+    "researchConfidence": "UNRESOLVED",
+    "researchFinding": "Exact title has several indexed renditions; local Nitin Mukesh version is not resolved",
+    "researchSources": ["https://www.bhajansangrah.in/lyrics/durga-durga-Anuradha-Paudwal-Jai-Santoshi-Mata-en"]
+  },
+  "krishna_shri_krishna_govind": {
+    "researchStatus": "PROBABLE_REVIEW",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateDeityId": "krishna",
+    "researchCandidateCategory": "BHAJAN",
+    "researchCandidateArtist": "Ravindra Jain",
+    "researchFinding": "Exact title/artist Krishna-bhajan catalog match",
+    "researchSources": ["https://www.lyricsbogie.com/shri-krishna-govind/"]
+  },
+  "ram_janam_safal_hoga_re_bande": {
+    "researchStatus": "PROBABLE_REVIEW",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateDeityId": "ram",
+    "researchCandidateCategory": "BHAJAN",
+    "researchCandidateArtist": "Jagjit Singh",
+    "researchAlbum": "Jai Siya Ram",
+    "researchFinding": "Exact official title, artist, album, Ram devotional context, and label match",
+    "researchSources": ["https://www.youtube.com/watch?v=ULJGXxzWnYQ", "https://bharatlyrics.com/janam-safal-hoga-re-bande-lyrics/"]
+  },
+  "unknown_kamli_hoyee": {
+    "researchStatus": "SEARCHED_UNRESOLVED",
+    "researchConfidence": "UNRESOLVED",
+    "researchFinding": "No exact recording-level source established",
+    "researchSources": []
+  },
+  "krishna_kanha_na_sata": {
+    "researchStatus": "PROBABLE_REVIEW",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateDeityId": "krishna",
+    "researchCandidateCategory": "BHAJAN",
+    "researchCandidateArtist": "Anuradha Paudwal",
+    "researchAlbum": "Hari Hari Govind Bol",
+    "researchFinding": "Exact official title, artist, and album match",
+    "researchSources": ["https://www.youtube.com/watch?v=qxih1N0zZ4U", "https://music.apple.com/us/song/1174253864"]
+  },
+  "unknown_karunamayi_vardayni": {
+    "researchStatus": "SEARCHED_UNRESOLVED",
+    "researchConfidence": "UNRESOLVED",
+    "researchFinding": "No exact recording-level source established",
+    "researchSources": []
+  },
+  "unknown_kaun_dusra": {
+    "researchStatus": "PROBABLE_REVIEW",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateDeityId": "shiv",
+    "researchCandidateCategory": "BHAJAN",
+    "researchCandidateArtist": "Billa Sonipat Ala",
+    "researchFinding": "Exact title/artist lyrics identify Bhole/Shiv context, but catalog date/version needs human confirmation",
+    "researchSources": ["https://www.paroles-musique.com/eng/Billa-Sonipat-Ala-Kaun-Dusra-lyrics%2Cp18291204", "https://music.amazon.in/artists/B08K4PPL33/billa-sonipat-ala"]
+  },
+  "unknown_leela_teri_tu_hi_jaane": {
+    "researchStatus": "AMBIGUOUS_VERSION",
+    "researchConfidence": "UNRESOLVED",
+    "researchCandidateArtist": "Kumar Vishu",
+    "researchFinding": "Exact title/artist association found inside an album listing, but deity/category is not established",
+    "researchSources": ["https://music.amazon.com.br/albums/B074VYM9Y9", "https://www.dailymotion.com/video/x267ziy"]
+  },
+  "unknown_maiya_teri_chuni_nu_sitare": {
+    "researchStatus": "PROBABLE_REVIEW_UNSUPPORTED_DEITY",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateCategory": "BHAJAN",
+    "researchCandidateArtist": "Lovish Love",
+    "researchFinding": "Exact title/artist Mata bhajan match; Mata identity is not silently mapped to a supported deity",
+    "researchSources": ["https://www.youtube.com/watch?v=65MdUnLw4KA", "https://bhajan-song.rockyraja.com/mata-rani/maiya-teri-chuni-lyrics-lovish-love/"]
+  },
+  "unknown_meharwali_sharda_amritwani": {
+    "researchStatus": "SEARCHED_UNRESOLVED",
+    "researchConfidence": "UNRESOLVED",
+    "researchCandidateCategory": "BHAJAN",
+    "researchFinding": "Sharda may be a devotional epithet, but no exact recording source or supported deity mapping was established",
+    "researchSources": []
+  },
+  "unknown_mere_nath": {
+    "researchStatus": "AMBIGUOUS_NON_DEVOTIONAL_CONTEXT",
+    "researchConfidence": "UNRESOLVED",
+    "researchFinding": "Search finds a current Haryanvi title by the same artist but does not establish a devotional deity/category for this local recording",
+    "researchSources": ["https://music.amazon.in/artists/B07XWDXMQP/bintu-pabra"]
+  },
+  "unknown_meri_pehchaan": {
+    "researchStatus": "PROBABLE_REVIEW",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateCategory": "BHAJAN",
+    "researchCandidateArtist": "Mani Ladla",
+    "researchFinding": "Exact title/artist devotional video match; deity remains unresolved",
+    "researchSources": ["https://www.youtube.com/watch?v=HalTSuRywos", "https://www.youtube.com/watch?v=JDaIHbpkrF8"]
+  },
+  "shiv_milta_hai_saccha_sukh": {
+    "researchStatus": "PROBABLE_REVIEW",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateDeityId": "shiv",
+    "researchCandidateCategory": "BHAJAN",
+    "researchCandidateArtist": "Anuradha Paudwal",
+    "researchAlbum": "Shiv Mahima",
+    "researchFinding": "Exact Shiv Mahima song match; local artist is present and needs no replacement",
+    "researchSources": ["https://www.hindigeetmala.net/song/milta_hai_saccha_sukh_keval.htm", "https://www.bhajansangrah.in/lyrics/milta-hai-saccha-sukh-lyrics"]
+  },
+  "shiv_milta_hai_saccha_sukh_b8576fd5_2": {
+    "researchStatus": "AMBIGUOUS_VERSION",
+    "researchConfidence": "UNRESOLVED",
+    "researchCandidateDeityId": "shiv",
+    "researchCandidateCategory": "BHAJAN",
+    "researchFinding": "Exact title has multiple Shiv Mahima renditions; local Gulshan Kumar version is not resolved by search",
+    "researchSources": ["https://www.hindigeetmala.net/song/milta_hai_saccha_sukh_keval.htm"]
+  },
+  "unknown_om_jai_jagdish_hare": {
+    "researchStatus": "PROBABLE_REVIEW_UNSUPPORTED_VERSION",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateDeityId": "vishnu",
+    "researchCandidateCategory": "AARTI",
+    "researchCandidateArtist": "Nitin Mukesh",
+    "researchFinding": "Exact aarti title/artist catalog match; deity mapping is a review candidate, not an assignment",
+    "researchSources": ["https://music.apple.com/us/song/1128378494", "https://open.spotify.com/track/0LdK5zbNM3U1ln8JGFHPYS"]
+  },
+  "unknown_om_jai_jagdish_hare_0f7e15e4_3": {
+    "researchStatus": "AMBIGUOUS_VERSION",
+    "researchConfidence": "UNRESOLVED",
+    "researchCandidateDeityId": "vishnu",
+    "researchCandidateCategory": "AARTI",
+    "researchFinding": "Exact aarti title has multiple indexed renditions; local Anuradha Paudwal version not resolved",
+    "researchSources": ["https://music.apple.com/us/song/1128378494"]
+  },
+  "unknown_om_jai_jagdish_hare_0f7e15e4_4": {
+    "researchStatus": "AMBIGUOUS_VERSION_BUT_MEDIA_DUPLICATE",
+    "researchConfidence": "UNRESOLVED",
+    "researchCandidateDeityId": "vishnu",
+    "researchCandidateCategory": "AARTI",
+    "researchFinding": "Exact duplicate of the canonical local source; version and invalid-source decision remain unresolved",
+    "researchSources": ["https://music.apple.com/us/song/1128378494"]
+  },
+  "unknown_om_jai_jagdish_hare_f6c6147a_2": {
+    "researchStatus": "AMBIGUOUS_VERSION",
+    "researchConfidence": "UNRESOLVED",
+    "researchCandidateDeityId": "vishnu",
+    "researchCandidateCategory": "AARTI",
+    "researchFinding": "Exact aarti title has multiple indexed renditions; local Raksha Bhandari version not resolved",
+    "researchSources": ["https://music.amazon.in/albums/B01HMYPHTA"]
+  },
+  "unknown_om_chanting": {
+    "researchStatus": "SEARCHED_UNRESOLVED",
+    "researchConfidence": "UNRESOLVED",
+    "researchCandidateCategory": "MANTRA",
+    "researchFinding": "Mantra category is supported by the title, but no exact recording/deity source was established",
+    "researchSources": []
+  },
+  "shiv_om_namah_shivay": {
+    "researchStatus": "PROBABLE_REVIEW",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateDeityId": "shiv",
+    "researchCandidateCategory": "MANTRA",
+    "researchCandidateArtist": "Anuradha Paudwal",
+    "researchFinding": "Exact title/artist and devotional-mantra catalog matches",
+    "researchSources": ["https://www.shazam.com/song/1238679223/om-namah-shivay", "https://www.youtube.com/watch?v=D05_47jiZFg"]
+  },
+  "shiv_pagli_kanwar_ki_mahima": {
+    "researchStatus": "PROBABLE_REVIEW",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateDeityId": "shiv",
+    "researchCandidateCategory": "BHAJAN",
+    "researchCandidateArtist": "Lakhbir Singh Lakha",
+    "researchAlbum": "Chal Bhole Ke Dwar",
+    "researchFinding": "Exact title/artist/album match; local display title is truncated by source metadata",
+    "researchSources": ["https://music.amazon.in/tracks/B07B53TK9H", "https://www.youtube.com/watch?v=tnobw8zJWZo"]
+  },
+  "shiv_prabhu_mere_man_ko": {
+    "researchStatus": "PROBABLE_REVIEW",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateDeityId": "shiv",
+    "researchCandidateCategory": "BHAJAN",
+    "researchCandidateArtist": "Gulshan Kumar",
+    "researchAlbum": "Shiv Mahima",
+    "researchFinding": "Exact Shiv Mahima title context; catalog pages vary on credited performer",
+    "researchSources": ["https://www.hindigeetmala.net/song/prabhu_mere_man_ko_bana_de_shivalay.htm", "https://en.wikipedia.org/wiki/Shiv_Mahima"]
+  },
+  "unknown_rachilya_rishi_munini": {
+    "researchStatus": "PROBABLE_REVIEW_UNSUPPORTED_DEITY",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateCategory": "AARTI",
+    "researchCandidateArtist": "Lata Mangeshkar",
+    "researchAlbum": "Ganapati Aarti",
+    "researchFinding": "Exact title/artist catalog match; Ganapati is not silently substituted for a supported Ganesh ID",
+    "researchSources": ["https://www.shazam.com/song/1330395858/rachilya-rishi-munini", "https://music.apple.com/us/song/1330395858"]
+  },
+  "unknown_radha_naam_sang_brij_chourasi_kos_yatra": {
+    "researchStatus": "PROBABLE_REVIEW_UNSUPPORTED_DEITY",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateCategory": "BHAJAN",
+    "researchCandidateArtist": "Shradheya Gaurav Krishan Goswami Ji",
+    "researchFinding": "Exact album/title association; Radha/Krishna context needs a supported-category/deity policy decision",
+    "researchSources": ["https://djpunjab.is/bollywood/radha-naam-sang-brij-chourasi-kos-yatra-songs-smmzwt.html", "https://open.spotify.com/track/2PhwRCVorxDyIAedwBGnWZ"]
+  },
+  "unknown_shri_badri_nath_ji_ki_aarti": {
+    "researchStatus": "PROBABLE_REVIEW_UNSUPPORTED_DEITY",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateCategory": "AARTI",
+    "researchCandidateArtist": "Anuradha Paudwal",
+    "researchAlbum": "Badrinath Amritwani",
+    "researchFinding": "Exact official title/artist/album and duration catalog match; Badri Nath is not silently mapped",
+    "researchSources": ["https://www.youtube.com/watch?v=87OncMslITM", "https://music.amazon.in/albums/B074W65KGK"]
+  },
+  "unknown_shri_mansadevi_ki_aarti_4": {
+    "researchStatus": "PROBABLE_REVIEW_UNSUPPORTED_DEITY_BUT_MEDIA_INVALID",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateCategory": "AARTI",
+    "researchCandidateArtist": "Anuradha Paudwal",
+    "researchAlbum": "Shree Mansa Devi Amritwani",
+    "researchDurationMs": "403000",
+    "researchFinding": "Exact title/artist/album match; local source duration is missing/invalid and web duration is not assigned",
+    "researchSources": ["https://hindibhajan.in/shri-mansadevi-ki-aarti-lyrics/", "https://music.amazon.com/tracks/B074W5S1Y4"]
+  },
+  "unknown_shri_shyamji_ki_aarti_ardaas": {
+    "researchStatus": "SEARCHED_UNRESOLVED",
+    "researchConfidence": "UNRESOLVED",
+    "researchCandidateCategory": "AARTI",
+    "researchFinding": "No exact recording-level source established; Shyamji is not silently mapped to Krishna",
+    "researchSources": []
+  },
+  "unknown_so_satgur_peyara_mere_naal_hai": {
+    "researchStatus": "PROBABLE_REVIEW_UNSUPPORTED_DEITY",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateCategory": "BHAJAN",
+    "researchCandidateArtist": "Baba Gulab Singh Ji",
+    "researchFinding": "Exact title/artist Shabad devotional match; no supported Hindu deity assignment is made",
+    "researchSources": ["https://music.apple.com/us/album/so-satgur-peyara-mere-naal-hai-single/1777068120", "https://www.djjohal.com/single/735160/baba-gulab-singh-ji-so-satgur-peyara-mere-naal-hai.html"]
+  },
+  "unknown_suna_hai_tere_dar_pe": {
+    "researchStatus": "SEARCHED_UNRESOLVED",
+    "researchConfidence": "UNRESOLVED",
+    "researchFinding": "No exact recording-level source established",
+    "researchSources": []
+  },
+  "unknown_taras_rahi_hai": {
+    "researchStatus": "SEARCHED_UNRESOLVED",
+    "researchConfidence": "UNRESOLVED",
+    "researchFinding": "No exact recording-level source established",
+    "researchSources": []
+  },
+  "shiv_saare_gaon_se_doodh_manga_kar": {
+    "researchStatus": "PROBABLE_REVIEW",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateDeityId": "shiv",
+    "researchCandidateCategory": "BHAJAN",
+    "researchCandidateArtist": "Gulshan Kumar",
+    "researchAlbum": "Shiv Mahima",
+    "researchFinding": "Exact title/artist appears in Shiv Mahima album tracklist",
+    "researchSources": ["https://www.djjohal.com/album/5043/shiv-mahima.html"]
+  },
+  "shiv_shiv_shankar_beda_paar_karo": {
+    "researchStatus": "PROBABLE_REVIEW",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateDeityId": "shiv",
+    "researchCandidateCategory": "BHAJAN",
+    "researchCandidateArtist": "Hariharan",
+    "researchAlbum": "Shiv Mahima",
+    "researchFinding": "Exact title and Shiv Mahima context; local credited artist is Gulshan Kumar and requires variant review",
+    "researchSources": ["https://www.youtube.com/watch?v=KgCrL2CDw6o", "https://www.shazam.com/track/87422777/shiv-shankar-beda-paar-karo"]
+  },
+  "shiv_shiv_shankar_ko_jisne_pooja": {
+    "researchStatus": "PROBABLE_REVIEW",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateDeityId": "shiv",
+    "researchCandidateCategory": "BHAJAN",
+    "researchCandidateArtist": "Anuradha Paudwal",
+    "researchAlbum": "Shiv Aaradhana Vol-1",
+    "researchFinding": "Exact title/artist/album match",
+    "researchSources": ["https://music.amazon.com/tracks/B074W2BLBT", "https://open.spotify.com/track/3wLygJYiyHleCpe1zjjqWt"]
+  },
+  "shiv_shiv_vivah": {
+    "researchStatus": "SEARCHED_UNRESOLVED",
+    "researchConfidence": "UNRESOLVED",
+    "researchCandidateDeityId": "shiv",
+    "researchCandidateCategory": "BHAJAN",
+    "researchFinding": "Search found Shiv Vivah title references but not an exact recording/artist catalog entry",
+    "researchSources": ["https://iprs.org/wp-content/uploads/2024/01/List_of_Authors_Other_Owners_for_Disclosure_Report_31st_Dec_2023.pdf"]
+  },
+  "shiv_shivnaath_teri_mahima": {
+    "researchStatus": "PROBABLE_REVIEW",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateDeityId": "shiv",
+    "researchCandidateCategory": "BHAJAN",
+    "researchCandidateArtist": "Gulshan Kumar",
+    "researchAlbum": "Shiv Mahima",
+    "researchFinding": "Exact title/artist appears in Shiv Mahima album tracklist",
+    "researchSources": ["https://www.djjohal.com/album/5043/shiv-mahima.html"]
+  },
+  "shiv_subah_subah_le_shiv_ka_naam": {
+    "researchStatus": "AMBIGUOUS_VERSION",
+    "researchConfidence": "UNRESOLVED",
+    "researchCandidateDeityId": "shiv",
+    "researchCandidateCategory": "BHAJAN",
+    "researchCandidateArtist": "Hariharan",
+    "researchAlbum": "Shiv Mahima",
+    "researchFinding": "Exact title/album match, but public catalogs credit Hariharan while local metadata credits Gulshan Kumar",
+    "researchSources": ["https://www.tseries.com/music/shiv-mahima", "https://www.shazam.com/track/45561359/subah-subah-le-shiv-ka-naam-kar-le-bande-ye-shubh-kaam"]
+  },
+  "ram_shri_ram_jai_ram_jai_jai_ram": {
+    "researchStatus": "PROBABLE_REVIEW",
+    "researchConfidence": "PROBABLE",
+    "researchCandidateDeityId": "ram",
+    "researchCandidateCategory": "MANTRA",
+    "researchCandidateArtist": "Anuradha Paudwal",
+    "researchFinding": "Exact title and Ram-dhun/Anuradha Paudwal context",
+    "researchSources": ["https://www.youtube.com/watch?v=B241lEeK_as", "https://timesofindia.indiatimes.com/videos/lifestyle/devotional/hindi/ram-dhun-hindi-bhakti-bhajan-shri-ram-jai-ram-jai-jai-ram-sung-by-anuradha-paudwal/videoshow/72527938.cms"]
+  },
+  "ram_tulsi_ramayan_sundar_kand_part_6": {
+    "researchStatus": "SEARCHED_UNRESOLVED",
+    "researchConfidence": "UNRESOLVED",
+    "researchCandidateDeityId": "ram",
+    "researchCandidateCategory": "STOTRA",
+    "researchFinding": "Title suggests Ramayan recitation, but no exact recording-level source or supported category was established",
+    "researchSources": []
+  },
+  "krishna_radhe_radhe_japa_karo_krishn_46aacc81_2": {
+    "researchStatus": "AMBIGUOUS_VERSION_BUT_MEDIA_DUPLICATE",
+    "researchConfidence": "UNRESOLVED",
+    "researchCandidateDeityId": "krishna",
+    "researchCandidateCategory": "MANTRA",
+    "researchFinding": "Local exact duplicate has a clear Krishna/mantra title, but source-media/duplicate resolution remains blocked",
+    "researchSources": ["https://djpunjab.is/bollywood/radha-naam-sang-brij-chourasi-kos-yatra-songs-smmzwt.html"]
+  }
+}

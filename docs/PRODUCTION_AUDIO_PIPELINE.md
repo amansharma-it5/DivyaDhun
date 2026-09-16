@@ -38,17 +38,36 @@ listed the `divyadhun-audio` bucket successfully, and the generated upload plan
 completed its dry-run checks. The owner has explicitly confirmed that the
 supplied licenses allow public streaming through DivyaDhun and public hosting
 on Cloudflare R2; records remain marked `LICENSED` / `USER_CONFIRMED`.
-Documentary license agreements were not independently reviewed. The local
-production catalog draft remains staged-only for the 76 metadata-review-blocked
-records; the approved 54 may proceed through the controlled upload gate.
+Documentary license agreements were not independently reviewed. The 76
+metadata-review-blocked records remain staged-only and excluded from the
+catalog; the approved 54 were uploaded and verified through the controlled
+publication flow.
 
-The authenticated Cloudflare R2 object listing on 2026-09-16 reported three
-existing objects totaling 23,263,652 bytes (23.3 MB): two zero-byte directory
-markers and the existing Phase 18 Hanuman Chalisa fixture. None of the 54
-production audio keys or `catalog/latest.json` exists yet; the read-only audit
-found zero matching or conflicting target objects. The public `r2.dev` endpoint
-returned HTTP 403 for HEAD probes, so the uploader must continue to fail closed
-when its configured public verification URL is not readable.
+The authenticated Cloudflare R2 bucket audit on 2026-09-16 reported 59 objects
+and `603,046,365` bytes (603 MB in Wrangler's rounded display): 54 approved
+audio objects, the existing Phase 18 Hanuman Chalisa fixture, two zero-byte
+directory markers, and two catalog objects. The target-object conflict check
+found all 54 approved keys already present with identical size/type/content
+verification. The public `r2.dev` endpoint returned HTTP 403 for a default
+`HEAD` request, but the uploader's explicit `DivyaDhun-Phase19/1.0` user agent
+gets HTTP 200 with the expected media headers; a range `GET` returns HTTP 206.
+The catalog and media verification path therefore remains fail-closed without
+weakening Cloudflare security settings.
+
+The blocked-track recovery report is generated with:
+
+```text
+python tools/audio_research/recover_blocked_metadata.py \
+  --inventory build/phase19-verification-20260916/AUDIO_INVENTORY.csv \
+  --output-dir build/metadata-recovery \
+  --evidence tools/audio_research/web_research_evidence.json
+```
+
+It writes ignored JSON, CSV, and Markdown reports for all 76 blocked records,
+including exact missing fields, SHA-256/ffprobe evidence, deterministic local
+candidates, and separately labeled web research suggestions. It never listens
+to or uploads audio, fabricates metadata, changes source files, or promotes a
+record into the catalog.
 
 The run discovered 130 MP3 files (1,411,677,680 original bytes), staged 127
 canonical copies/derivatives (1,333,381,709 bytes), excluded one zero-byte file
