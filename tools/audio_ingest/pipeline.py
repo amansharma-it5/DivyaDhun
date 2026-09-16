@@ -317,6 +317,82 @@ def detect_duplicates(records: Iterable[dict[str, Any]]) -> dict[str, list[list[
     }
 
 
+def metadata_review_fields(record: dict[str, Any]) -> list[str]:
+    """Return source metadata fields that need an explicit human decision."""
+    fields: list[str] = []
+    if not str(record.get("deityId") or "").strip():
+        fields.append("deityId")
+    if not str(record.get("category") or "").strip():
+        fields.append("category")
+    if record.get("durationMs") is None:
+        fields.append("durationMs")
+    if str(record.get("metadataArtist") or "").strip() in {"", "Licensed recording"}:
+        fields.append("artist")
+    return fields
+
+
+def _markdown_cell(value: object) -> str:
+    return str(value or "—").replace("|", "\\|").replace("\r", " ").replace("\n", " ").strip()
+
+
+def metadata_review_suggestions(record: dict[str, Any]) -> list[str]:
+    """Return deterministic review actions without assigning metadata values."""
+    suggestions: list[str] = []
+    fields = metadata_review_fields(record)
+    if "deityId" in fields:
+        suggestions.append("deityId: review the source title/path and choose a supported deity only with human confirmation; no safe candidate was inferred")
+    if "category" in fields:
+        suggestions.append("category: choose a supported category only with human confirmation; no safe candidate was inferred")
+    if "durationMs" in fields:
+        suggestions.append("durationMs: re-probe or listen-check the original media and record a positive duration")
+    if "artist" in fields:
+        suggestions.append("artist: confirm the recording artist/licensor from source metadata or the license; do not retain the placeholder")
+    if record.get("duplicateOf"):
+        suggestions.append(f"duplicate: compare with canonical source `{record['duplicateOf']}` and retain or document the duplicate decision")
+    errors = [str(error) for error in record.get("errors", []) if str(error).strip()]
+    if errors:
+        suggestions.append("media: resolve the recorded source error before staging; invalid media remains excluded")
+    if not suggestions:
+        suggestions.append("review the source record and supply documentary metadata; no value is assigned automatically")
+    return suggestions
+
+
+def build_metadata_review_report(records: Iterable[dict[str, Any]]) -> str:
+    """Render every non-publishable review record as an auditable Markdown table."""
+    blocked = sorted(
+        (record for record in records if record.get("needsReview") or not record.get("valid") or record.get("duplicateOf")),
+        key=lambda record: (str(record.get("relativePath", "")).lower(), str(record.get("trackId", ""))),
+    )
+    lines = [
+        "# Phase 19 metadata review", "",
+        f"This report contains {len(blocked)} records that remain blocked from publication.",
+        "It is generated from the explicit source scan and makes no automatic deity, category, artist, duration, or rights decision.",
+        "Resolve each row with source evidence and a human review; unresolved records must remain blocked.", "",
+        "| # | Track ID | Source file | Title | Missing fields | Blockers | Deterministic review action |",
+        "| ---: | --- | --- | --- | --- | --- | --- |",
+    ]
+    for index, record in enumerate(blocked, start=1):
+        errors = [str(error) for error in record.get("errors", []) if str(error).strip()]
+        blockers = errors or ["metadata needs review"]
+        if record.get("duplicateOf") and "exact duplicate of canonical source" not in blockers:
+            blockers.append(f"exact duplicate of {record['duplicateOf']}")
+        lines.append("| " + " | ".join([
+            str(index),
+            _markdown_cell(record.get("trackId")),
+            _markdown_cell(record.get("relativePath")),
+            _markdown_cell(record.get("metadataTitle")),
+            _markdown_cell(", ".join(metadata_review_fields(record)) or "none identified"),
+            _markdown_cell("; ".join(blockers)),
+            _markdown_cell("; ".join(metadata_review_suggestions(record))),
+        ]) + " |")
+    lines.extend([
+        "", "## Release gate", "",
+        "The scan's `LICENSED` / `USER_CONFIRMED` status is not documentary proof that public streaming and hosting are permitted.",
+        "No record should be uploaded or published until the applicable license and metadata review are confirmed.", "",
+    ])
+    return "\n".join(lines)
+
+
 def build_manifest(records: Iterable[dict[str, Any]], base_url: str | None = None, catalog_version: str = "draft") -> dict[str, Any]:
     normalized_base = normalize_base_url(base_url)
     tracks: list[dict[str, Any]] = []

@@ -7,6 +7,7 @@ from pathlib import Path
 from tools.audio_ingest.pipeline import (
     build_audio_url,
     build_manifest,
+    build_metadata_review_report,
     build_publishable_manifest,
     build_remote_catalog,
     build_upload_plan,
@@ -188,6 +189,24 @@ class PipelineTest(unittest.TestCase):
             "objectKey": "audio/hanuman/hanuman-aarti.mp3", "durationMs": None, "sha256": "abc",
             "valid": True, "needsReview": True, "rightsStatus": "LICENSED",
         }], "https://audio.divyadhun.com")["tracks"])
+
+    def test_metadata_review_report_lists_exact_fields_without_inventing_values(self):
+        report = build_metadata_review_report([{
+            "trackId": "unknown_aarti",
+            "relativePath": "Aarti.mp3",
+            "metadataTitle": "Aarti",
+            "deityId": None,
+            "category": None,
+            "metadataArtist": "Licensed recording",
+            "durationMs": None,
+            "needsReview": True,
+            "valid": True,
+            "errors": [],
+        }])
+        self.assertIn("This report contains 1 records", report)
+        self.assertIn("deityId, category, durationMs, artist", report)
+        self.assertIn("no safe candidate was inferred", report)
+        self.assertNotIn("Hanuman", report)
 
 
 if __name__ == "__main__":

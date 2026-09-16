@@ -33,10 +33,20 @@ value, audio master, or generated staging output belongs in Git.
 The development `r2.dev` hostname is a configuration input. A future
 `audio.divyadhun.com` CDN/custom domain can replace it without changing the
 Media3 or catalog architecture. The explicitly authorized source directory was
-inventoried in the Phase 19 run. No R2 uploader (`wrangler` or AWS
-CLI) or R2 environment credentials were available, so no recording or catalog
-was uploaded. The local production catalog draft remains staged-only until
-authentication and final metadata review are supplied.
+inventoried in the Phase 19 run. On 2026-09-16, authenticated Wrangler 4.132.0
+listed the `divyadhun-audio` bucket successfully, and the generated upload plan
+completed its dry-run checks. No R2 object or catalog was uploaded: public
+streaming and hosting permission in the license remains unconfirmed, and final
+metadata review is still pending. The local production catalog draft remains
+staged-only until those release gates are supplied.
+
+The authenticated Cloudflare R2 object listing on 2026-09-16 reported three
+existing objects totaling 23,263,652 bytes (23.3 MB): two zero-byte directory
+markers and the existing Phase 18 Hanuman Chalisa fixture. None of the 54
+production audio keys or `catalog/latest.json` exists yet; the read-only audit
+found zero matching or conflicting target objects. The public `r2.dev` endpoint
+returned HTTP 403 for HEAD probes, so the uploader must continue to fail closed
+when its configured public verification URL is not readable.
 
 The run discovered 130 MP3 files (1,411,677,680 original bytes), staged 127
 canonical copies/derivatives (1,333,381,709 bytes), excluded one zero-byte file

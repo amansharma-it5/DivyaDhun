@@ -11,6 +11,11 @@ python -m tools.audio_ingest validate --manifest build/audio-ingest/PRODUCTION_C
 python -m tools.audio_ingest upload --manifest build/audio-ingest/PRODUCTION_CONTENT_PUBLISHABLE.json --staging-dir build/audio-ingest/staged --catalog-file build/audio-ingest/catalog/latest.json
 ```
 
+The scan also writes `METADATA_REVIEW_REPORT.md`, a deterministic row-by-row
+review of every record excluded from publication. It names missing fields and
+source errors without assigning deity, category, artist, duration, or rights
+values automatically.
+
 The upload command is a dry run unless `--upload` is explicitly supplied. It
 requires `wrangler` or the AWS CLI and a configured `R2_BUCKET`; credentials are
 read from the process environment or the authenticated CLI session and are

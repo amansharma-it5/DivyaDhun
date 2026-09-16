@@ -13,6 +13,7 @@ from urllib.request import Request, urlopen
 
 from .pipeline import (
     build_manifest,
+    build_metadata_review_report,
     build_publishable_manifest,
     build_remote_catalog,
     build_upload_plan,
@@ -56,6 +57,7 @@ def _scan(args: argparse.Namespace) -> int:
     write_csv(output / "R2_UPLOAD_PLAN.csv", build_upload_plan(manifest, output / "staged"))
     quality = _quality_report(records, duplicates, rights_status, args.rights_evidence)
     (output / "AUDIO_QUALITY_REPORT.md").write_text(quality, encoding="utf-8")
+    (output / "METADATA_REVIEW_REPORT.md").write_text(build_metadata_review_report(records), encoding="utf-8")
     (output / "INGESTION_SUMMARY.md").write_text(
         _ingestion_summary(records, duplicates, manifest, publishable, args.existing_usage_bytes, output / "staged"), encoding="utf-8"
     )
