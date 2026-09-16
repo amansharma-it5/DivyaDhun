@@ -476,9 +476,11 @@ def build_remote_catalog(manifest: dict[str, Any], catalog_version: str | None =
             "lyricsId": track.get("lyricsId"),
             "keywords": [],
             "aliases": [],
+            "audioObjectKey": track.get("audioObjectKey"),
             "rightsStatus": track.get("rightsStatus"),
             "rightsEvidence": track.get("rightsEvidence"),
             "availability": track.get("availability"),
+            "sha256": track.get("sha256"),
         })
     return {
         "schemaVersion": 1,

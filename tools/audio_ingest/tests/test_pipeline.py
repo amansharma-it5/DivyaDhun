@@ -116,6 +116,7 @@ class PipelineTest(unittest.TestCase):
             "id": "hanuman_chalisa", "titleEnglish": "Hanuman Chalisa", "titleHindi": "",
             "source": "Licensed recording", "artist": "Traditional source", "deityId": "hanuman",
             "category": "CHALISA", "language": "HINDI", "durationMs": 1000,
+            "audioObjectKey": "audio/hanuman/hanuman-chalisa.mp3", "sha256": "abc",
             "audioUrl": "https://audio.divyadhun.com/audio/hanuman/hanuman-chalisa.mp3",
             "lyricsId": None, "rightsStatus": "LICENSED", "rightsEvidence": "USER_CONFIRMED",
             "availability": "STAGED",
@@ -123,6 +124,8 @@ class PipelineTest(unittest.TestCase):
         catalog = build_remote_catalog(manifest)
         self.assertEqual("v1", catalog["version"])
         self.assertEqual("Hanuman Chalisa", catalog["tracks"][0]["titleHindi"])
+        self.assertEqual("audio/hanuman/hanuman-chalisa.mp3", catalog["tracks"][0]["audioObjectKey"])
+        self.assertEqual("STAGED", catalog["tracks"][0]["availability"])
         self.assertIn("हनुमान", catalog["deities"][0]["aliases"])
         self.assertNotIn("sourcePath", json.dumps(catalog))
 
