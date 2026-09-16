@@ -9,6 +9,7 @@ import com.divyadhun.app.data.RemoteContentDataSource
 import com.divyadhun.app.data.RemoteContentRepository
 import com.divyadhun.app.data.RemoteDeityDto
 import com.divyadhun.app.data.RemoteTrackDto
+import com.divyadhun.app.data.HttpRemoteContentDataSource
 import com.divyadhun.app.domain.model.AudioSource
 import com.divyadhun.app.domain.model.DevotionalCategory
 import com.divyadhun.app.domain.model.Language
@@ -77,6 +78,47 @@ class RemoteStreamingSmokeTest {
                 controller.state.first { it.currentTrackId == track.id && it.status == PlaybackStatus.PLAYING && it.positionMs > sought.positionMs }
             }
             assertTrue("R2 playback did not resume", resumed.isPlaying)
+        } finally {
+            withContext(Dispatchers.Main.immediate) {
+                controller.stop()
+                controller.release()
+            }
+        }
+    }
+
+    @Test
+    fun fiveProductionCatalogTracksPrepareAndAdvance() = runBlocking {
+        val catalogUrl = BuildConfig.REMOTE_CATALOG_URL
+        assertTrue("Production catalog URL must be supplied for this test", catalogUrl.isNotBlank())
+        val catalog = HttpRemoteContentDataSource(catalogUrl).fetchCatalog()
+        val repository = RemoteContentRepository(
+            RemoteContentDataSource { catalog },
+            fallback = LocalContentRepository()
+        )
+        val tracks = repository.getTracks().take(5)
+        assertEquals("Production catalog should provide five tracks", 5, tracks.size)
+        val controller = Media3PlaybackController(context)
+
+        try {
+            tracks.forEach { track ->
+                withContext(Dispatchers.Main.immediate) { controller.playTrack(track, listOf(track)) }
+                val started = withTimeout(60_000) {
+                    controller.state.first {
+                        it.currentTrackId == track.id &&
+                            it.status in setOf(PlaybackStatus.PLAYING, PlaybackStatus.PAUSED, PlaybackStatus.ERROR)
+                    }
+                }
+                assertNotEquals("Production track reported a Media3 playback error: ${track.id}", PlaybackStatus.ERROR, started.status)
+                val progressed = withTimeout(45_000) {
+                    controller.state.first {
+                        it.currentTrackId == track.id &&
+                            it.status == PlaybackStatus.PLAYING &&
+                            it.positionMs >= 1_000L
+                    }
+                }
+                assertTrue("Production track did not advance: ${track.id}", progressed.positionMs >= 1_000L)
+                withContext(Dispatchers.Main.immediate) { controller.stop() }
+            }
         } finally {
             withContext(Dispatchers.Main.immediate) {
                 controller.stop()
