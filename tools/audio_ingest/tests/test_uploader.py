@@ -1,0 +1,69 @@
+import hashlib
+import tempfile
+import unittest
+from pathlib import Path
+from types import SimpleNamespace
+from unittest.mock import patch
+
+from tools.audio_ingest.__main__ import _HTTP_USER_AGENT, _existing_object, _uploader_command, _verify_url
+
+
+class UploaderVerificationTest(unittest.TestCase):
+    def test_wrangler_upload_command_explicitly_targets_remote_r2(self):
+        with patch("tools.audio_ingest.__main__.shutil.which", return_value="wrangler.cmd"):
+            command = _uploader_command()("divyadhun-audio", "audio/track.mp3", "track.mp3")
+        self.assertIn("--remote", command)
+        self.assertIn("--content-type", command)
+        self.assertIn("audio/mpeg", command)
+
+    def test_verify_url_checks_mime_length_and_byte_range(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "track.mp3"
+            path.write_bytes(b"abc")
+            head = SimpleNamespace(status=200, headers={
+                "Content-Type": "audio/mpeg",
+                "Content-Length": "3",
+                "Accept-Ranges": "bytes",
+            })
+            ranged = SimpleNamespace(status=206, headers={
+                "Content-Length": "2",
+                "Content-Range": "bytes 0-1/3",
+            })
+            with patch("tools.audio_ingest.__main__.urlopen", side_effect=[head, ranged]) as urlopen:
+                _verify_url("https://audio.example/track.mp3", str(path))
+            self.assertEqual(2, urlopen.call_count)
+            self.assertEqual(_HTTP_USER_AGENT, urlopen.call_args_list[0].args[0].get_header("User-agent"))
+            self.assertEqual(_HTTP_USER_AGENT, urlopen.call_args_list[1].args[0].get_header("User-agent"))
+
+    def test_verify_url_fails_closed_on_wrong_content_length(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "track.mp3"
+            path.write_bytes(b"abc")
+            head = SimpleNamespace(status=200, headers={
+                "Content-Type": "audio/mpeg",
+                "Content-Length": "4",
+                "Accept-Ranges": "bytes",
+            })
+            with patch("tools.audio_ingest.__main__.urlopen", return_value=head):
+                with self.assertRaisesRegex(RuntimeError, "Content-Length"):
+                    _verify_url("https://audio.example/track.mp3", str(path))
+
+    def test_multipart_etag_is_not_treated_as_whole_file_md5(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "track.mp3"
+            path.write_bytes(b"abc")
+            response = SimpleNamespace(status=200, headers={
+                "Content-Length": "3",
+                "ETag": f'"{hashlib.md5(b"abc").hexdigest()}-2"',
+            })
+            with patch("tools.audio_ingest.__main__.urlopen", return_value=response):
+                result = _existing_object(
+                    "https://audio.example",
+                    "audio/track.mp3",
+                    str(path),
+                )
+        self.assertEqual("CONFLICT", result)
+
+
+if __name__ == "__main__":
+    unittest.main()

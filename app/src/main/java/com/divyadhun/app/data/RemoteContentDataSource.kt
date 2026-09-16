@@ -51,7 +51,12 @@ data class RemoteTrackDto(
     val audioUrl: String? = null,
     val lyricsId: String? = null,
     val keywords: List<String> = emptyList(),
-    val aliases: List<String> = emptyList()
+    val aliases: List<String> = emptyList(),
+    val audioObjectKey: String? = null,
+    val rightsStatus: String? = null,
+    val rightsEvidence: String? = null,
+    val availability: String? = null,
+    val sha256: String? = null
 )
 
 data class RemoteLyricsDto(
@@ -114,7 +119,8 @@ object RemoteCatalogMergePolicy {
 class RemoteContentRepository(
     private val dataSource: RemoteContentDataSource,
     private val fallback: ContentRepository = LocalContentRepository(),
-    private val cache: RemoteCatalogCache? = null
+    private val cache: RemoteCatalogCache? = null,
+    private val mergeFallback: Boolean = false
 ) : ContentRepository {
     private data class SearchEntry<T>(val value: T, val haystack: String)
 
@@ -203,7 +209,7 @@ class RemoteContentRepository(
         return Catalog(getDeities(), loadedTracks, loadedLyrics).indexed()
     }
 
-    private fun RemoteCatalogDto.toDomainCatalog(): Catalog {
+    private suspend fun RemoteCatalogDto.toDomainCatalog(): Catalog {
         val normalizedVersion = version.trim()
         require(normalizedVersion.isNotEmpty()) { "Remote catalog version is blank" }
         require(deities.isNotEmpty()) { "Remote catalog has no deities" }
@@ -225,6 +231,17 @@ class RemoteContentRepository(
             requireStableId(track.id)
             val deityId = track.deityId.trim()
             require(deityId in deityIds) { "Track ${track.id} references unknown deity $deityId" }
+            val audioUrl = track.audioUrl?.let(RemoteContentUrlPolicy::requireAudioUrl)
+            val rights = track.rightsStatus?.trim()?.uppercase(Locale.ROOT)
+            require(rights == null || rights in setOf("OWNER_CREATED", "LICENSED", "PUBLIC_DOMAIN_RECORDING")) {
+                "Track ${track.id} has unapproved rights status ${track.rightsStatus}"
+            }
+            val availability = track.availability?.trim()?.uppercase(Locale.ROOT)
+            require(availability == null || availability in setOf("PUBLISHED", "REMOTE_PRODUCTION", "STAGED", "METADATA_ONLY", "UNAVAILABLE")) {
+                "Track ${track.id} has unknown availability ${track.availability}"
+            }
+            val playable = audioUrl != null &&
+                (availability == null || availability == "PUBLISHED" || availability == "REMOTE_PRODUCTION")
             Track(
                 id = track.id.trim(),
                 title = LocalizedText(track.titleEnglish.requireText("titleEnglish"), track.titleHindi.requireText("titleHindi")),
@@ -236,10 +253,16 @@ class RemoteContentRepository(
                 durationMs = track.durationMs?.takeIf { it >= 0L },
                 artworkKey = track.artworkKey.requireText("artworkKey"),
                 artworkSource = track.artworkUrl?.let(RemoteContentUrlPolicy::requireArtworkUrl)?.let(ArtworkSource::RemoteUrl),
-                audioSource = track.audioUrl?.let(RemoteContentUrlPolicy::requireAudioUrl)?.let(AudioSource::RemoteUrl),
+                audioSource = audioUrl?.takeIf { playable }?.let(AudioSource::RemoteUrl),
                 lyricsId = track.lyricsId?.trim()?.takeIf(String::isNotEmpty),
                 keywords = track.keywords.map(String::trim).filter(String::isNotEmpty).toSet(),
-                aliases = track.aliases.map(String::trim).filter(String::isNotEmpty).toSet()
+                aliases = track.aliases.map(String::trim).filter(String::isNotEmpty).toSet(),
+                availabilityOverride = when (availability) {
+                    "STAGED", "METADATA_ONLY" -> com.divyadhun.app.domain.model.ContentAvailability.METADATA_ONLY
+                    "UNAVAILABLE" -> com.divyadhun.app.domain.model.ContentAvailability.UNAVAILABLE
+                    "PUBLISHED", "REMOTE_PRODUCTION" -> com.divyadhun.app.domain.model.ContentAvailability.REMOTE_PRODUCTION
+                    else -> null
+                }
             )
         }
         require(mappedTracks.map { it.id }.toSet().size == mappedTracks.size) { "Remote track IDs are duplicated" }
@@ -252,7 +275,14 @@ class RemoteContentRepository(
                 meaning = lyric.meaning.requireText("meaning")
             )
         }
-        return Catalog(mappedDeities, mappedTracks, mappedLyrics).indexed()
+        val remoteCatalog = Catalog(mappedDeities, mappedTracks, mappedLyrics).indexed()
+        if (!mergeFallback) return remoteCatalog
+        val fallbackCatalog = fallback.toCatalog()
+        return Catalog(
+            deities = RemoteCatalogMergePolicy.mergeDeities(remoteCatalog.deities, fallbackCatalog.deities),
+            tracks = RemoteCatalogMergePolicy.mergeTracks(remoteCatalog.tracks, fallbackCatalog.tracks),
+            lyrics = fallbackCatalog.lyrics + remoteCatalog.lyrics
+        ).indexed()
     }
 
     private fun Catalog.indexed(): Catalog {
