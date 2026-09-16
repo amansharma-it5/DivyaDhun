@@ -35,10 +35,12 @@ The development `r2.dev` hostname is a configuration input. A future
 Media3 or catalog architecture. The explicitly authorized source directory was
 inventoried in the Phase 19 run. On 2026-09-16, authenticated Wrangler 4.132.0
 listed the `divyadhun-audio` bucket successfully, and the generated upload plan
-completed its dry-run checks. No R2 object or catalog was uploaded: public
-streaming and hosting permission in the license remains unconfirmed, and final
-metadata review is still pending. The local production catalog draft remains
-staged-only until those release gates are supplied.
+completed its dry-run checks. The owner has explicitly confirmed that the
+supplied licenses allow public streaming through DivyaDhun and public hosting
+on Cloudflare R2; records remain marked `LICENSED` / `USER_CONFIRMED`.
+Documentary license agreements were not independently reviewed. The local
+production catalog draft remains staged-only for the 76 metadata-review-blocked
+records; the approved 54 may proceed through the controlled upload gate.
 
 The authenticated Cloudflare R2 object listing on 2026-09-16 reported three
 existing objects totaling 23,263,652 bytes (23.3 MB): two zero-byte directory

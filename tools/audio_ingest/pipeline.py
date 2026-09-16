@@ -387,8 +387,8 @@ def build_metadata_review_report(records: Iterable[dict[str, Any]]) -> str:
         ]) + " |")
     lines.extend([
         "", "## Release gate", "",
-        "The scan's `LICENSED` / `USER_CONFIRMED` status is not documentary proof that public streaming and hosting are permitted.",
-        "No record should be uploaded or published until the applicable license and metadata review are confirmed.", "",
+        "The owner has confirmed that the supplied licenses allow public streaming through DivyaDhun and public hosting on Cloudflare R2; records remain marked `LICENSED` / `USER_CONFIRMED`.",
+        "Documentary license agreements were not independently reviewed. The 76 rows above remain blocked until their metadata or media issues are resolved.", "",
     ])
     return "\n".join(lines)
 

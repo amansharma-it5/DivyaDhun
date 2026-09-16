@@ -186,7 +186,7 @@ def _upload(args: argparse.Namespace) -> int:
             print(f"Upload failed for {item['objectKey']}: {result.stderr.strip()}", file=sys.stderr)
             return 1
         print(f"Uploaded {item['objectKey']}; verifying HTTP response")
-        _verify_url(args.base_url.rstrip("/") + "/" + item["objectKey"])
+        _verify_url(args.base_url.rstrip("/") + "/" + item["objectKey"], item["localStagedFile"])
     if catalog_item:
         existing = _existing_object(args.base_url, catalog_item["objectKey"], catalog_item["localStagedFile"])
         if existing == "SAME":
@@ -201,7 +201,7 @@ def _upload(args: argparse.Namespace) -> int:
             print(f"Catalog upload failed for {catalog_item['objectKey']}: {result.stderr.strip()}", file=sys.stderr)
             return 1
         print(f"Uploaded {catalog_item['objectKey']}; verifying HTTP response")
-        _verify_url(args.base_url.rstrip("/") + "/" + catalog_item["objectKey"])
+        _verify_url(args.base_url.rstrip("/") + "/" + catalog_item["objectKey"], catalog_item["localStagedFile"])
     return 0
 
 
@@ -245,14 +245,33 @@ def _uploader_command():
     return None
 
 
-def _verify_url(url: str) -> None:
+def _verify_url(url: str, expected_path: str | None = None) -> None:
+    expected_size = os.path.getsize(expected_path) if expected_path else None
+    expected_type = mimetypes.guess_type(expected_path)[0] if expected_path else None
     try:
         response = urlopen(Request(url, method="HEAD"), timeout=20)
-        print(f"  HTTP {response.status}; Content-Type={response.headers.get('Content-Type')}; Content-Length={response.headers.get('Content-Length')}; Accept-Ranges={response.headers.get('Accept-Ranges')}")
+        content_type = (response.headers.get("Content-Type") or "").split(";", 1)[0].strip().lower()
+        content_length = response.headers.get("Content-Length")
+        if not 200 <= response.status < 300:
+            raise RuntimeError(f"HTTP HEAD returned {response.status}")
+        if expected_size is not None and content_length != str(expected_size):
+            raise RuntimeError(f"HTTP Content-Length {content_length!r} does not match local size {expected_size}")
+        if expected_type and content_type != expected_type:
+            raise RuntimeError(f"HTTP Content-Type {content_type!r} does not match expected {expected_type!r}")
+        if (response.headers.get("Accept-Ranges") or "").lower() != "bytes":
+            raise RuntimeError("HTTP response does not advertise byte ranges")
+        print(f"  HTTP {response.status}; Content-Type={response.headers.get('Content-Type')}; Content-Length={content_length}; Accept-Ranges={response.headers.get('Accept-Ranges')}")
         range_response = urlopen(Request(url, headers={"Range": "bytes=0-1"}), timeout=20)
-        print(f"  Range probe HTTP {range_response.status}; Content-Range={range_response.headers.get('Content-Range')}")
+        content_range = range_response.headers.get("Content-Range") or ""
+        if range_response.status != 206 or not content_range.startswith("bytes 0-1/"):
+            raise RuntimeError(f"range probe did not return bytes 0-1 (HTTP {range_response.status}, Content-Range={content_range!r})")
+        if range_response.headers.get("Content-Length") != "2":
+            raise RuntimeError("range probe did not return exactly two bytes")
+        print(f"  Range probe HTTP {range_response.status}; Content-Range={content_range}")
+    except RuntimeError:
+        raise
     except Exception as error:  # pragma: no cover - network is intentionally optional
-        print(f"  verification failed: {error}")
+        raise RuntimeError(f"HTTP verification failed: {error}") from error
 
 
 def _parser() -> argparse.ArgumentParser:
