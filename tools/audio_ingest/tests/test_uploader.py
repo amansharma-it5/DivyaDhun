@@ -1,10 +1,11 @@
+import hashlib
 import tempfile
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
 
-from tools.audio_ingest.__main__ import _HTTP_USER_AGENT, _uploader_command, _verify_url
+from tools.audio_ingest.__main__ import _HTTP_USER_AGENT, _existing_object, _uploader_command, _verify_url
 
 
 class UploaderVerificationTest(unittest.TestCase):
@@ -46,6 +47,22 @@ class UploaderVerificationTest(unittest.TestCase):
             with patch("tools.audio_ingest.__main__.urlopen", return_value=head):
                 with self.assertRaisesRegex(RuntimeError, "Content-Length"):
                     _verify_url("https://audio.example/track.mp3", str(path))
+
+    def test_multipart_etag_is_not_treated_as_whole_file_md5(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "track.mp3"
+            path.write_bytes(b"abc")
+            response = SimpleNamespace(status=200, headers={
+                "Content-Length": "3",
+                "ETag": f'"{hashlib.md5(b"abc").hexdigest()}-2"',
+            })
+            with patch("tools.audio_ingest.__main__.urlopen", return_value=response):
+                result = _existing_object(
+                    "https://audio.example",
+                    "audio/track.mp3",
+                    str(path),
+                )
+        self.assertEqual("CONFLICT", result)
 
 
 if __name__ == "__main__":

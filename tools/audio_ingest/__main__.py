@@ -183,7 +183,7 @@ def _upload(args: argparse.Namespace) -> int:
             print(f"Upload blocked because object already exists with different metadata: {item['objectKey']}", file=sys.stderr)
             return 1
         command = uploader(bucket, item["objectKey"], item["localStagedFile"])
-        result = subprocess.run(command, capture_output=True, text=True, check=False)
+        result = subprocess.run(command, capture_output=True, text=True, encoding="utf-8", errors="replace", check=False)
         if result.returncode != 0:
             print(f"Upload failed for {item['objectKey']}: {result.stderr.strip()}", file=sys.stderr)
             return 1
@@ -198,7 +198,7 @@ def _upload(args: argparse.Namespace) -> int:
             print(f"Catalog upload blocked because the object already exists with different metadata: {catalog_item['objectKey']}", file=sys.stderr)
             return 1
         command = uploader(bucket, catalog_item["objectKey"], catalog_item["localStagedFile"])
-        result = subprocess.run(command, capture_output=True, text=True, check=False)
+        result = subprocess.run(command, capture_output=True, text=True, encoding="utf-8", errors="replace", check=False)
         if result.returncode != 0:
             print(f"Catalog upload failed for {catalog_item['objectKey']}: {result.stderr.strip()}", file=sys.stderr)
             return 1
@@ -221,6 +221,10 @@ def _existing_object(base_url: str, object_key: str, local_path: str) -> str:
     local_size = os.path.getsize(local_path)
     etag = (response.headers.get("ETag") or "").strip().strip('"')
     if remote_length and int(remote_length) == local_size and etag:
+        # Multipart ETags are not whole-file MD5 hashes. Treat them as an
+        # unresolved conflict instead of guessing that the object is equal.
+        if "-" in etag:
+            return "CONFLICT"
         digestor = hashlib.md5()  # noqa: S324 - compare non-secret HTTP ETag only
         with Path(local_path).open("rb") as stream:
             while chunk := stream.read(1024 * 1024):
