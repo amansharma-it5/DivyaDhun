@@ -95,7 +95,9 @@ class RemoteStreamingSmokeTest {
             RemoteContentDataSource { catalog },
             fallback = LocalContentRepository()
         )
-        val tracks = repository.getTracks().take(5)
+        val allTracks = repository.getTracks()
+        val tracks = listOf("hanuman", "krishna", "ram", "durga", "ganesh")
+            .mapNotNull { deityId -> allTracks.firstOrNull { it.deityId == deityId } }
         assertEquals("Production catalog should provide five tracks", 5, tracks.size)
         val controller = Media3PlaybackController(context)
 
