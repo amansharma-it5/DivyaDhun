@@ -6,7 +6,7 @@ DivyaDhun is an Android-first devotional listening experience. **Phase 19 adds t
 
 ## Phase 19 licensed-audio integration
 
-- The explicitly supplied `C:\Users\dell\Desktop\Songs` directory was scanned read-only: 130 MP3 files, 129 non-zero inputs, one zero-byte file, and two exact duplicate groups.
+- The explicitly supplied licensed audio directory was scanned read-only: 130 MP3 files, 129 non-zero inputs, one zero-byte file, and two exact duplicate groups.
 - Staging produced 127 canonical streaming copies/derivatives (1,333,381,709 bytes): 120 direct MP3 copies and seven audio-only AAC-LC M4A derivatives at 128 kbps for high-bitrate inputs. No original file was renamed, deleted, or overwritten.
 - `PRODUCTION_CONTENT_DRAFT.json`, `PRODUCTION_CONTENT_PUBLISHABLE.json`, `catalog/latest.json`, inventories, duplicate reports, quality reports, and an upload plan are generated below the ignored `build/production-audio/` directory. The tracked `content/production-content.json` is a sanitized 54-track publishable metadata fixture and contains no local paths or audio bytes.
 - Every supplied recording is marked `LICENSED` with `USER_CONFIRMED` evidence because the owner supplied that assertion. Documentary license contracts were not independently reviewed. Ambiguous deity/category records remain review-blocked; corrupt and exact-duplicate files are never upload-ready.
@@ -142,7 +142,7 @@ The Phase 17 RC validation passed 37 JVM unit tests and three consecutive comple
 
 ## Phase 18B ingestion pipeline
 
-Run `python -m tools.audio_ingest scan --source "C:\\Users\\dell\\Desktop\\Songs" --output build/production-audio --base-url https://pub-867b1331c5b9468db9b3fce509773119.r2.dev --rights-status LICENSED --rights-evidence USER_CONFIRMED --stage` only for the explicitly authorized source directory. The command writes inventory, quality, duplicate, draft, publishable-catalog, ingestion-summary, and R2 upload-plan reports. `python -m tools.audio_ingest validate --manifest <path>` checks IDs, categories, deity relationships, object keys, URLs, durations, and rights. `python -m tools.audio_ingest upload ...` is a dry run by default; `--upload` is rights-gated, requires an authenticated Wrangler/AWS CLI configuration, and verifies existing objects before upload. See [docs/PRODUCTION_AUDIO_PIPELINE.md](docs/PRODUCTION_AUDIO_PIPELINE.md).
+Run `python -m tools.audio_ingest scan --source "<authorized audio source directory>" --output build/production-audio --base-url https://pub-867b1331c5b9468db9b3fce509773119.r2.dev --rights-status LICENSED --rights-evidence USER_CONFIRMED --stage` only for the explicitly authorized source directory. The command writes inventory, quality, duplicate, draft, publishable-catalog, ingestion-summary, and R2 upload-plan reports. `python -m tools.audio_ingest validate --manifest <path>` checks IDs, categories, deity relationships, object keys, URLs, durations, and rights. `python -m tools.audio_ingest upload ...` is a dry run by default; `--upload` is rights-gated, requires an authenticated Wrangler/AWS CLI configuration, and verifies existing objects before upload. See [docs/PRODUCTION_AUDIO_PIPELINE.md](docs/PRODUCTION_AUDIO_PIPELINE.md).
 
 ## Deferred work and known limitations
 

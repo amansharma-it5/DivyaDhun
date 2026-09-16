@@ -32,8 +32,8 @@ value, audio master, or generated staging output belongs in Git.
 
 The development `r2.dev` hostname is a configuration input. A future
 `audio.divyadhun.com` CDN/custom domain can replace it without changing the
-Media3 or catalog architecture. The authorized `C:\Users\dell\Desktop\Songs`
-source was inventoried in the Phase 19 run. No R2 uploader (`wrangler` or AWS
+Media3 or catalog architecture. The explicitly authorized source directory was
+inventoried in the Phase 19 run. No R2 uploader (`wrangler` or AWS
 CLI) or R2 environment credentials were available, so no recording or catalog
 was uploaded. The local production catalog draft remains staged-only until
 authentication and final metadata review are supplied.
