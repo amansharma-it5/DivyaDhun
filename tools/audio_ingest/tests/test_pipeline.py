@@ -122,6 +122,7 @@ class PipelineTest(unittest.TestCase):
         catalog = build_remote_catalog(manifest)
         self.assertEqual("v1", catalog["version"])
         self.assertEqual("Hanuman Chalisa", catalog["tracks"][0]["titleHindi"])
+        self.assertIn("हनुमान", catalog["deities"][0]["aliases"])
         self.assertNotIn("sourcePath", json.dumps(catalog))
 
     def test_scan_marks_exact_duplicates_without_deleting_sources(self):

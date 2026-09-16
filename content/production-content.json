@@ -7,7 +7,16 @@
       "nameKey": "deity_durga",
       "descriptionKey": "deity_durga_description",
       "artworkKey": "durga",
-      "aliases": [],
+      "aliases": [
+        "ambe",
+        "ambey",
+        "durga",
+        "jagdambe",
+        "navratri",
+        "sherawali",
+        "जगदम्बे",
+        "दुर्गा"
+      ],
       "supportedCategories": [
         "AARTI",
         "BHAJAN"
@@ -18,7 +27,14 @@
       "nameKey": "deity_ganesh",
       "descriptionKey": "deity_ganesh_description",
       "artworkKey": "ganesh",
-      "aliases": [],
+      "aliases": [
+        "ganapati",
+        "ganesh",
+        "ganesha",
+        "vinayak",
+        "गणेश",
+        "विनायक"
+      ],
       "supportedCategories": [
         "AARTI",
         "BHAJAN"
@@ -29,7 +45,14 @@
       "nameKey": "deity_hanuman",
       "descriptionKey": "deity_hanuman_description",
       "artworkKey": "hanuman",
-      "aliases": [],
+      "aliases": [
+        "bajrang",
+        "bajrangbali",
+        "hanuman",
+        "pawanputra",
+        "salasar",
+        "हनुमान"
+      ],
       "supportedCategories": [
         "AARTI",
         "BHAJAN"
@@ -40,7 +63,17 @@
       "nameKey": "deity_krishna",
       "descriptionKey": "deity_krishna_description",
       "artworkKey": "krishna",
-      "aliases": [],
+      "aliases": [
+        "bihari",
+        "gopal",
+        "govind",
+        "kanha",
+        "kanhaiya",
+        "krishna",
+        "madhav",
+        "sanware",
+        "कृष्ण"
+      ],
       "supportedCategories": [
         "AARTI",
         "MANTRA"
@@ -51,7 +84,12 @@
       "nameKey": "deity_lakshmi",
       "descriptionKey": "deity_lakshmi_description",
       "artworkKey": "lakshmi",
-      "aliases": [],
+      "aliases": [
+        "lakshmi",
+        "laxmi",
+        "mahalakshmi",
+        "लक्ष्मी"
+      ],
       "supportedCategories": [
         "AARTI"
       ]
@@ -61,7 +99,15 @@
       "nameKey": "deity_ram",
       "descriptionKey": "deity_ram_description",
       "artworkKey": "ram",
-      "aliases": [],
+      "aliases": [
+        "raghunath",
+        "ram",
+        "rama",
+        "ramayan",
+        "shri-ram",
+        "shriram",
+        "राम"
+      ],
       "supportedCategories": [
         "AARTI"
       ]
@@ -71,7 +117,12 @@
       "nameKey": "deity_sai",
       "descriptionKey": "deity_sai_description",
       "artworkKey": "sai",
-      "aliases": [],
+      "aliases": [
+        "sai",
+        "sai-baba",
+        "saibaba",
+        "साईं"
+      ],
       "supportedCategories": [
         "BHAJAN"
       ]
@@ -81,7 +132,10 @@
       "nameKey": "deity_saraswati",
       "descriptionKey": "deity_saraswati_description",
       "artworkKey": "saraswati",
-      "aliases": [],
+      "aliases": [
+        "saraswati",
+        "सरस्वती"
+      ],
       "supportedCategories": [
         "AARTI"
       ]
@@ -91,7 +145,18 @@
       "nameKey": "deity_shiv",
       "descriptionKey": "deity_shiv_description",
       "artworkKey": "shiv",
-      "aliases": [],
+      "aliases": [
+        "bhole",
+        "bholenath",
+        "kanwar",
+        "mahadev",
+        "shankar",
+        "shiv",
+        "shiva",
+        "कांवड़",
+        "महादेव",
+        "शिव"
+      ],
       "supportedCategories": [
         "AARTI",
         "BHAJAN",
@@ -104,7 +169,10 @@
       "nameKey": "deity_vishnu",
       "descriptionKey": "deity_vishnu_description",
       "artworkKey": "vishnu",
-      "aliases": [],
+      "aliases": [
+        "vishnu",
+        "विष्णु"
+      ],
       "supportedCategories": [
         "MANTRA"
       ]

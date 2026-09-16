@@ -375,7 +375,7 @@ def build_remote_catalog(manifest: dict[str, Any], catalog_version: str | None =
         "nameKey": f"deity_{deity_id}",
         "descriptionKey": f"deity_{deity_id}_description",
         "artworkKey": deity_id,
-        "aliases": [],
+        "aliases": sorted(set(_DEITY_ALIASES.get(deity_id, (deity_id,)))),
         "supportedCategories": sorted({str(track.get("category")) for track in tracks if track.get("deityId") == deity_id and track.get("category")}),
     } for deity_id in deity_ids]
     remote_tracks = []
