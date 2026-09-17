@@ -41,26 +41,30 @@ on Cloudflare R2; records remain marked `LICENSED` / `USER_CONFIRMED`.
 Documentary license agreements were not independently reviewed. The original
 76 metadata-review records were re-investigated with local technical evidence
 and advisory web research: 22 were verified and published in the separate
-Phase 20 canary-gated expansion, while 54 remain metadata/media-review-blocked
+Phase 20 canary-gated expansion, one additional exact catalog match was
+verified and published in Phase 21, and 53 remain metadata/media-review-blocked
 and excluded from the catalog.
 
 The Phase 20 expansion was published only after a 22-record dry run, remote
 conflict checks, a one-track canary, and catalog/reference verification. The
-versioned catalog is
-`catalog/phase20-2026-09-16.json`; `catalog/latest.json` now contains 76
-unique verified tracks. The 22 new object keys are all HTTPS-readable with the
+Phase 21 expansion followed the same gates for one additional record. The
+versioned catalogs are `catalog/phase20-2026-09-16.json` and
+`catalog/phase21-2026-09-17.json`; `catalog/latest.json` now contains 77
+unique verified tracks. All 77 referenced objects are HTTPS-readable with the
 expected MIME type, Content-Length, and byte-range support. The two distinct
 Shiv Shambhu recordings remain separate because their source SHA-256 values,
 durations, and credited artists differ.
 
 The authenticated Cloudflare R2 bucket audit before expansion reported 59
 objects and `603,046,365` bytes (603 MB in Wrangler's rounded display). The
-current authenticated bucket-info result is 82 objects and 812 MB rounded;
-the object-level post-expansion ledger is `812,249,159` bytes, including 76
-audio objects, the existing Phase 18 fixture and directory markers, and three
-catalog objects. The object-level total includes the 22 verified audio sizes,
-the new 75,508-byte versioned catalog, and the 20,305-byte latest-catalog
-increase. The
+the latest direct object-level ledger is `819,795,136` bytes across 84 known
+objects, including 77 audio objects, the existing Phase 18 fixture and
+directory markers, and four catalog objects. It adds the 7,468,681-byte Phase
+21 audio object, the 76,402-byte versioned catalog, and the 894-byte increase
+to `catalog/latest.json` over the post-Phase-20 ledger. The authenticated
+Wrangler bucket-info display may lag and currently reports 82 objects/812 MB;
+the direct ledger is retained as the exact usage audit until Cloudflare's
+usage view catches up. The
 public `r2.dev` endpoint returned HTTP 403 for a default `HEAD` request, but
 the uploader's explicit `DivyaDhun-Phase19/1.0` user agent gets HTTP 200 with
 the expected media headers; a range `GET` returns HTTP 206. The catalog and
