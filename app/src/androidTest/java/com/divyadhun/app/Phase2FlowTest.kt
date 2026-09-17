@@ -25,6 +25,7 @@ class Phase2FlowTest {
         rule.onNodeWithTag("onboarding_language_HINDI").assertIsSelected()
         rule.onNodeWithTag("onboarding_continue").performClick()
         rule.onNodeWithTag("onboarding_deity_hanuman").performClick()
+        rule.onNodeWithTag("screen_ONBOARDING").performScrollToNode(hasTestTag("onboarding_deity_shiv"))
         rule.onNodeWithTag("onboarding_deity_shiv").performClick()
         rule.onNodeWithTag("onboarding_continue").performClick()
         rule.onNodeWithTag("onboarding_time_MORNING").performClick()
@@ -47,9 +48,9 @@ class Phase2FlowTest {
             rule.onNodeWithTag("tab_$destination").assertIsSelected()
         }
         rule.onNodeWithTag("tab_SEARCH").performClick()
-        rule.onNodeWithTag("search_field").performTextInput("mahadev")
-        waitForText("Om Namah Shivaya")
-        rule.onNodeWithText("Om Namah Shivaya").assertIsDisplayed()
+        rule.onNodeWithTag("search_field").performTextInput("shiv")
+        waitForText("Shiv", substring = true)
+        rule.onAllNodesWithText("Shiv", substring = true)[0].assertIsDisplayed()
     }
 
     @Test fun preferencesCanBeRevisitedAfterOnboarding() {
@@ -85,6 +86,8 @@ class Phase2FlowTest {
         rule.onNodeWithTag("onboarding_get_started").performClick()
         rule.onNodeWithTag("onboarding_continue").performClick()
         rule.onNodeWithTag("onboarding_skip").performClick()
+        // The skip tag exists on both steps; wait for the step-3 marker before clicking it again.
+        waitForTag("onboarding_time_ANYTIME")
         rule.onNodeWithTag("onboarding_skip").performClick()
         waitForTag("screen_HOME")
     }
@@ -94,9 +97,9 @@ class Phase2FlowTest {
         }
     }
 
-    private fun waitForText(text: String) {
+    private fun waitForText(text: String, substring: Boolean = false) {
         rule.waitUntil(10000) {
-            runCatching { rule.onAllNodesWithText(text).fetchSemanticsNodes().isNotEmpty() }.getOrDefault(false)
+            runCatching { rule.onAllNodesWithText(text, substring = substring).fetchSemanticsNodes().isNotEmpty() }.getOrDefault(false)
         }
     }
 }

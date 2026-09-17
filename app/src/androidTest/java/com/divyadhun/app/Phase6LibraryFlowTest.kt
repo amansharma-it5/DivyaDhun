@@ -64,7 +64,7 @@ class Phase6LibraryFlowTest {
         rule.onNodeWithTag("onboarding_continue").performClick()
         waitForTag("onboarding_skip")
         rule.onNodeWithTag("onboarding_skip").performClick()
-        waitForTag("onboarding_skip")
+        waitForTag("onboarding_time_ANYTIME")
         rule.onNodeWithTag("onboarding_skip").performClick()
         waitForTag("screen_HOME")
     }

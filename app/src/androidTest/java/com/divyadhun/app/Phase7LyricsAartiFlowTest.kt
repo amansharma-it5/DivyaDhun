@@ -30,6 +30,7 @@ class Phase7LyricsAartiFlowTest {
         waitForTag("screen_EXPLORE")
         rule.onNodeWithTag("category_AARTI").performClick()
         waitForTag("screen_CATEGORY_AARTI")
+        rule.onNodeWithTag("screen_CATEGORY_AARTI").performScrollToNode(hasTestTag("track_hanuman_aarti"))
         rule.onNodeWithTag("track_hanuman_aarti").performClick()
         waitForTag("screen_TRACK_hanuman_aarti")
         rule.onNodeWithTag("screen_TRACK_hanuman_aarti").performScrollToNode(hasTestTag("track_open_lyrics"))
@@ -52,7 +53,7 @@ class Phase7LyricsAartiFlowTest {
         rule.onNodeWithTag("onboarding_continue").performClick()
         waitForTag("onboarding_skip")
         rule.onNodeWithTag("onboarding_skip").performClick()
-        waitForTag("onboarding_skip")
+        waitForTag("onboarding_time_ANYTIME")
         rule.onNodeWithTag("onboarding_skip").performClick()
         waitForTag("screen_HOME")
     }

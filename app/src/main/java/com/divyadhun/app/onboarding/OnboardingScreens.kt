@@ -69,7 +69,7 @@ fun OnboardingFlow(viewModel: OnboardingViewModel, deities: List<Deity>) {
             Modifier.fillMaxSize().padding(padding).padding(horizontal = Space.lg, vertical = Space.md).testTag("screen_ONBOARDING"),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            Column(Modifier.fillMaxWidth()) {
+            Column(Modifier.fillMaxWidth().weight(1f)) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
                     if (state.step > 0) {
                         OutlinedButton(onClick = viewModel::back, modifier = Modifier.testTag("onboarding_back").height(48.dp), contentPadding = PaddingValues(horizontal = Space.sm)) {
@@ -84,11 +84,13 @@ fun OnboardingFlow(viewModel: OnboardingViewModel, deities: List<Deity>) {
                 Spacer(Modifier.height(Space.lg))
                 StepProgress(state.step)
                 Spacer(Modifier.height(Space.xl))
-                when (state.step) {
-                    0 -> WelcomeStep()
-                    1 -> LanguageStep(state.language, viewModel::selectLanguage, context)
-                    2 -> DeityStep(deities, state.selectedDeityIds, viewModel::toggleDeity)
-                    else -> ListeningTimeStep(state.listeningTime, viewModel::selectListeningTime)
+                Box(Modifier.fillMaxWidth().weight(1f)) {
+                    when (state.step) {
+                        0 -> WelcomeStep()
+                        1 -> LanguageStep(state.language, viewModel::selectLanguage, context)
+                        2 -> DeityStep(deities, state.selectedDeityIds, viewModel::toggleDeity)
+                        else -> ListeningTimeStep(state.listeningTime, viewModel::selectListeningTime)
+                    }
                 }
             }
             Column(Modifier.fillMaxWidth().padding(top = Space.lg), verticalArrangement = Arrangement.spacedBy(Space.sm)) {

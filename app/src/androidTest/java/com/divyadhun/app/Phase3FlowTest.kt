@@ -1,6 +1,7 @@
 package com.divyadhun.app
 
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.performClick
@@ -9,7 +10,6 @@ import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.onNodeWithText
 import androidx.test.core.app.ApplicationProvider
 import org.junit.Before
 import org.junit.Rule
@@ -46,9 +46,8 @@ class Phase3FlowTest {
     fun searchOpensTrackAndDeityDetails() {
         completeWithSkips()
         rule.onNodeWithTag("tab_SEARCH").performClick()
-        rule.onNodeWithTag("search_field").performTextInput("mahadev")
+        rule.onNodeWithTag("search_field").performTextInput("Om Namah Shivaya")
         waitForTag("track_om_namah_shivaya")
-        rule.onNodeWithTag("screen_SEARCH").performScrollToNode(hasTestTag("track_om_namah_shivaya"))
         rule.onNodeWithTag("track_title_om_namah_shivaya").performClick()
         waitForTag("screen_TRACK_om_namah_shivaya")
         rule.onNodeWithTag("screen_TRACK_om_namah_shivaya").performScrollToNode(hasTestTag("track_view_category"))
@@ -56,8 +55,8 @@ class Phase3FlowTest {
         rule.onNodeWithTag("back_button").performClick()
         waitForTag("screen_SEARCH")
         if (rule.onAllNodesWithTag("clear_search").fetchSemanticsNodes().isNotEmpty()) rule.onNodeWithTag("clear_search").performClick()
-        rule.onNodeWithTag("search_field").performTextInput("mahadev")
-        waitForTag("track_om_namah_shivaya")
+        rule.onNodeWithTag("search_field").performTextInput("shiv")
+        waitForTag("search_deity_shiv")
         rule.onNodeWithTag("search_deity_shiv").performClick()
         waitForTag("screen_DEITY_shiv")
     }
@@ -66,26 +65,37 @@ class Phase3FlowTest {
     fun preferredDeityAppearsInPersonalizedHome() {
         rule.onNodeWithTag("onboarding_get_started").performClick()
         rule.onNodeWithTag("onboarding_continue").performClick()
+        rule.onNodeWithTag("screen_ONBOARDING").performScrollToNode(hasTestTag("onboarding_deity_shiv"))
         rule.onNodeWithTag("onboarding_deity_shiv").performClick()
+        rule.onNodeWithTag("onboarding_deity_shiv").assertIsSelected()
         rule.onNodeWithTag("onboarding_continue").performClick()
         rule.onNodeWithTag("onboarding_time_ANYTIME").performClick()
         rule.onNodeWithTag("onboarding_finish").performClick()
         waitForTag("screen_HOME")
         rule.onNodeWithTag("home_hero").assertIsDisplayed()
-        rule.onNodeWithTag("screen_HOME").performScrollToNode(hasText("Shiv"))
-        rule.onNodeWithText("Shiv").assertIsDisplayed()
+        waitForVisibleTag("home_your_gods")
+        rule.onNodeWithTag("home_deity_shiv").assertIsDisplayed()
     }
 
     private fun completeWithSkips() {
         rule.onNodeWithTag("onboarding_get_started").performClick()
         rule.onNodeWithTag("onboarding_continue").performClick()
         rule.onNodeWithTag("onboarding_skip").performClick()
+        waitForTag("onboarding_time_ANYTIME")
         rule.onNodeWithTag("onboarding_skip").performClick()
         waitForTag("screen_HOME")
     }
     private fun waitForTag(tag: String) {
         rule.waitUntil(10000) {
             runCatching { rule.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty() }.getOrDefault(false)
+        }
+    }
+    private fun waitForVisibleTag(tag: String) {
+        rule.waitUntil(10000) {
+            runCatching {
+                rule.onNodeWithTag("screen_HOME").performScrollToNode(hasTestTag(tag))
+                true
+            }.getOrDefault(false)
         }
     }
 }

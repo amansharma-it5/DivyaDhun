@@ -28,6 +28,7 @@ class Phase8MantraFlowTest {
         rule.onNodeWithTag("onboarding_get_started").performClick()
         rule.onNodeWithTag("onboarding_continue").performClick()
         rule.onNodeWithTag("onboarding_skip").performClick()
+        waitForTag("onboarding_time_ANYTIME")
         rule.onNodeWithTag("onboarding_skip").performClick()
         waitForTag("screen_HOME")
         rule.onNodeWithTag("tab_EXPLORE").performClick()

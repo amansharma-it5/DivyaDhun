@@ -98,7 +98,7 @@ fun HomeScreen(
         item { SectionHeader(stringResource(R.string.your_gods_section)) }
         item {
             if (content.yourGods.isEmpty()) EmptyState(stringResource(R.string.your_gods_section), stringResource(R.string.no_preference_deities))
-            else LazyRow(horizontalArrangement = Arrangement.spacedBy(Space.sm), contentPadding = PaddingValues(end = Space.lg)) {
+            else LazyRow(Modifier.testTag("home_your_gods"), horizontalArrangement = Arrangement.spacedBy(Space.sm), contentPadding = PaddingValues(end = Space.lg)) {
                 items(content.yourGods, key = { it.id }) { deity -> DeityShortcut(deity) { onDeity(deity.id) } }
             }
         }
@@ -400,7 +400,7 @@ private fun CategoryCard(category: DevotionalCategory, count: Int, modifier: Mod
 }
 
 @Composable private fun DeityShortcut(deity: Deity, onClick: () -> Unit) {
-    Column(Modifier.width(94.dp).heightIn(min = 112.dp).clickable(onClick = onClick).semantics { role = Role.Button }, horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(Space.xs)) {
+    Column(Modifier.width(94.dp).heightIn(min = 112.dp).clickable(onClick = onClick).semantics { role = Role.Button }.testTag("home_deity_${deity.id}"), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(Space.xs)) {
         DeityArtwork(deity, Modifier.size(72.dp))
         Text(stringResource(deityNameRes(deity.id)), style = MaterialTheme.typography.labelLarge)
     }
