@@ -23,7 +23,7 @@ As of 2026-09-17, this branch is a release-readiness preparation branch. It does
 | Debug validation | PASS from Phase 21 | Python 19, Android unit 49, connected 18/18 twice, lint, debug build, remote smoke, and production checks were previously recorded after the Phase 21 merge. |
 | Release APK | PASS, unsigned | `app/build/outputs/apk/release/app-release-unsigned.apk`; package metadata is correct. |
 | Release AAB | PASS, unsigned | `app/build/outputs/bundle/release/app-release.aab`. Play accepts an app bundle only after it is correctly signed. |
-| Production signing | OWNER_ACTION_REQUIRED | No release signing config or production key exists. See `docs/RELEASE_SIGNING_SETUP.md`. |
+| Production signing | OWNER_ACTION_REQUIRED | Optional local signing wiring is present, but no production key/configuration exists in this environment. See `docs/RELEASE_SIGNING_SETUP.md`. |
 | R8/resource shrinking | REVIEW | No custom R8 rules or release minification configuration is present. This is not a publication blocker by itself; enable and test only if desired for the signed candidate. |
 | Native/ABI audit | REVIEW | AAB includes dependency `.so` files for arm64-v8a, armeabi-v7a, x86, and x86_64. Recheck Play’s current native/16 KB page-size guidance against the signed bundle. |
 | Bundled fallback media | OWNER_ACTION_REQUIRED | The APK also contains five existing demo WAV fixtures (`1,852,420` bytes total) for the offline/local fallback. Confirm their distribution rights or remove/replace them before Play publication; Phase 22 did not modify them. |

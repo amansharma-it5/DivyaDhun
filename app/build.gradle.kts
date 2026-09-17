@@ -1,5 +1,18 @@
+import java.util.Properties
+
 plugins { alias(libs.plugins.android.application); alias(libs.plugins.compose.compiler) }
 val configuredRemoteCatalogUrl = providers.gradleProperty("divyadhunCatalogUrl").orNull.orEmpty()
+val keystorePropertiesFile = rootProject.file("keystore.properties")
+val keystoreProperties = Properties().apply {
+ if (keystorePropertiesFile.exists()) {
+  keystorePropertiesFile.inputStream().use(::load)
+ }
+}
+val releaseSigningKeys = listOf("storeFile", "storePassword", "keyAlias", "keyPassword")
+val hasReleaseSigning = releaseSigningKeys.all { keystoreProperties.getProperty(it).orEmpty().isNotBlank() }
+if (keystorePropertiesFile.exists() && !hasReleaseSigning) {
+ error("keystore.properties exists but is incomplete; provide storeFile, storePassword, keyAlias, and keyPassword")
+}
 android {
  namespace = "com.divyadhun.app"
  compileSdk = 37
@@ -11,6 +24,21 @@ android {
   versionName = "1.0.0"
   testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   buildConfigField("String", "REMOTE_CATALOG_URL", "\"${configuredRemoteCatalogUrl.replace("\\", "\\\\").replace("\"", "\\\"")}\"")
+ }
+ signingConfigs {
+  if (hasReleaseSigning) {
+   create("release") {
+    storeFile = file(keystoreProperties.getProperty("storeFile"))
+    storePassword = keystoreProperties.getProperty("storePassword")
+    keyAlias = keystoreProperties.getProperty("keyAlias")
+    keyPassword = keystoreProperties.getProperty("keyPassword")
+   }
+  }
+ }
+ buildTypes {
+  release {
+   if (hasReleaseSigning) signingConfig = signingConfigs.getByName("release")
+  }
  }
  buildFeatures { compose = true; buildConfig = true }
  bundle { language { enableSplit = false } }

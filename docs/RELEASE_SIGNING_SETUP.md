@@ -2,7 +2,7 @@
 
 Status: `OWNER_ACTION_REQUIRED`
 
-The Phase 22 release candidate is `com.divyadhun.app` version `1.0.0` (`versionCode 1`). The repository currently has no production signing configuration or private key. `:app:assembleRelease` produces `app-release-unsigned.apk`, and `:app:bundleRelease` produces an unsigned `app-release.aab`. `:app:signingReport` reports `release: Config: none`.
+The Phase 22 release candidate is `com.divyadhun.app` version `1.0.0` (`versionCode 1`). The repository contains an optional local signing configuration that activates only when a complete ignored `keystore.properties` exists. No production key is present in the current environment, so `:app:assembleRelease` produces `app-release-unsigned.apk`, `:app:bundleRelease` produces an unsigned `app-release.aab`, and `:app:signingReport` reports `release: Config: none`.
 
 This is intentional. The debug keystore must not be used for Play distribution, and a private upload key must not be generated or committed by an automated run.
 
@@ -10,7 +10,7 @@ This is intentional. The debug keystore must not be used for Play distribution, 
 
 1. Create or obtain a dedicated RSA 2048+ Play upload key on a protected owner workstation. Keep the keystore and passwords outside Git, backups that are not access-controlled, and chat transcripts.
 2. Copy `keystore.properties.example` to `keystore.properties` and fill in local paths/secrets. The existing `.gitignore` excludes that file and `*.jks`/`*.keystore`.
-3. Add a release signing configuration in `app/build.gradle.kts` that reads the local properties only when present. Do not hard-code passwords or key paths.
+3. The checked-in Gradle configuration reads the local properties only when all four fields are present. Do not hard-code passwords or key paths. An incomplete local file fails closed with a clear configuration error.
 4. Run `:app:bundleRelease` and verify the resulting AAB with `jarsigner`/Play Console. Keep the upload key available for future updates; Play App Signing protects the app signing key after enrollment.
 5. Enroll the app in Google Play App Signing during the first Play upload. Google’s current guidance uses a developer-held upload key and a Google-held app-signing key: [Play App Signing](https://support.google.com/googleplay/android-developer/answer/9842756?hl=en).
 

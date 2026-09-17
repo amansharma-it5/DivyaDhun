@@ -14,7 +14,7 @@
 
 - [ ] Owner supplies a monitored support contact and publishes the reviewed privacy policy at a stable HTTPS URL.
 - [ ] Owner adds an in-app privacy-policy link or policy text and tests it on the signed release.
-- [ ] Owner creates/loads a dedicated Play upload key; configure release signing locally; verify the signed AAB.
+- [ ] Owner creates/loads a dedicated Play upload key; populate the ignored `keystore.properties`; verify the signed AAB.
 - [ ] Owner enrolls in Play App Signing and records the upload-key recovery process.
 - [ ] Owner completes Data Safety, content rating, target audience, and any account-specific declarations.
 - [ ] Owner supplies Play-ready icon/adaptive icon, feature graphic, and screenshots.
