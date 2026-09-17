@@ -24,19 +24,27 @@ data class OnboardingUiState(
 class OnboardingViewModel(application: Application) : AndroidViewModel(application) {
     private val repository = UserPreferencesRepository(application)
     private val mutableState = MutableStateFlow(OnboardingUiState())
+    // DataStore emits an update for each intermediate onboarding write. Keep the
+    // in-progress UI choices authoritative until the final atomic completion write,
+    // otherwise an older emission can replace a just-selected deity before Finish.
+    private var hasLocalEdits = false
     val state = mutableState.asStateFlow()
 
     init {
         viewModelScope.launch {
             repository.preferences.collect { preferences ->
-                mutableState.update {
-                    it.copy(
-                        language = preferences.language,
-                        step = preferences.onboardingStep,
-                        selectedDeityIds = preferences.preferredDeityIds,
-                        listeningTime = preferences.listeningTime,
-                        loaded = true
-                    )
+                if (!hasLocalEdits) {
+                    mutableState.update {
+                        it.copy(
+                            language = preferences.language,
+                            step = preferences.onboardingStep,
+                            selectedDeityIds = preferences.preferredDeityIds,
+                            listeningTime = preferences.listeningTime,
+                            loaded = true
+                        )
+                    }
+                } else {
+                    mutableState.update { it.copy(loaded = true) }
                 }
             }
         }
@@ -45,20 +53,24 @@ class OnboardingViewModel(application: Application) : AndroidViewModel(applicati
     fun next() = setStep((state.value.step + 1).coerceAtMost(3))
     fun back() = setStep((state.value.step - 1).coerceAtLeast(0))
     private fun setStep(step: Int) {
+        hasLocalEdits = true
         mutableState.update { it.copy(step = step) }
         viewModelScope.launch { repository.setOnboardingStep(step) }
     }
     fun selectLanguage(language: Language, onSaved: () -> Unit = {}) {
+        hasLocalEdits = true
         mutableState.update { it.copy(language = language) }
         viewModelScope.launch { repository.setLanguage(language); onSaved() }
     }
     fun toggleDeity(id: String) {
+        hasLocalEdits = true
         val ids = state.value.selectedDeityIds.toMutableSet()
         if (!ids.add(id)) ids.remove(id)
         mutableState.update { it.copy(selectedDeityIds = ids) }
         viewModelScope.launch { repository.setPreferredDeityIds(ids) }
     }
     fun selectListeningTime(time: ListeningTime) {
+        hasLocalEdits = true
         mutableState.update { it.copy(listeningTime = time) }
         viewModelScope.launch { repository.setListeningTime(time) }
     }
