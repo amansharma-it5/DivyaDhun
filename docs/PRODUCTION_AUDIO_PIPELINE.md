@@ -55,12 +55,12 @@ durations, and credited artists differ.
 
 The authenticated Cloudflare R2 bucket audit before expansion reported 59
 objects and `603,046,365` bytes (603 MB in Wrangler's rounded display). The
-object-level post-expansion ledger is 82 objects and `812,249,159` bytes,
-including 76 audio objects, the existing Phase 18 fixture and directory
-markers, and three catalog objects. During propagation, the Wrangler
-`bucket info` endpoint continued to display its older 59-object/603 MB value;
-the object-level total includes the 22 verified audio sizes, the new 75,508
-byte versioned catalog, and the 20,305-byte latest-catalog increase. The
+current authenticated bucket-info result is 82 objects and 812 MB rounded;
+the object-level post-expansion ledger is `812,249,159` bytes, including 76
+audio objects, the existing Phase 18 fixture and directory markers, and three
+catalog objects. The object-level total includes the 22 verified audio sizes,
+the new 75,508-byte versioned catalog, and the 20,305-byte latest-catalog
+increase. The
 public `r2.dev` endpoint returned HTTP 403 for a default `HEAD` request, but
 the uploader's explicit `DivyaDhun-Phase19/1.0` user agent gets HTTP 200 with
 the expected media headers; a range `GET` returns HTTP 206. The catalog and
