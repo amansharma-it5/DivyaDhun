@@ -56,15 +56,15 @@ Shiv Shambhu recordings remain separate because their source SHA-256 values,
 durations, and credited artists differ.
 
 The authenticated Cloudflare R2 bucket audit before expansion reported 59
-objects and `603,046,365` bytes (603 MB in Wrangler's rounded display). The
-the latest direct object-level ledger is `819,795,136` bytes across 84 known
+objects and `603,046,365` bytes (603 MB in Wrangler's rounded display). The latest
+direct object-level ledger is `819,795,136` bytes across 84 known
 objects, including 77 audio objects, the existing Phase 18 fixture and
 directory markers, and four catalog objects. It adds the 7,468,681-byte Phase
 21 audio object, the 76,402-byte versioned catalog, and the 894-byte increase
 to `catalog/latest.json` over the post-Phase-20 ledger. The authenticated
-Wrangler bucket-info display may lag and currently reports 82 objects/812 MB;
-the direct ledger is retained as the exact usage audit until Cloudflare's
-usage view catches up. The
+Wrangler bucket-info result now reports 84 objects and 820 MB rounded,
+consistent with the direct ledger; the direct byte total remains the exact
+usage audit. The
 public `r2.dev` endpoint returned HTTP 403 for a default `HEAD` request, but
 the uploader's explicit `DivyaDhun-Phase19/1.0` user agent gets HTTP 200 with
 the expected media headers; a range `GET` returns HTTP 206. The catalog and
