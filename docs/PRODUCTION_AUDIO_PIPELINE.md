@@ -38,21 +38,34 @@ listed the `divyadhun-audio` bucket successfully, and the generated upload plan
 completed its dry-run checks. The owner has explicitly confirmed that the
 supplied licenses allow public streaming through DivyaDhun and public hosting
 on Cloudflare R2; records remain marked `LICENSED` / `USER_CONFIRMED`.
-Documentary license agreements were not independently reviewed. The 76
-metadata-review-blocked records remain staged-only and excluded from the
-catalog; the approved 54 were uploaded and verified through the controlled
-publication flow.
+Documentary license agreements were not independently reviewed. The original
+76 metadata-review records were re-investigated with local technical evidence
+and advisory web research: 22 were verified and published in the separate
+Phase 20 canary-gated expansion, while 54 remain metadata/media-review-blocked
+and excluded from the catalog.
 
-The authenticated Cloudflare R2 bucket audit on 2026-09-16 reported 59 objects
-and `603,046,365` bytes (603 MB in Wrangler's rounded display): 54 approved
-audio objects, the existing Phase 18 Hanuman Chalisa fixture, two zero-byte
-directory markers, and two catalog objects. The target-object conflict check
-found all 54 approved keys already present with identical size/type/content
-verification. The public `r2.dev` endpoint returned HTTP 403 for a default
-`HEAD` request, but the uploader's explicit `DivyaDhun-Phase19/1.0` user agent
-gets HTTP 200 with the expected media headers; a range `GET` returns HTTP 206.
-The catalog and media verification path therefore remains fail-closed without
-weakening Cloudflare security settings.
+The Phase 20 expansion was published only after a 22-record dry run, remote
+conflict checks, a one-track canary, and catalog/reference verification. The
+versioned catalog is
+`catalog/phase20-2026-09-16.json`; `catalog/latest.json` now contains 76
+unique verified tracks. The 22 new object keys are all HTTPS-readable with the
+expected MIME type, Content-Length, and byte-range support. The two distinct
+Shiv Shambhu recordings remain separate because their source SHA-256 values,
+durations, and credited artists differ.
+
+The authenticated Cloudflare R2 bucket audit before expansion reported 59
+objects and `603,046,365` bytes (603 MB in Wrangler's rounded display). The
+current authenticated bucket-info result is 82 objects and 812 MB rounded;
+the object-level post-expansion ledger is `812,249,159` bytes, including 76
+audio objects, the existing Phase 18 fixture and directory markers, and three
+catalog objects. The object-level total includes the 22 verified audio sizes,
+the new 75,508-byte versioned catalog, and the 20,305-byte latest-catalog
+increase. The
+public `r2.dev` endpoint returned HTTP 403 for a default `HEAD` request, but
+the uploader's explicit `DivyaDhun-Phase19/1.0` user agent gets HTTP 200 with
+the expected media headers; a range `GET` returns HTTP 206. The catalog and
+media verification path therefore remains fail-closed without weakening
+Cloudflare security settings.
 
 The blocked-track recovery report is generated with:
 
@@ -63,7 +76,7 @@ python tools/audio_research/recover_blocked_metadata.py \
   --evidence tools/audio_research/web_research_evidence.json
 ```
 
-It writes ignored JSON, CSV, and Markdown reports for all 76 blocked records,
+It writes ignored JSON, CSV, and Markdown reports for all 76 originally blocked records,
 including exact missing fields, SHA-256/ffprobe evidence, deterministic local
 candidates, and separately labeled web research suggestions. It never listens
 to or uploads audio, fabricates metadata, changes source files, or promotes a
@@ -71,7 +84,8 @@ record into the catalog.
 
 The run discovered 130 MP3 files (1,411,677,680 original bytes), staged 127
 canonical copies/derivatives (1,333,381,709 bytes), excluded one zero-byte file
-and two exact duplicates, and produced 54 publishable metadata records. Seven
-high-bitrate inputs were converted to audio-only AAC-LC M4A at 128 kbps; the
-remaining valid MP3s were copied directly. These numbers are run artifacts and
-should be regenerated whenever the source directory changes.
+and two exact duplicates, and produced 54 initial publishable metadata
+records. The recovery workflow later verified 22 additional unique MP3s;
+seven high-bitrate inputs were converted to audio-only AAC-LC M4A at 128 kbps;
+the remaining valid MP3s were copied directly. These numbers are run artifacts
+and should be regenerated whenever the source directory changes.
