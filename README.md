@@ -2,16 +2,22 @@
 
 Your Daily Bhakti. Bhakti, bas ek tap mein.
 
-DivyaDhun is an Android-first devotional listening experience. **Phase 19 adds the licensed production-audio inventory, deterministic staging, catalog generation, and remote-catalog integration seam on top of the Phase 18 streaming hardening work.** R2 upload authentication and final metadata review remain external release gates. Phase 18A still validates one R2 streaming fixture; Phase 18B adds the reusable rights-gated ingestion pipeline.
+DivyaDhun is an Android-first devotional listening experience. **Phase 19 adds the licensed production-audio inventory, deterministic staging, catalog generation, and remote-catalog integration seam on top of the Phase 18 streaming hardening work.** Phase 20 expands the verified public catalog through a separate canary-gated publication flow. Phase 18A still validates one R2 streaming fixture; Phase 18B adds the reusable rights-gated ingestion pipeline.
 
 ## Phase 19 licensed-audio integration
 
 - The explicitly supplied licensed audio directory was scanned read-only: 130 MP3 files, 129 non-zero inputs, one zero-byte file, and two exact duplicate groups.
 - Staging produced 127 canonical streaming copies/derivatives (1,333,381,709 bytes): 120 direct MP3 copies and seven audio-only AAC-LC M4A derivatives at 128 kbps for high-bitrate inputs. No original file was renamed, deleted, or overwritten.
-- `PRODUCTION_CONTENT_DRAFT.json`, `PRODUCTION_CONTENT_PUBLISHABLE.json`, `catalog/latest.json`, inventories, duplicate reports, quality reports, and an upload plan are generated below the ignored `build/production-audio/` directory. The tracked `content/production-content.json` is a sanitized 54-track publishable metadata fixture and contains no local paths or audio bytes.
+- `PRODUCTION_CONTENT_DRAFT.json`, `PRODUCTION_CONTENT_PUBLISHABLE.json`, `catalog/latest.json`, inventories, duplicate reports, quality reports, and an upload plan are generated below the ignored `build/production-audio/` directory. The tracked `content/production-content.json` remains a sanitized 54-track local metadata fixture and contains no local paths or audio bytes; the current verified remote catalog contains 76 tracks.
 - Every supplied recording is marked `LICENSED` with `USER_CONFIRMED` evidence because the owner supplied that assertion. Documentary license contracts were not independently reviewed. Ambiguous deity/category records remain review-blocked; corrupt and exact-duplicate files are never upload-ready.
 - The uploader defaults to dry-run, requires an explicitly configured R2 endpoint/CLI, verifies HTTPS/MIME/length/range behavior, and blocks conflicting object replacement unless explicitly overridden. No R2 credentials or production media are committed.
 - The app has a single `ContentRepositoryProvider` boundary and an HTTPS `HttpRemoteContentDataSource`; pass `-PdivyadhunCatalogUrl=https://.../catalog/latest.json` to enable remote-first loading. Without that property it remains on the local offline fallback, so an unavailable catalog cannot break the app.
+
+## Phase 20 verified catalog expansion
+
+- The 76-record recovery report produced 22 `VERIFIED` / `READY_FOR_PUBLICATION` candidates after source SHA-256, technical media, deterministic metadata, and exact-title research checks; 54 records remain review-blocked.
+- The 22 candidates were staged outside the source directory, dry-run validated, uploaded with one canary first, and verified with HTTPS 200/MIME/Content-Length/range checks. The public versioned and latest catalogs now contain 76 unique HTTPS tracks.
+- The owner confirmation is recorded as `LICENSED — USER_CONFIRMED`; documentary license agreements were not independently reviewed. Unresolved metadata, invalid media, and exact duplicates remain excluded.
 
 ## Phase 17 RC status
 
