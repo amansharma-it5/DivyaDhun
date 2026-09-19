@@ -15,10 +15,10 @@
 - [x] Support contact supplied and privacy policy published at `https://amansharma-it5.github.io/divyadhun-privacy/`.
 - [x] Android source exposes the HTTPS privacy-policy link from Library → Preferences.
 - [ ] Owner verifies the privacy link on the signed release and confirms the published policy remains accurate.
-- [ ] Owner creates/loads a dedicated Play upload key; populate the ignored `keystore.properties`; verify the signed AAB.
+- [ ] Owner verifies an encrypted backup of `divyadhun-upload-key-IN.p12` (alias `divyadhun-upload`), then populates the ignored `keystore.properties` and verifies the signed AAB. Never use the similarly named key without `-IN`.
 - [ ] Owner enrolls in Play App Signing and records the upload-key recovery process.
 - [ ] Owner completes Data Safety, content rating, target audience, and any account-specific declarations.
-- [ ] Owner supplies Play-ready icon/adaptive icon, feature graphic, and screenshots.
+- [ ] Owner supplies a Play-ready 512x512 PNG icon/adaptive icon, 1024x500 feature graphic, and genuine screenshots from the signed release; see `docs/PLAY_STORE_ASSET_PREPARATION.md`.
 - [x] Owner confirmed distribution rights for the five bundled offline demo WAV fixtures; documentary agreements were not independently reviewed.
 - [ ] If applicable, complete the 12-tester/14-day closed test for a new personal developer account.
 - [ ] If applicable, complete Play Console real-device verification.

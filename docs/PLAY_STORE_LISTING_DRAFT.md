@@ -39,7 +39,7 @@ DivyaDhun does not require an account and does not include ads, subscriptions, o
 
 ## Asset and policy checklist
 
-- Final app icon/adaptive icon and feature graphic: owner/design action required; the current build has a vector brand icon but no Play-ready asset set.
-- Screenshots: owner action required; capture the real release candidate without debug/demo-only claims.
+- Final app icon/adaptive icon and feature graphic: owner/design action required; the current launcher icon is a 108dp vector and must be exported as a Play-ready 512x512 PNG. Feature graphic must be 1024x500 JPEG or 24-bit PNG without alpha.
+- Screenshots: owner action required; provide at least two genuine screenshots from the signed release, using JPEG or 24-bit PNG without alpha and Play’s current dimension/aspect-ratio limits. Do not use debug-only or fabricated screens.
 - Privacy policy: published at the URL above; owner must verify the signed release link. Data Safety remains owner action required.
 - Music/content rights: `LICENSED — USER_CONFIRMED`; the owner confirmed public streaming and Cloudflare R2 hosting, but documentary agreements were not independently reviewed.

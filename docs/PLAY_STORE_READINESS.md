@@ -23,7 +23,7 @@ As of 2026-09-19, this branch is a release-readiness preparation branch. It does
 | Debug validation | PASS | Python 19, Android unit 50, lint 0 errors, debug build, and current connected suite 18/18; Phase 4 and all three remote streaming tests passed. |
 | Release APK | PASS, unsigned | `app/build/outputs/apk/release/app-release-unsigned.apk`; package metadata is correct. |
 | Release AAB | PASS, unsigned | `app/build/outputs/bundle/release/app-release.aab`. Play accepts an app bundle only after it is correctly signed. |
-| Production signing | OWNER_ACTION_REQUIRED | Optional local signing wiring is present, but no production key/configuration exists in this environment. See `docs/RELEASE_SIGNING_SETUP.md`. |
+| Production signing | OWNER_ACTION_REQUIRED | Owner reports `divyadhun-upload-key-IN.p12` / alias `divyadhun-upload` was generated and locally verified outside Git. Encrypted backup verification and local `keystore.properties` configuration remain pending; see `docs/RELEASE_SIGNING_SETUP.md`. |
 | R8/resource shrinking | REVIEW | No custom R8 rules or release minification configuration is present. This is not a publication blocker by itself; enable and test only if desired for the signed candidate. |
 | Native/ABI audit | REVIEW | AAB includes dependency `.so` files for arm64-v8a, armeabi-v7a, x86, and x86_64. Recheck Play’s current native/16 KB page-size guidance against the signed bundle. |
 | Bundled fallback media | OWNER_CONFIRMED | Five existing demo WAV fixtures (`1,852,420` bytes total) remain unchanged. Owner confirmed distribution rights; documentary rights agreements were not independently reviewed. |
@@ -31,7 +31,7 @@ As of 2026-09-19, this branch is a release-readiness preparation branch. It does
 | Data Safety | OWNER_ACTION_REQUIRED | Draft proposes no collection/sharing based on source audit. Owner must submit the final Play Console declaration. |
 | Content rating | OWNER_ACTION_REQUIRED | Complete the Play questionnaire; unrated apps cannot be published. |
 | Target audience | OWNER_ACTION_REQUIRED | Confirm general-audience selection and assess Families requirements if the audience includes children. |
-| Store listing assets | OWNER_ACTION_REQUIRED | Listing copy drafted; Play icon/adaptive icon, feature graphic, and screenshots remain. Support contact and privacy URL are supplied. |
+| Store listing assets | OWNER_ACTION_REQUIRED | Listing copy drafted. Current launcher icon is a 108dp vector and is not yet a Play-ready 512x512 PNG; feature graphic and genuine signed-build screenshots remain. Support contact and privacy URL are supplied. See `docs/PLAY_STORE_ASSET_PREPARATION.md`. |
 | Account deletion | NOT_APPLICABLE | The app has no account creation or sign-in. Reassess if that changes. |
 | New personal-account testing | OWNER_ACTION_REQUIRED | If the developer account is a new personal account created after 2023-11-13, Google requires a closed test with at least 12 opted-in testers for 14 continuous days before production access: [Closed testing requirements](https://support.google.com/googleplay/android-developer/answer/14151465?hl=en-GB). |
 | Developer device verification | OWNER_ACTION_REQUIRED_IF_APPLICABLE | New personal accounts may need real-device verification using the Play Console mobile app: [Device verification](https://support.google.com/googleplay/android-developer/answer/14316361?hl=en). |
@@ -40,7 +40,7 @@ As of 2026-09-19, this branch is a release-readiness preparation branch. It does
 
 ## Current blockers
 
-1. Production upload key/signing configuration is absent.
+1. Encrypted backup of the owner-controlled upload key is not yet verified; local signing configuration is not populated.
 2. Owner must verify the privacy link on the signed release and confirm the published policy remains accurate.
 3. Owner must complete Data Safety, content rating, target audience, store assets, and account-specific testing/device-verification steps.
 4. A signed release candidate still needs installation and physical-device acceptance on `RZCX623LLJK` before any Play submission.
