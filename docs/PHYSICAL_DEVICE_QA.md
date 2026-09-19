@@ -4,11 +4,22 @@ Status for Phase 22: **BLOCKED**. `RZCX623LLJK` is connected, but its installed 
 
 Run this checklist on an authorized phone without clearing unrelated applications or personal data.
 
+## Data-preservation finding for `RZCX623LLJK`
+
+- The installed debug build contains a device-local Android DataStore file at `files/datastore/user_preferences.preferences_pb`. Source inspection identifies the stored state as onboarding progress, language, preferred deities, listening time, theme, simple mode, Daily Bhakti reminder setting, optional Family Mandir name/member names, favorites, recent track IDs, and the last-played track ID.
+- The app has no user-facing export/import or restore feature. `FileProvider` is used only for user-directed blessing-card sharing from the disposable cache; it is not a backup mechanism.
+- The manifest sets `android:allowBackup="false"` and `android:fullBackupContent="false"`. Its data-extraction rules exclude `file`, `database`, and `sharedpref` domains from both cloud backup and device transfer. A debug-only `run-as` listing is not a supported portable backup or restore path, so no private data archive was created.
+- A standard uninstall would remove the app sandbox, including the DataStore and disposable cache. The remote catalog and remote audio are not local user data and would remain available after reinstall, but the local preferences, favorites, history, Family Mandir values, reminder choice, and last-played state would not be reliably recoverable.
+
+**Current decision:** do not uninstall, clear data, change certificates, or install the release APK on this phone without explicit owner approval to accept loss of the local DivyaDhun state. No phone data was changed during this assessment.
+
 ## Current device gate
 
 - Installed device certificate: Android Debug, SHA-256 `915a1e49e6c952a4c63f882a75ace00ff1016e3dcc4bacc442eaf1722d145b0b`.
 - Phase 22 release certificate: `CN=Aman Sharma, L=Delhi, ST=Delhi, C=IN`, SHA-256 `a91a010619faa841768e4f33db69bc3e5956034f61dba6dddcbae722df00630c`.
 - Because the signatures differ, do not install the release APK over this existing package. Use an authorized clean test device or a device already carrying the matching release signature; do not uninstall or clear this phone’s app as a workaround.
+
+The owner has no spare Android phone. The signed release has already passed the documented disposable-emulator checks, but that does not replace physical-device QA or human audible confirmation.
 
 ## Signed-release disposable-emulator result
 
