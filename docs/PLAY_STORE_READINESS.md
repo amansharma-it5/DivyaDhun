@@ -23,7 +23,7 @@ As of 2026-09-19, this branch is a release-readiness preparation branch. It does
 | Debug validation | PASS | Python 19, Android unit 50, lint 0 errors, debug build, and current connected suite 18/18; Phase 4 and all three remote streaming tests passed. |
 | Release APK | PASS, signed | `app/build/outputs/apk/release/app-release.apk`; APK Signature Scheme v2 verification passed. |
 | Release AAB | PASS, signed | `app/build/outputs/bundle/release/app-release.aab`; `jarsigner` verification passed. |
-| Production signing | PASS locally; OWNER_ACTION_REQUIRED for Play | Correct `-IN.p12` / alias `divyadhun-upload` used. USB backup SHA-256 comparison was unavailable because Windows did not mount the USB disk; Play App Signing enrollment remains owner-controlled. |
+| Production signing | PASS locally; OWNER_ACTION_REQUIRED for Play | Correct `-IN.p12` / alias `divyadhun-upload` used. Owner confirms an encrypted Google Drive backup; a second independent backup remains pending. Play App Signing enrollment remains owner-controlled. |
 | R8/resource shrinking | REVIEW | No custom R8 rules or release minification configuration is present. This is not a publication blocker by itself; enable and test only if desired for the signed candidate. |
 | Native/ABI audit | REVIEW | AAB includes dependency `.so` files for arm64-v8a, armeabi-v7a, x86, and x86_64. Recheck Play’s current native/16 KB page-size guidance against the signed bundle. |
 | Bundled fallback media | OWNER_CONFIRMED | Five existing demo WAV fixtures (`1,852,420` bytes total) remain unchanged. Owner confirmed distribution rights; documentary rights agreements were not independently reviewed. |
@@ -40,7 +40,7 @@ As of 2026-09-19, this branch is a release-readiness preparation branch. It does
 
 ## Current blockers
 
-1. USB backup SHA-256 comparison is pending because the USB disk is not mounted in Windows.
+1. A second independent encrypted backup is pending; the owner-confirmed Google Drive backup was not accessed by this audit.
 2. Owner must verify the privacy link on the signed release and confirm the published policy remains accurate.
 3. Owner must complete Data Safety, content rating, target audience, store assets, and account-specific testing/device-verification steps.
 4. A signed release candidate still needs installation and physical-device acceptance on `RZCX623LLJK` before any Play submission.

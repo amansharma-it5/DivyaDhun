@@ -10,6 +10,12 @@ Run this checklist on an authorized phone without clearing unrelated application
 - Phase 22 release certificate: `CN=Aman Sharma, L=Delhi, ST=Delhi, C=IN`, SHA-256 `a91a010619faa841768e4f33db69bc3e5956034f61dba6dddcbae722df00630c`.
 - Because the signatures differ, do not install the release APK over this existing package. Use an authorized clean test device or a device already carrying the matching release signature; do not uninstall or clear this phone’s app as a workaround.
 
+## Signed-release disposable-emulator result
+
+- The signed `app-release.apk` was installed on clean `emulator-5554` only. Launch, onboarding, live catalog/deity browsing, playback, pause/resume, seek, mini-player, full player, queue/transport state, background service, foreground media notification, MediaSession, screen-off playback state, and emulator network off/on checks passed.
+- Direct release-targeted instrumentation was not run because the existing debug-signed test APK cannot attach to the release-signed target; Android rejected the mismatched signatures. No release test APK was re-signed with owner key material.
+- These emulator results do not replace real-phone QA or human audible confirmation.
+
 ## Install and first launch
 
 - [ ] Record device model, Android version, ABI, locale, font scale, and battery state.

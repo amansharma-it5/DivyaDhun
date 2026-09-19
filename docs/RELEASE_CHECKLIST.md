@@ -15,7 +15,7 @@
 - [x] Support contact supplied and privacy policy published at `https://amansharma-it5.github.io/divyadhun-privacy/`.
 - [x] Android source exposes the HTTPS privacy-policy link from Library → Preferences.
 - [ ] Owner verifies the privacy link on the signed release and confirms the published policy remains accurate.
-- [ ] Verify the USB copy of the encrypted backup matches the local `FINAL.7z` SHA-256 when the USB disk is mounted. The correct key is `divyadhun-upload-key-IN.p12` (alias `divyadhun-upload`); never use the similarly named key without `-IN`.
+- [x] Owner confirms the encrypted Google Drive backup. A second independent encrypted backup remains pending. The correct key is `divyadhun-upload-key-IN.p12` (alias `divyadhun-upload`); never use the similarly named key without `-IN`.
 - [x] Local ignored `keystore.properties` was populated privately and the signed AAB was verified without exposing passwords.
 - [ ] Owner enrolls in Play App Signing and records the upload-key recovery process.
 - [ ] Owner completes Data Safety, content rating, target audience, and any account-specific declarations.

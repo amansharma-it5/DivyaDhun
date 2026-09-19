@@ -2,7 +2,7 @@
 
 Status: `SIGNED_LOCAL_BUILD_COMPLETE; OWNER_ACTION_REQUIRED_FOR_BACKUP_AND_PLAY`
 
-The Phase 22 release candidate is `com.divyadhun.app` version `1.0.0` (`versionCode 1`). The repository contains an optional local signing configuration that activates only when a complete ignored `keystore.properties` exists. The owner supplied `divyadhun-upload-key-IN.p12` with alias `divyadhun-upload`; the local signed build is now verified. Play App Signing enrollment, physical-device QA, and USB-backup hash comparison remain pending.
+The Phase 22 release candidate is `com.divyadhun.app` version `1.0.0` (`versionCode 1`). The repository contains an optional local signing configuration that activates only when a complete ignored `keystore.properties` exists. The owner supplied `divyadhun-upload-key-IN.p12` with alias `divyadhun-upload`; the local signed build is now verified. The owner confirms an encrypted Google Drive backup; a second independent backup, Play App Signing enrollment, and physical-device QA remain pending.
 
 This is intentional. The debug keystore must not be used for Play distribution, and a private upload key must not be generated or committed by an automated run.
 
@@ -44,5 +44,5 @@ The following filesystem checks were performed without opening the P12 or reveal
 
 - `divyadhun-upload-key-IN.p12` exists at the owner-supplied protected location and is the only permitted key for this release. The older filename without `-IN` is excluded.
 - `divyadhun-upload-key-FINAL.7z` exists (3,665 bytes) and `divyadhun-upload-key-IN.7z` exists (3,665 bytes). A no-password 7-Zip listing test reports `Cannot open encrypted archive`, `Wrong password?`, and `Headers Error` for both. This is not an integrity pass and no password was guessed.
-- The P12 contents were never read by this audit. The USB disk was not mounted during the signed build, so the USB archive SHA-256 comparison remains pending.
+- The P12 contents were never read by this audit. The owner confirms an encrypted Google Drive backup; no USB backup is expected.
 - Local signing proceeded only from the owner-configured ignored properties; no archive was uploaded or altered.
