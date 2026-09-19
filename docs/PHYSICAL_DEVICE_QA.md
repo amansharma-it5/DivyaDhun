@@ -1,8 +1,14 @@
 # DivyaDhun physical-device QA checklist
 
-Status for Phase 22: **PENDING**. The disposable emulator currently passes instrumentation, but no authorized physical Android device has completed this checklist.
+Status for Phase 22: **BLOCKED**. `RZCX623LLJK` is connected, but its installed `com.divyadhun.app` 0.1.0 package is debug-signed and is not compatible with the Phase 22 release APK. The release APK was not installed; no app uninstall, data clear, or overwrite was attempted.
 
 Run this checklist on an authorized phone without clearing unrelated applications or personal data.
+
+## Current device gate
+
+- Installed device certificate: Android Debug, SHA-256 `915a1e49e6c952a4c63f882a75ace00ff1016e3dcc4bacc442eaf1722d145b0b`.
+- Phase 22 release certificate: `CN=Aman Sharma, L=Delhi, ST=Delhi, C=IN`, SHA-256 `a91a010619faa841768e4f33db69bc3e5956034f61dba6dddcbae722df00630c`.
+- Because the signatures differ, do not install the release APK over this existing package. Use an authorized clean test device or a device already carrying the matching release signature; do not uninstall or clear this phone’s app as a workaround.
 
 ## Install and first launch
 
