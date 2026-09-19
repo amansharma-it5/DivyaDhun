@@ -1,8 +1,8 @@
 # DivyaDhun release signing setup
 
-Status: `OWNER_ACTION_REQUIRED`
+Status: `SIGNED_LOCAL_BUILD_COMPLETE; OWNER_ACTION_REQUIRED_FOR_BACKUP_AND_PLAY`
 
-The Phase 22 release candidate is `com.divyadhun.app` version `1.0.0` (`versionCode 1`). The repository contains an optional local signing configuration that activates only when a complete ignored `keystore.properties` exists. The owner reports that `divyadhun-upload-key-IN.p12` with alias `divyadhun-upload` was generated and verified locally outside this repository. Its encrypted backup has not yet been verified, so production signing remains intentionally deferred; the checked-in build outputs remain unsigned.
+The Phase 22 release candidate is `com.divyadhun.app` version `1.0.0` (`versionCode 1`). The repository contains an optional local signing configuration that activates only when a complete ignored `keystore.properties` exists. The owner supplied `divyadhun-upload-key-IN.p12` with alias `divyadhun-upload`; the local signed build is now verified. Play App Signing enrollment, physical-device QA, and USB-backup hash comparison remain pending.
 
 This is intentional. The debug keystore must not be used for Play distribution, and a private upload key must not be generated or committed by an automated run.
 
@@ -28,13 +28,15 @@ The first Play submission must be an Android App Bundle, and every future update
 
 ## Current evidence
 
-- Release APK: `app/build/outputs/apk/release/app-release-unsigned.apk`
-- Release AAB: `app/build/outputs/bundle/release/app-release.aab`
+- Release APK: `app/build/outputs/apk/release/app-release.apk` (signed; APK Signature Scheme v2 verified)
+- Release AAB: `app/build/outputs/bundle/release/app-release.aab` (JAR signature verified)
 - Owner key filename reported outside Git: `divyadhun-upload-key-IN.p12`; alias: `divyadhun-upload`; private location is owner-controlled and was not inspected by this audit.
 - Package: `com.divyadhun.app`
+- Version: `1.0.0` / `versionCode 1`
+- Certificate identity: `CN=Aman Sharma, L=Delhi, ST=Delhi, C=IN`; Gradle release signing report matches alias `divyadhun-upload`.
 - Target SDK: 37
 - Production catalog URL is injected with `-PdivyadhunCatalogUrl=...`; no catalog or audio files are embedded by this setting.
-- No private key, password, or signing file was added to the repository. Do not configure signing until the encrypted backup is verified.
+- No private key, password, or signing file was added to the repository. The ignored local `keystore.properties` is not committed.
 
 ## Backup verification record
 
@@ -42,5 +44,5 @@ The following filesystem checks were performed without opening the P12 or reveal
 
 - `divyadhun-upload-key-IN.p12` exists at the owner-supplied protected location and is the only permitted key for this release. The older filename without `-IN` is excluded.
 - `divyadhun-upload-key-FINAL.7z` exists (3,665 bytes) and `divyadhun-upload-key-IN.7z` exists (3,665 bytes). A no-password 7-Zip listing test reports `Cannot open encrypted archive`, `Wrong password?`, and `Headers Error` for both. This is not an integrity pass and no password was guessed.
-- The P12 and archive contents have therefore not been accepted, and no Google Drive upload or second backup was attempted.
-- After the owner enters the intended password in the trusted local 7-Zip window, run the archive's built-in integrity test and confirm exactly one expected `divyadhun-upload-key-IN.p12` entry before any signing or cloud backup.
+- The P12 contents were never read by this audit. The USB disk was not mounted during the signed build, so the USB archive SHA-256 comparison remains pending.
+- Local signing proceeded only from the owner-configured ignored properties; no archive was uploaded or altered.

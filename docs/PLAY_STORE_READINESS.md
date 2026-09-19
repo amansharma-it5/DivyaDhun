@@ -21,9 +21,9 @@ As of 2026-09-19, this branch is a release-readiness preparation branch. It does
 | Manifest and Android media service | PASS | INTERNET, network-state, foreground media playback, notifications, boot receiver; Media3 service is declared with `mediaPlayback`. |
 | Target API | PASS | Target SDK 37 is above the current new-app API 36 requirement described by [Target API requirements](https://support.google.com/googleplay/android-developer/answer/11926878?hl=en). Recheck before submission because Play policy is time-sensitive. |
 | Debug validation | PASS | Python 19, Android unit 50, lint 0 errors, debug build, and current connected suite 18/18; Phase 4 and all three remote streaming tests passed. |
-| Release APK | PASS, unsigned | `app/build/outputs/apk/release/app-release-unsigned.apk`; package metadata is correct. |
-| Release AAB | PASS, unsigned | `app/build/outputs/bundle/release/app-release.aab`. Play accepts an app bundle only after it is correctly signed. |
-| Production signing | OWNER_ACTION_REQUIRED | Owner reports `divyadhun-upload-key-IN.p12` / alias `divyadhun-upload` was generated and locally verified outside Git. Encrypted backup verification and local `keystore.properties` configuration remain pending; see `docs/RELEASE_SIGNING_SETUP.md`. |
+| Release APK | PASS, signed | `app/build/outputs/apk/release/app-release.apk`; APK Signature Scheme v2 verification passed. |
+| Release AAB | PASS, signed | `app/build/outputs/bundle/release/app-release.aab`; `jarsigner` verification passed. |
+| Production signing | PASS locally; OWNER_ACTION_REQUIRED for Play | Correct `-IN.p12` / alias `divyadhun-upload` used. USB backup SHA-256 comparison was unavailable because Windows did not mount the USB disk; Play App Signing enrollment remains owner-controlled. |
 | R8/resource shrinking | REVIEW | No custom R8 rules or release minification configuration is present. This is not a publication blocker by itself; enable and test only if desired for the signed candidate. |
 | Native/ABI audit | REVIEW | AAB includes dependency `.so` files for arm64-v8a, armeabi-v7a, x86, and x86_64. Recheck Play’s current native/16 KB page-size guidance against the signed bundle. |
 | Bundled fallback media | OWNER_CONFIRMED | Five existing demo WAV fixtures (`1,852,420` bytes total) remain unchanged. Owner confirmed distribution rights; documentary rights agreements were not independently reviewed. |
@@ -40,7 +40,7 @@ As of 2026-09-19, this branch is a release-readiness preparation branch. It does
 
 ## Current blockers
 
-1. Encrypted backup of the owner-controlled upload key is not yet verified; local signing configuration is not populated.
+1. USB backup SHA-256 comparison is pending because the USB disk is not mounted in Windows.
 2. Owner must verify the privacy link on the signed release and confirm the published policy remains accurate.
 3. Owner must complete Data Safety, content rating, target audience, store assets, and account-specific testing/device-verification steps.
 4. A signed release candidate still needs installation and physical-device acceptance on `RZCX623LLJK` before any Play submission.

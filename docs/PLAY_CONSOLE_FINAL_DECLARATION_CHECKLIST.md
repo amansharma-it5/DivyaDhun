@@ -21,7 +21,8 @@ Use this checklist for the signed `com.divyadhun.app` `1.0.0` release. It is an 
 
 - [x] Production audio status recorded as `LICENSED — USER_CONFIRMED`; owner confirmed public streaming/R2 hosting and demo WAV distribution rights. Documentary agreements were not independently reviewed.
 - [ ] Complete content rating, target-audience/Families, store listing assets, and account-specific testing/device-verification declarations.
-- [ ] Verify the encrypted backup for `divyadhun-upload-key-IN.p12` / alias `divyadhun-upload`, configure it locally, enroll in Play App Signing, and verify the signed AAB. Do not use the similarly named key without `-IN`.
+- [ ] Verify the USB copy of the encrypted backup for `divyadhun-upload-key-IN.p12` / alias `divyadhun-upload` matches the local archive SHA-256. Play App Signing enrollment remains owner-controlled.
+- [x] Configure the ignored local signing properties and verify the signed AAB. Do not use the similarly named key without `-IN`.
 - [ ] Upload the owner-approved 512x512 icon, 1024x500 feature graphic, and genuine signed-build screenshots.
 - [ ] Complete [physical-device QA](PHYSICAL_DEVICE_QA.md), including audible playback, background/lock-screen controls, MediaSession, seeking, and reconnect behavior.
 - [ ] Do not upload to Play, publish, or merge PR #25 until all mandatory gates are green and the owner makes the release decision.
