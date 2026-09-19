@@ -2,7 +2,7 @@
 
 ## Technical blockers
 
-- Physical-device QA is blocked on `RZCX623LLJK`: the existing app is signed with the Android debug certificate while the Phase 22 APK uses the owner release certificate. The signed APK was not installed because doing so would require a destructive uninstall/overwrite path, and source inspection found no supported export/restore path for the phone's local DataStore state. Emulator release QA remains separate from physical QA.
+- Physical-device QA is partial on `RZCX623LLJK`: after explicit owner approval, the debug package was removed and the signed Phase 22 release was installed without touching unrelated phone data. Launch, 77-track catalog loading, playback, transport controls, background/screen-off behavior, and reversible network recovery passed. Human audible confirmation and an unlocked in-app privacy-link tap remain pending.
 - A second independent encrypted backup of the owner-controlled upload key remains pending. The encrypted Google Drive backup is owner-confirmed; no USB backup exists. Play App Signing enrollment and final Play Console declarations remain owner-controlled.
 
 ## External blockers

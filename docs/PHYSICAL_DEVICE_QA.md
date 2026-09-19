@@ -1,6 +1,6 @@
 # DivyaDhun physical-device QA checklist
 
-Status for Phase 22: **BLOCKED**. `RZCX623LLJK` is connected, but its installed `com.divyadhun.app` 0.1.0 package is debug-signed and is not compatible with the Phase 22 release APK. The release APK was not installed; no app uninstall, data clear, or overwrite was attempted.
+Status for Phase 22: **PARTIAL — owner confirmation pending**. The prior debug-signed `com.divyadhun.app` package was removed only after explicit owner approval, and the verified Phase 22 release APK is now installed on `RZCX623LLJK`. The app remains installed. Human audible confirmation and a foreground tap-through of the privacy link remain pending.
 
 Run this checklist on an authorized phone without clearing unrelated applications or personal data.
 
@@ -11,13 +11,13 @@ Run this checklist on an authorized phone without clearing unrelated application
 - The manifest sets `android:allowBackup="false"` and `android:fullBackupContent="false"`. Its data-extraction rules exclude `file`, `database`, and `sharedpref` domains from both cloud backup and device transfer. A debug-only `run-as` listing is not a supported portable backup or restore path, so no private data archive was created.
 - A standard uninstall would remove the app sandbox, including the DataStore and disposable cache. The remote catalog and remote audio are not local user data and would remain available after reinstall, but the local preferences, favorites, history, Family Mandir values, reminder choice, and last-played state would not be reliably recoverable.
 
-**Current decision:** do not uninstall, clear data, change certificates, or install the release APK on this phone without explicit owner approval to accept loss of the local DivyaDhun state. No phone data was changed during this assessment.
+**Previous decision:** preserve the phone until the owner explicitly approved the local-state loss. That approval was later provided; only `com.divyadhun.app` was uninstalled, and the signed release was installed. No unrelated phone data was changed.
 
 ## Current device gate
 
-- Installed device certificate: Android Debug, SHA-256 `915a1e49e6c952a4c63f882a75ace00ff1016e3dcc4bacc442eaf1722d145b0b`.
+- Pre-install package record: version `0.1.0`, versionCode `1`, `DEBUGGABLE`, Android Debug certificate SHA-256 `915a1e49e6c952a4c63f882a75ace00ff1016e3dcc4bacc442eaf1722d145b0b`.
 - Phase 22 release certificate: `CN=Aman Sharma, L=Delhi, ST=Delhi, C=IN`, SHA-256 `a91a010619faa841768e4f33db69bc3e5956034f61dba6dddcbae722df00630c`.
-- Because the signatures differ, do not install the release APK over this existing package. Use an authorized clean test device or a device already carrying the matching release signature; do not uninstall or clear this phone’s app as a workaround.
+- Because the signatures differed, the owner explicitly approved the package-only uninstall. No unrelated package or phone data was changed. The release package is now installed with version `1.0.0`, versionCode `1`, APK signing version 2, and non-debuggable package flags.
 
 The owner has no spare Android phone. The signed release has already passed the documented disposable-emulator checks, but that does not replace physical-device QA or human audible confirmation.
 
@@ -26,6 +26,16 @@ The owner has no spare Android phone. The signed release has already passed the 
 - The signed `app-release.apk` was installed on clean `emulator-5554` only. Launch, onboarding, live catalog/deity browsing, playback, pause/resume, seek, mini-player, full player, queue/transport state, background service, foreground media notification, MediaSession, screen-off playback state, and emulator network off/on checks passed.
 - Direct release-targeted instrumentation was not run because the existing debug-signed test APK cannot attach to the release-signed target; Android rejected the mismatched signatures. No release test APK was re-signed with owner key material.
 - These emulator results do not replace real-phone QA or human audible confirmation.
+
+## Physical signed-release results
+
+- **PASS:** launch, fresh onboarding, production HTTPS catalog load, and host-side catalog verification of 77 unique records.
+- **PASS:** search returned 15 Hanuman devotional tracks; a production Hanuman track loaded into the player.
+- **PASS:** MediaSession playback, pause, resume, fast-forward seek, background playback with the launcher foreground, and the foreground media service notification.
+- **PASS:** screen-off playback state remained active; the Samsung lock screen exposed the DivyaDhun media card with Previous, Pause, and Next controls.
+- **PASS:** Wi-Fi and mobile data were temporarily disabled and then restored; the active MediaSession remained PLAYING and Wi-Fi reconnected. Connectivity was restored to its original state.
+- **NOT CONFIRMED:** human-audible output. A person must listen through the phone speaker or headphones.
+- **PENDING:** tap the in-app Privacy policy link while the phone is unlocked. The phone was left keyguard-locked after the lock-screen check; no lock bypass was attempted.
 
 ## Install and first launch
 
