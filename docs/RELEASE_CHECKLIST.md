@@ -19,7 +19,7 @@
 - [ ] Owner enrolls in Play App Signing and records the upload-key recovery process.
 - [ ] Owner completes Data Safety, content rating, target audience, and any account-specific declarations.
 - [ ] Owner supplies Play-ready icon/adaptive icon, feature graphic, and screenshots.
-- [ ] Owner confirms rights for the five bundled offline demo WAV fixtures, or removes/replaces them before publication.
+- [x] Owner confirmed distribution rights for the five bundled offline demo WAV fixtures; documentary agreements were not independently reviewed.
 - [ ] If applicable, complete the 12-tester/14-day closed test for a new personal developer account.
 - [ ] If applicable, complete Play Console real-device verification.
 - [ ] Install the signed release on `RZCX623LLJK` and complete audible playback, background, lock-screen, notification, MediaSession, seeking, and network-recovery QA.

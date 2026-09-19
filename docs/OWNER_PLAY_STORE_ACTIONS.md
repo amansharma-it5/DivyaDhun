@@ -10,7 +10,7 @@ The engineering branch is ready for owner-controlled release setup but is not re
 6. Confirm whether the developer account is subject to the 12-testers/14-days closed-testing rule and complete it if required.
 7. Complete developer device verification if Play Console requests it.
 8. Supply the final icon, adaptive icon/monochrome asset if required by the current Play UI, feature graphic, screenshots, and support URL.
-9. Confirm distribution rights for the five bundled offline demo WAV fixtures, or remove/replace them before publication.
+9. Distribution rights for the five bundled offline demo WAV fixtures are `OWNER_CONFIRMED`; retain the owner’s confirmation and note that documentary agreements were not independently reviewed.
 10. Review the live production catalog and rights record. The status is `LICENSED — USER_CONFIRMED`; agreements were not independently reviewed by this engineering audit.
 11. After all gates pass, make the Play release decision and retain rollback/version records.
 

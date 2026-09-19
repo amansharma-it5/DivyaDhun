@@ -1,13 +1,13 @@
 # DivyaDhun physical-device QA checklist
 
-Status for Phase 17: **PENDING**. No authorized physical Android device was connected during the RC pass; the Medium_Phone API 36 emulator was used for reproducible instrumentation and UI checks.
+Status for Phase 22: **PENDING**. The disposable emulator currently passes instrumentation, but no authorized physical Android device has completed this checklist.
 
 Run this checklist on an authorized phone without clearing unrelated applications or personal data.
 
 ## Install and first launch
 
 - [ ] Record device model, Android version, ABI, locale, font scale, and battery state.
-- [ ] Install the unsigned debug APK supplied by the engineering build process.
+- [ ] Install the signed Phase 22 release candidate. Do not use the unsigned APK for final acceptance.
 - [ ] Launch DivyaDhun and complete onboarding in English.
 - [ ] Repeat on a clean app-data state in Hindi.
 - [ ] Confirm that closing and reopening the app bypasses onboarding.
@@ -22,11 +22,13 @@ Run this checklist on an authorized phone without clearing unrelated application
 
 ## Playback and notifications
 
+- [ ] Open Library → Preferences → Privacy policy and verify the HTTPS page and support email.
 - [ ] Start each bundled demo fixture and confirm audible output through the phone speaker and headphones.
 - [ ] Pause, resume, seek, and move previous/next while the app is foregrounded.
 - [ ] Background the app for at least 60 seconds, lock the device, and verify playback continues once.
 - [ ] Verify lock-screen and notification transport controls, including a service restart/reconnect.
 - [ ] Enable a reminder, grant notification permission, observe one notification, open the app from it, then disable the reminder.
+- [ ] Disable network access, observe the documented offline/reconnect behavior, restore network access, and start another remote track.
 
 ## Sharing and local Family Mandir
 
@@ -35,4 +37,4 @@ Run this checklist on an authorized phone without clearing unrelated application
 - [ ] Configure a Family Mandir name and members, restart the app, and verify local persistence.
 - [ ] Confirm the Family Mandir surface continues to identify data as local device-only data.
 
-Record results, screenshots, and logcat excerpts with the release candidate build identifier before marking this checklist complete.
+Record device model, release build identifier, results, screenshots, and logcat excerpts before marking this checklist complete. Only mark audible playback PASS after a person actually hears the phone output.

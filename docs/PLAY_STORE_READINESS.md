@@ -20,18 +20,18 @@ As of 2026-09-19, this branch is a release-readiness preparation branch. It does
 | Production catalog wiring | PASS | HTTPS-only `BuildConfig.REMOTE_CATALOG_URL` with deterministic local fallback. |
 | Manifest and Android media service | PASS | INTERNET, network-state, foreground media playback, notifications, boot receiver; Media3 service is declared with `mediaPlayback`. |
 | Target API | PASS | Target SDK 37 is above the current new-app API 36 requirement described by [Target API requirements](https://support.google.com/googleplay/android-developer/answer/11926878?hl=en). Recheck before submission because Play policy is time-sensitive. |
-| Debug validation | PASS from Phase 21 | Python 19, Android unit 49, connected 18/18 twice, lint, debug build, remote smoke, and production checks were previously recorded after the Phase 21 merge. |
+| Debug validation | PASS | Python 19, Android unit 50, lint 0 errors, debug build, and current connected suite 18/18; Phase 4 and all three remote streaming tests passed. |
 | Release APK | PASS, unsigned | `app/build/outputs/apk/release/app-release-unsigned.apk`; package metadata is correct. |
 | Release AAB | PASS, unsigned | `app/build/outputs/bundle/release/app-release.aab`. Play accepts an app bundle only after it is correctly signed. |
 | Production signing | OWNER_ACTION_REQUIRED | Optional local signing wiring is present, but no production key/configuration exists in this environment. See `docs/RELEASE_SIGNING_SETUP.md`. |
 | R8/resource shrinking | REVIEW | No custom R8 rules or release minification configuration is present. This is not a publication blocker by itself; enable and test only if desired for the signed candidate. |
 | Native/ABI audit | REVIEW | AAB includes dependency `.so` files for arm64-v8a, armeabi-v7a, x86, and x86_64. Recheck Play’s current native/16 KB page-size guidance against the signed bundle. |
-| Bundled fallback media | OWNER_ACTION_REQUIRED | The APK also contains five existing demo WAV fixtures (`1,852,420` bytes total) for the offline/local fallback. Confirm their distribution rights or remove/replace them before Play publication; Phase 22 did not modify them. |
+| Bundled fallback media | OWNER_CONFIRMED | Five existing demo WAV fixtures (`1,852,420` bytes total) remain unchanged. Owner confirmed distribution rights; documentary rights agreements were not independently reviewed. |
 | Privacy policy | PASS, signed-release verification pending | Published at `https://amansharma-it5.github.io/divyadhun-privacy/`; contact is `divyadhun.support@gmail.com`; Library → Preferences exposes the HTTPS link. See `docs/PRIVACY_POLICY_DRAFT.md`. |
 | Data Safety | OWNER_ACTION_REQUIRED | Draft proposes no collection/sharing based on source audit. Owner must submit the final Play Console declaration. |
 | Content rating | OWNER_ACTION_REQUIRED | Complete the Play questionnaire; unrated apps cannot be published. |
 | Target audience | OWNER_ACTION_REQUIRED | Confirm general-audience selection and assess Families requirements if the audience includes children. |
-| Store listing assets | OWNER_ACTION_REQUIRED | Listing copy drafted; Play icon/adaptive icon, feature graphic, screenshots, support contact, and privacy URL remain. |
+| Store listing assets | OWNER_ACTION_REQUIRED | Listing copy drafted; Play icon/adaptive icon, feature graphic, and screenshots remain. Support contact and privacy URL are supplied. |
 | Account deletion | NOT_APPLICABLE | The app has no account creation or sign-in. Reassess if that changes. |
 | New personal-account testing | OWNER_ACTION_REQUIRED | If the developer account is a new personal account created after 2023-11-13, Google requires a closed test with at least 12 opted-in testers for 14 continuous days before production access: [Closed testing requirements](https://support.google.com/googleplay/android-developer/answer/14151465?hl=en-GB). |
 | Developer device verification | OWNER_ACTION_REQUIRED_IF_APPLICABLE | New personal accounts may need real-device verification using the Play Console mobile app: [Device verification](https://support.google.com/googleplay/android-developer/answer/14316361?hl=en). |

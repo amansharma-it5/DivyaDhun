@@ -6,13 +6,17 @@ The Phase 22 release candidate is `com.divyadhun.app` version `1.0.0` (`versionC
 
 This is intentional. The debug keystore must not be used for Play distribution, and a private upload key must not be generated or committed by an automated run.
 
-## Owner procedure
+## Beginner-safe owner procedure
 
-1. Create or obtain a dedicated RSA 2048+ Play upload key on a protected owner workstation. Keep the keystore and passwords outside Git, backups that are not access-controlled, and chat transcripts.
-2. Copy `keystore.properties.example` to `keystore.properties` and fill in local paths/secrets. The existing `.gitignore` excludes that file and `*.jks`/`*.keystore`.
-3. The checked-in Gradle configuration reads the local properties only when all four fields are present. Do not hard-code passwords or key paths. An incomplete local file fails closed with a clear configuration error.
-4. Run `:app:bundleRelease` and verify the resulting AAB with `jarsigner`/Play Console. Keep the upload key available for future updates; Play App Signing protects the app signing key after enrollment.
-5. Enroll the app in Google Play App Signing during the first Play upload. Google’s current guidance uses a developer-held upload key and a Google-held app-signing key: [Play App Signing](https://support.google.com/googleplay/android-developer/answer/9842756?hl=en).
+Do these steps manually on the owner’s protected workstation. Codex must not generate, receive, or adopt the owner’s permanent key.
+
+1. Install a trusted JDK and Android SDK, then open a terminal in this repository. Do not put the keystore, passwords, or recovery notes in Git or chat.
+2. Generate or obtain a dedicated RSA 2048+ upload key. If generating it yourself, run the command below and answer the prompts locally; never paste the output or passwords into chat.
+3. Make at least two encrypted backups of the keystore in separate access-controlled locations. Record the alias and recovery process privately.
+4. Copy `keystore.properties.example` to `keystore.properties` and fill in local paths/secrets only. Verify Git ignores it with `git check-ignore -v keystore.properties`.
+5. Build the production bundle with `:app:bundleRelease`. The checked-in Gradle configuration fails closed unless all four fields are present: `storeFile`, `storePassword`, `keyAlias`, and `keyPassword`.
+6. Verify the signed artifact locally with `:app:signingReport`, `jarsigner -verify -verbose -certs app/build/outputs/bundle/release/app-release.aab`, and the Play Console upload check. Do not use the debug keystore.
+7. Enroll in Play App Signing during the first upload and retain the upload-key recovery process: [Play App Signing](https://support.google.com/googleplay/android-developer/answer/9842756?hl=en).
 
 Example key-generation command (run manually by the owner; do not paste the resulting secrets here):
 
