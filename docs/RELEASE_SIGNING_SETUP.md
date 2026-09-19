@@ -35,3 +35,12 @@ The first Play submission must be an Android App Bundle, and every future update
 - Target SDK: 37
 - Production catalog URL is injected with `-PdivyadhunCatalogUrl=...`; no catalog or audio files are embedded by this setting.
 - No private key, password, or signing file was added to the repository. Do not configure signing until the encrypted backup is verified.
+
+## Backup verification record
+
+The following filesystem checks were performed without opening the P12 or revealing any password:
+
+- `divyadhun-upload-key-IN.p12` exists at the owner-supplied protected location and is the only permitted key for this release. The older filename without `-IN` is excluded.
+- `divyadhun-upload-key-FINAL.7z` exists (3,665 bytes) and `divyadhun-upload-key-IN.7z` exists (3,665 bytes). A no-password 7-Zip listing test reports `Cannot open encrypted archive`, `Wrong password?`, and `Headers Error` for both. This is not an integrity pass and no password was guessed.
+- The P12 and archive contents have therefore not been accepted, and no Google Drive upload or second backup was attempted.
+- After the owner enters the intended password in the trusted local 7-Zip window, run the archive's built-in integrity test and confirm exactly one expected `divyadhun-upload-key-IN.p12` entry before any signing or cloud backup.
