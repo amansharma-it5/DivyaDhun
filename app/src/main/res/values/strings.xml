@@ -63,6 +63,7 @@
     <string name="dark">Dark</string>
     <string name="preference_error">Your preference could not be saved. Please try again.</string>
     <string name="preferences">Preferences</string>
+    <string name="privacy_policy">Privacy policy</string>
     <string name="family_mandir">Family Mandir</string>
     <string name="family_mandir_not_set">Set up a local family space</string>
     <string name="family_mandir_configured">Your local family space</string>

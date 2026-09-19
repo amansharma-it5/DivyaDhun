@@ -2,8 +2,8 @@
 
 The engineering branch is ready for owner-controlled release setup but is not ready for Play publication.
 
-1. Supply the final support/privacy contact and publish the reviewed policy from `docs/PRIVACY_POLICY_DRAFT.md`.
-2. Add the policy URL or policy text to the app and verify that the final signed build exposes it.
+1. Review the published policy at `https://amansharma-it5.github.io/divyadhun-privacy/` and confirm it remains accurate.
+2. Verify that the final signed build exposes the policy link from Library → Preferences.
 3. Create a protected Play upload key and configure `keystore.properties` locally. Never commit the keystore or passwords.
 4. Upload the signed AAB to an internal/closed test track only after the signed artifact passes physical QA.
 5. Complete Play Console Data Safety, content rating, target audience, store listing, app-access (not applicable to the current no-account app), and content-rights declarations.

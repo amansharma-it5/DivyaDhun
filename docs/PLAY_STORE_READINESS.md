@@ -1,6 +1,6 @@
 # DivyaDhun Phase 22 Play Store readiness
 
-As of 2026-09-17, this branch is a release-readiness preparation branch. It does not publish to Google Play, change the live catalog, or upload audio.
+As of 2026-09-19, this branch is a release-readiness preparation branch. It does not publish to Google Play, change the live catalog, or upload audio.
 
 ## Release candidate
 
@@ -27,7 +27,7 @@ As of 2026-09-17, this branch is a release-readiness preparation branch. It does
 | R8/resource shrinking | REVIEW | No custom R8 rules or release minification configuration is present. This is not a publication blocker by itself; enable and test only if desired for the signed candidate. |
 | Native/ABI audit | REVIEW | AAB includes dependency `.so` files for arm64-v8a, armeabi-v7a, x86, and x86_64. Recheck Play’s current native/16 KB page-size guidance against the signed bundle. |
 | Bundled fallback media | OWNER_ACTION_REQUIRED | The APK also contains five existing demo WAV fixtures (`1,852,420` bytes total) for the offline/local fallback. Confirm their distribution rights or remove/replace them before Play publication; Phase 22 did not modify them. |
-| Privacy policy | OWNER_ACTION_REQUIRED | Draft exists, but owner contact/URL is not supplied and the current app has no dedicated in-app policy destination. See `docs/PRIVACY_POLICY_DRAFT.md`. |
+| Privacy policy | PASS, signed-release verification pending | Published at `https://amansharma-it5.github.io/divyadhun-privacy/`; contact is `divyadhun.support@gmail.com`; Library → Preferences exposes the HTTPS link. See `docs/PRIVACY_POLICY_DRAFT.md`. |
 | Data Safety | OWNER_ACTION_REQUIRED | Draft proposes no collection/sharing based on source audit. Owner must submit the final Play Console declaration. |
 | Content rating | OWNER_ACTION_REQUIRED | Complete the Play questionnaire; unrated apps cannot be published. |
 | Target audience | OWNER_ACTION_REQUIRED | Confirm general-audience selection and assess Families requirements if the audience includes children. |
@@ -41,7 +41,7 @@ As of 2026-09-17, this branch is a release-readiness preparation branch. It does
 ## Current blockers
 
 1. Production upload key/signing configuration is absent.
-2. Owner must replace the privacy-policy contact/URL and make the policy available in-app or through a stable in-app link.
+2. Owner must verify the privacy link on the signed release and confirm the published policy remains accurate.
 3. Owner must complete Data Safety, content rating, target audience, store assets, and account-specific testing/device-verification steps.
 4. A signed release candidate still needs installation and physical-device acceptance on `RZCX623LLJK` before any Play submission.
 

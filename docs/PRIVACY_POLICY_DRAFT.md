@@ -1,10 +1,11 @@
 # DivyaDhun privacy policy draft
 
-**Effective date:** `[OWNER TO SET]`
+**Effective date:** September 19, 2026
 **App:** DivyaDhun
-**Contact:** `[OWNER TO REPLACE WITH A MONITORED SUPPORT EMAIL OR WEB FORM]`
+**Contact:** divyadhun.support@gmail.com
+**Published policy:** https://amansharma-it5.github.io/divyadhun-privacy/
 
-This draft describes the current Android implementation. Replace the bracketed owner fields and have the owner review it before publishing. It is not legal advice.
+This document records the policy content published at the URL above. It describes the current Android implementation and is not legal advice.
 
 ## What DivyaDhun does
 
@@ -38,4 +39,4 @@ DivyaDhun is not designed as a child-directed service. The final Play Console ta
 
 ## Changes and contact
 
-We may update this policy when the app’s data practices change. Questions or privacy requests can be sent to `[OWNER CONTACT]`.
+We may update this policy when the app’s data practices change. Questions or privacy requests can be sent to `divyadhun.support@gmail.com`.

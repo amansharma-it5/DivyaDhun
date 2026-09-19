@@ -10,8 +10,8 @@ This copy is grounded in the current app. It does not claim offline downloads, a
 - Category: `Music & Audio` (owner to confirm in Play Console)
 - Target audience: General audience, subject to owner confirmation; do not select a child-directed audience without a Families review.
 - Content rating: Owner must complete the Play questionnaire; unrated apps cannot be published. See [Content ratings](https://support.google.com/googleplay/android-developer/answer/9859655?hl=en-GB).
-- Privacy-policy URL: `[OWNER TO PROVIDE HTTPS URL]`
-- Support contact: `[OWNER TO PROVIDE MONITORED CONTACT]`
+- Privacy-policy URL: `https://amansharma-it5.github.io/divyadhun-privacy/`
+- Support contact: `divyadhun.support@gmail.com`
 
 ## Short description
 
@@ -41,5 +41,5 @@ DivyaDhun does not require an account and does not include ads, subscriptions, o
 
 - Final app icon/adaptive icon and feature graphic: owner/design action required; the current build has a vector brand icon but no Play-ready asset set.
 - Screenshots: owner action required; capture the real release candidate without debug/demo-only claims.
-- Privacy policy and Data Safety: owner action required; use the accompanying drafts.
+- Privacy policy: published at the URL above; owner must verify the signed release link. Data Safety remains owner action required.
 - Music/content rights: `LICENSED — USER_CONFIRMED`; the owner confirmed public streaming and Cloudflare R2 hosting, but documentary agreements were not independently reviewed.

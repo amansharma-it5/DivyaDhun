@@ -18,7 +18,7 @@ This is an engineering draft for the Play Console form. The owner must submit th
 
 ## Owner submission checklist
 
-- Publish the final privacy-policy URL and add it to the Play Console form. Google’s privacy-policy requirement is documented at [User Data](https://support.google.com/googleplay/android-developer/answer/10144311?hl=en-GB).
+- Add the published privacy-policy URL `https://amansharma-it5.github.io/divyadhun-privacy/` to the Play Console form. Google’s privacy-policy requirement is documented at [User Data](https://support.google.com/googleplay/android-developer/answer/10144311?hl=en-GB).
 - Confirm that all bundled and transitive SDK behavior matches this draft.
 - Answer the Play Console questions for the exact signed release artifact, not only the source tree.
 - Revisit this form before any analytics, crash reporting, account, subscription, cloud-sync, or upload feature is added.

@@ -36,8 +36,8 @@ The app does not intentionally retain a user identifier or usage history on the 
 
 The production audio rights status is `LICENSED — USER_CONFIRMED`. The owner confirmed public streaming through DivyaDhun and public Cloudflare R2 hosting. Documentary license agreements were not independently reviewed in this audit.
 
-## Remaining owner confirmations
+## Current release follow-up
 
-- Confirm the final privacy-policy owner/contact and publish the policy at a stable HTTPS URL.
+- The verified public policy is published at `https://amansharma-it5.github.io/divyadhun-privacy/` with contact `divyadhun.support@gmail.com`, effective September 19, 2026.
+- The Android app now exposes that HTTPS policy from Library → Preferences. The signed release still needs device verification.
 - Confirm the Play Console Data Safety answers after reviewing the final dependency and Play Console declarations.
-- Add an in-app privacy-policy link or policy text before production submission. The current app has no dedicated privacy-policy destination.
