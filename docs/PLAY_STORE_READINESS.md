@@ -31,7 +31,7 @@ As of 2026-09-20, this branch is a release-readiness preparation branch. It does
 | Data Safety | OWNER_ACTION_REQUIRED | Draft proposes no collection/sharing based on source audit. Owner must submit the final Play Console declaration. |
 | Content rating | OWNER_ACTION_REQUIRED | Complete the Play questionnaire; unrated apps cannot be published. |
 | Target audience | OWNER_ACTION_REQUIRED | Confirm general-audience selection and assess Families requirements if the audience includes children. |
-| Store listing assets | OWNER_ACTION_REQUIRED | Listing copy drafted. Current launcher icon is a 108dp vector and is not yet a Play-ready 512x512 PNG; feature graphic and genuine signed-build screenshots remain. Support contact and privacy URL are supplied. See `docs/PLAY_STORE_ASSET_PREPARATION.md`. |
+| Store listing assets | OWNER_ACTION_REQUIRED | Listing copy drafted. Current launcher icon is a 108dp vector and is not yet a Play-ready 512x512 PNG; no feature graphic is present; genuine QA screenshots are 1080x2340 and need Play-compliant sizing/format approval. See `docs/PLAY_STORE_ASSET_PREPARATION.md`. |
 | Account deletion | NOT_APPLICABLE | The app has no account creation or sign-in. Reassess if that changes. |
 | New personal-account testing | OWNER_ACTION_REQUIRED | If the developer account is a new personal account created after 2023-11-13, Google requires a closed test with at least 12 opted-in testers for 14 continuous days before production access: [Closed testing requirements](https://support.google.com/googleplay/android-developer/answer/14151465?hl=en-GB). |
 | Developer device verification | OWNER_ACTION_REQUIRED_IF_APPLICABLE | New personal accounts may need real-device verification using the Play Console mobile app: [Device verification](https://support.google.com/googleplay/android-developer/answer/14316361?hl=en). |
@@ -41,8 +41,8 @@ As of 2026-09-20, this branch is a release-readiness preparation branch. It does
 ## Current blockers
 
 1. A second independent encrypted backup is pending; the owner-confirmed Google Drive backup was not accessed by this audit.
-2. Owner must confirm the published policy remains accurate and personally confirm audible output.
+2. Owner must confirm the published policy remains accurate.
 3. Owner must complete Data Safety, app-access, content rating, target audience, foreground-service, store-assets, and account-specific testing/device-verification steps.
-4. Remaining physical-device release checks are human audible confirmation and any owner-required transport/lock-screen cases; the signed release is already installed and privacy/layout/playback-state checks are recorded.
+4. Core physical-device acceptance is recorded as PASS with owner-confirmed audible playback; any separately unverified fixture/transport cases remain owner review items.
 
 Official Play preparation guidance also requires accurate metadata, a privacy policy, and Data Safety information before submission: [Prepare your app for review](https://support.google.com/googleplay/android-developer/answer/10788890?hl=en).

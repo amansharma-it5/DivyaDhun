@@ -25,5 +25,5 @@ Use this checklist for the signed `com.divyadhun.app` `1.0.0` release. It is an 
 - [ ] Create or verify a second independent encrypted backup. Play App Signing enrollment remains owner-controlled.
 - [x] Configure the ignored local signing properties and verify the signed AAB. Do not use the similarly named key without `-IN`.
 - [ ] Upload the owner-approved 512x512 icon, 1024x500 feature graphic, and genuine signed-build screenshots.
-- [ ] Complete [physical-device QA](PHYSICAL_DEVICE_QA.md), including owner-confirmed audible playback and any remaining transport/lock-screen cases. Privacy, layout, playback-state, and background MediaSession checks are recorded as PASS.
+- [x] Core [physical-device QA](PHYSICAL_DEVICE_QA.md) complete: privacy, layout, playback-state, background MediaSession, and owner-confirmed audible playback are recorded as PASS. Any separately unverified fixture/transport cases remain owner review items.
 - [ ] Do not upload to Play, publish, or merge PR #25 until all mandatory gates are green and the owner makes the release decision.

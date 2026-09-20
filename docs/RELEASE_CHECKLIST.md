@@ -23,7 +23,7 @@
 - [x] Owner confirmed distribution rights for the five bundled offline demo WAV fixtures; documentary agreements were not independently reviewed.
 - [ ] If applicable, complete the 12-tester/14-day closed test for a new personal developer account.
 - [ ] If applicable, complete Play Console real-device verification.
-- [x] Signed release installed in place on `RZCX623LLJK`; physical layout, privacy, playback-state, and background MediaSession checks passed. Human audible confirmation, and any unverified transport/lock-screen cases, remain open.
+- [x] Signed release installed in place on `RZCX623LLJK`; physical layout, privacy, playback-state, background MediaSession, and owner-confirmed audible playback passed. Any separately unverified fixture/transport cases remain open.
 - [ ] Run final signed-artifact regression, remote smoke, catalog verification, secrets audit, and media audit.
 - [ ] Owner separately confirms the final release decision; do not publish or merge while any mandatory gate is open.
 

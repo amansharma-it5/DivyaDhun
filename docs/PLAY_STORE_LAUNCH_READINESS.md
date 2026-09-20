@@ -2,6 +2,8 @@
 
 As of 2026-09-20. This is an engineering preparation record only. No Play Console declaration was submitted, no audio/catalog was changed, and no Play release was published.
 
+Owner evidence: Aman personally confirmed that audio was audible on the signed release installed on `RZCX623LLJK`. This is recorded as `OWNER_CONFIRMED`; it is not an automated hearing measurement.
+
 ## Status matrix
 
 | Area | Status | Evidence / owner boundary |
@@ -10,12 +12,12 @@ As of 2026-09-20. This is an engineering preparation record only. No Play Consol
 | Production catalog | PASS | HTTPS remote catalog is configured in the latest signed build; live catalog remains 77 tracks. |
 | Privacy/support | PASS | Physical signed-build tap opened Chrome at `https://amansharma-it5.github.io/divyadhun-privacy/`; support email is `divyadhun.support@gmail.com`. Owner must review policy accuracy before submission. |
 | Signed artifacts | PASS | Latest signed APK/AAB use the expected upload certificate; package/version checks passed. The AAB must be rebuilt with the remote URL before final upload if its timestamp predates this record. |
-| Physical QA | PENDING | Layout, privacy, playback state, and background MediaSession passed on `RZCX623LLJK`; human audible confirmation is still pending. |
+| Physical QA | PASS — owner-confirmed | Layout, privacy, playback state, and background MediaSession passed on `RZCX623LLJK`; Aman personally confirmed audible playback. The audible result is owner evidence, not independent automated verification. |
 | Data Safety | OWNER ACTION | Engineering draft is based on source/dependency audit; owner must complete and submit the exact Play form. |
 | App access | OWNER ACTION | No account, login, paid wall, or restricted content was found. Owner must select the applicable Play Console answer and provide no access credentials unless the app changes. |
 | Content rating | OWNER ACTION | Complete the IARC questionnaire accurately; do not pre-assign a rating. [Official guidance](https://support.google.com/googleplay/android-developer/answer/9898843?hl=en). |
 | Target audience | OWNER ACTION | Owner must choose the actual intended age groups. Do not infer a Families/children declaration from the devotional subject matter. [Official guidance](https://support.google.com/googleplay/android-developer/answer/9867159?hl=en). |
-| Store listing assets | OWNER ACTION | Listing copy is drafted. Play-ready icon, 1024x500 feature graphic, and owner-approved genuine screenshots remain. See `docs/PLAY_STORE_ASSET_PREPARATION.md`. |
+| Store listing assets | PENDING / OWNER ACTION | Listing copy is drafted. The existing vector icon is not yet exported as a Play PNG, no feature graphic is present, and 1080x2340 QA screenshots exceed Play’s 2:1 limit; owner-approved final assets remain. See `docs/PLAY_STORE_ASSET_PREPARATION.md`. |
 | Play App Signing | OWNER ACTION | Enroll during first bundle upload, retain the upload-key recovery path, and keep the second independent encrypted backup pending until verified. [Official guidance](https://support.google.com/googleplay/android-developer/answer/9842756?hl=en). |
 | New personal-account testing | BLOCKED/IF APPLICABLE | If the developer account was created after 2023-11-13, complete the required closed test with at least 12 opted-in testers for 14 continuous days before production access. [Official guidance](https://support.google.com/googleplay/android-developer/answer/14151465?hl=en-GB). Account age/type is owner-only. |
 | Device verification | OWNER ACTION/IF APPLICABLE | Complete Play Console device verification if the account flow requests it. [Official guidance](https://support.google.com/googleplay/android-developer/answer/14316361?hl=en). |
@@ -41,8 +43,7 @@ Draft app name: **DivyaDhun**. Draft short description: **Devotional audio, dail
 
 ## Owner actions in priority order
 
-1. Personally listen to the installed signed release and confirm audible playback; record speaker/headphone and basic transport results.
-2. Verify a second independent encrypted signing-key backup; do not use the old key or unencrypted archive.
-3. Approve final icon, feature graphic, genuine screenshots, listing copy, and rights records.
-4. Complete Play App Signing enrollment, Data Safety, app access, content rating, target audience, permissions/FGS, and any account-specific testing/device-verification flows.
-5. Upload the owner-approved AAB to an internal/closed track and run Play-distributed QA before deciding on publication.
+1. Verify a second independent encrypted signing-key backup; do not use the old key or unencrypted archive.
+2. Approve/export the icon, feature graphic, and genuine Play-sized screenshots.
+3. Complete Play App Signing enrollment, Data Safety, app access, content rating, target audience, permissions/FGS, and any account-specific testing/device-verification flows.
+4. Upload the owner-approved AAB to an internal/closed track and run Play-distributed QA before deciding on publication.

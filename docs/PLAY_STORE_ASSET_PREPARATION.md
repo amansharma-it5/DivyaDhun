@@ -1,6 +1,6 @@
 # Play Store asset preparation
 
-Status: `OWNER_ACTION_REQUIRED`. No fabricated graphics or screenshots were added to the repository. Physical QA evidence is retained separately; Play listing assets still require owner review and upload.
+Status: `OWNER_ACTION_REQUIRED`. No fabricated graphics or screenshots were added to the repository. Physical QA evidence is retained separately; Play listing assets still require owner review, final sizing/format conversion, and upload.
 
 ## Current app icon review
 
@@ -15,6 +15,12 @@ Status: `OWNER_ACTION_REQUIRED`. No fabricated graphics or screenshots were adde
 - Capture the signed release after production signing and physical QA. Do not use emulator/debug-only states as final evidence, and do not add device frames or promotional text that makes the app look different from the tested build.
 - Suggested truthful sequence: Home, Explore/deity browsing, Search, full player/queue, and Library/preferences with the privacy link. Capture only screens that exist in the signed build.
 - Current physical evidence includes `build/physical-qa-remote-daily.png` (1080x2340) and `build/physical-qa-remote-privacy-page.png` (1080x2340). These are QA evidence, not yet approved Play assets; inspect/convert to Play-accepted JPEG or 24-bit PNG without alpha before upload.
+
+## Validation result for current files
+
+- The current QA captures are genuine signed-release phone evidence and visually pass their intended checks, but 1080x2340 is taller than the current Play maximum-dimension ratio of 2:1. Do not upload them unchanged; crop or resize copies to an accepted ratio while retaining the tested UI and without adding promotional claims.
+- `app/src/main/res/drawable/ic_brand.xml` is an original DivyaDhun vector source with the existing maroon/gold branding. It is not a Play upload file; export an owner-approved 512x512 32-bit PNG with alpha and keep it at or below 1024 KB.
+- No 1024x500 feature graphic exists in the repository. It remains an owner-created/approved asset; no copyrighted artwork or unverified devotional imagery was added.
 
 ## Current official size checks
 
