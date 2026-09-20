@@ -70,7 +70,14 @@ fun DailyBhaktiScreen(
             Surface(color = MaterialTheme.colorScheme.primaryContainer, shape = MaterialTheme.shapes.large) {
                 Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(10.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                     current?.let { TrackArtwork(it, Modifier.size(132.dp)) }
-                    Text(stringResource(R.string.daily_bhakti_for_time, listeningTimeRes(routine)), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
+                    Text(
+                        stringResource(
+                            R.string.daily_bhakti_for_time,
+                            stringResource(listeningTimeRes(routine))
+                        ),
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.primary
+                    )
                     Text(stringResource(R.string.routine_progress, state.currentIndex + 1, routineTracks.size), style = MaterialTheme.typography.headlineSmall, modifier = Modifier.testTag("routine_progress"))
                 }
             }

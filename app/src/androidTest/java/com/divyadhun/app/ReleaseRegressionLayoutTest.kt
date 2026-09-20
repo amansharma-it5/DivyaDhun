@@ -5,6 +5,7 @@ import androidx.compose.ui.test.assertWidthIsAtLeast
 import androidx.compose.ui.test.getBoundsInRoot
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.width
 import com.divyadhun.app.domain.model.AudioSource
@@ -75,6 +76,27 @@ class ReleaseRegressionLayoutTest {
         title.assertIsDisplayed()
         val titleBounds = title.getBoundsInRoot()
         assertTrue("daily title must not grow vertically without bound", titleBounds.bottom - titleBounds.top <= 56.dp)
+    }
+
+    @Test
+    fun dailyBhaktiResolvesListeningTimeLabelInsteadOfShowingResourceId() {
+        val track = longTrack("daily_label")
+        val viewModel = com.divyadhun.app.content.DailyBhaktiViewModel()
+        rule.setContent {
+            DivyaTheme {
+                DailyBhaktiScreen(
+                    viewModel = viewModel,
+                    routine = DailyBhaktiRoutine("label", com.divyadhun.app.domain.model.ListeningTime.ANYTIME, listOf(track.id)),
+                    tracks = listOf(track),
+                    language = Language.ENGLISH,
+                    playbackState = PlaybackState(),
+                    playbackController = null,
+                    onBack = {}
+                )
+            }
+        }
+
+        rule.onNodeWithText("For Anytime").assertIsDisplayed()
     }
 
     private fun longTrack(id: String) = Track(
