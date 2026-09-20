@@ -17,7 +17,7 @@ Owner evidence: Aman personally confirmed that audio was audible on the signed r
 | App access | OWNER ACTION | No account, login, paid wall, or restricted content was found. Owner must select the applicable Play Console answer and provide no access credentials unless the app changes. |
 | Content rating | OWNER ACTION | Complete the IARC questionnaire accurately; do not pre-assign a rating. [Official guidance](https://support.google.com/googleplay/android-developer/answer/9898843?hl=en). |
 | Target audience | OWNER ACTION | Owner must choose the actual intended age groups. Do not infer a Families/children declaration from the devotional subject matter. [Official guidance](https://support.google.com/googleplay/android-developer/answer/9867159?hl=en). |
-| Store listing assets | PENDING / OWNER ACTION | Original icon PNG, polished 1024x500 feature graphic, and revised 1080x2160 RGB screenshots (Home, Explore, Daily Bhakti) are prepared and visually reviewed; owner approval and Play upload remain. See `docs/PLAY_STORE_ASSET_PREPARATION.md`. |
+| Store listing assets | OWNER ACTION — upload | Original icon PNG, polished 1024x500 feature graphic, and final 1200x2400 RGB screenshots (Home, Explore, Daily Bhakti) are prepared, directly inspected, and owner-approved for content. Upload remains an owner Play Console action. See `docs/PLAY_STORE_ASSET_PREPARATION.md`. |
 | Play App Signing | OWNER ACTION | Enroll during first bundle upload, retain the upload-key recovery path, and keep the second independent encrypted backup pending until verified. Google Drive backup SHA-256 match is owner-confirmed. [Official guidance](https://support.google.com/googleplay/android-developer/answer/9842756?hl=en). |
 | New personal-account testing | BLOCKED/IF APPLICABLE | If the developer account was created after 2023-11-13, complete the required closed test with at least 12 opted-in testers for 14 continuous days before production access. [Official guidance](https://support.google.com/googleplay/android-developer/answer/14151465?hl=en-GB). Account age/type is owner-only. |
 | Device verification | OWNER ACTION/IF APPLICABLE | Complete Play Console device verification if the account flow requests it. [Official guidance](https://support.google.com/googleplay/android-developer/answer/14316361?hl=en). |
@@ -44,6 +44,6 @@ Draft app name: **DivyaDhun**. Draft short description: **Devotional audio, dail
 ## Owner actions in priority order
 
 1. Verify a second independent encrypted signing-key backup; do not use the old key or unencrypted archive.
-2. Approve/export the icon, feature graphic, and genuine Play-sized screenshots.
+2. Upload the owner-approved icon, feature graphic, and genuine Play-sized screenshots.
 3. Complete Play App Signing enrollment, Data Safety, app access, content rating, target audience, permissions/FGS, and any account-specific testing/device-verification flows.
 4. Upload the owner-approved AAB to an internal/closed track and run Play-distributed QA before deciding on publication.

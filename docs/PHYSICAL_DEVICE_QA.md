@@ -33,7 +33,7 @@ The owner has no spare Android phone. The signed release has passed the document
 
 - The signed `app-release.apk` was installed on clean `emulator-5554` only. Launch, onboarding, live catalog/deity browsing, playback, pause/resume, seek, mini-player, full player, queue/transport state, background service, foreground media notification, MediaSession, screen-off playback state, and emulator network off/on checks passed.
 - A signed `releaseQa` instrumentation variant is enabled with the existing release signing configuration; its test-only Compose host is excluded from the production `release` APK/AAB. The targeted privacy and layout regressions pass on the disposable AVD. This does not replace real-phone QA.
-- The latest signed `releaseQa` connected run executed 22 tests: 21 passed, including the new Daily Bhakti label regression and all existing UI/flow tests; 1 production-catalog `RemoteStreamingSmokeTest` timed out after 60 seconds on the emulator network path. This is an environment/network failure, not a UI assertion failure, and does not replace real-phone QA.
+- The latest signed `releaseQa` connected run executed 22 tests: 21 passed, including the new Daily Bhakti label regression and all existing UI/flow tests; 1 production-catalog `RemoteStreamingSmokeTest` timed out after 60 seconds on the emulator network path. A host HTTPS GET to the same R2 catalog returned HTTP 200, while the emulator production path did not complete; no UI assertion failed. Record this as `ENVIRONMENT_BLOCKED / INCOMPLETE`, not PASS, and do not treat it as proof of production streaming.
 - These emulator results do not replace real-phone QA.
 
 ## Physical signed-release results — latest remote-configured APK
