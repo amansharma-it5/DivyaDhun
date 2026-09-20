@@ -35,11 +35,11 @@ class Phase10SimpleModeFlowTest {
         waitForTag("screen_LIBRARY")
         rule.onNodeWithTag("screen_LIBRARY").performScrollToNode(hasTestTag("simple_mode_toggle"))
         rule.onNodeWithTag("simple_mode_toggle").performClick()
-        rule.onNodeWithTag("simple_mode_toggle").assertIsOn()
+        waitForSimpleModeOn()
         rule.activityRule.scenario.recreate()
         waitForTag("screen_LIBRARY")
         rule.onNodeWithTag("screen_LIBRARY").performScrollToNode(hasTestTag("simple_mode_toggle"))
-        rule.onNodeWithTag("simple_mode_toggle").assertIsOn()
+        waitForSimpleModeOn()
         rule.onNodeWithTag("tab_HOME").performClick()
         waitForTag("screen_HOME")
         rule.onNodeWithTag("home_hero").assertIsDisplayed()
@@ -48,6 +48,15 @@ class Phase10SimpleModeFlowTest {
     private fun waitForTag(tag: String) {
         rule.waitUntil(15000) {
             runCatching { rule.onAllNodesWithTag(tag, useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() }.getOrDefault(false)
+        }
+    }
+
+    private fun waitForSimpleModeOn() {
+        rule.waitUntil(5000) {
+            runCatching {
+                rule.onNodeWithTag("simple_mode_toggle").assertIsOn()
+                true
+            }.getOrDefault(false)
         }
     }
 }

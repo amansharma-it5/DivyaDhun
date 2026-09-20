@@ -84,35 +84,38 @@ import com.divyadhun.app.ui.theme.*
   modifier = Modifier.fillMaxWidth().heightIn(min = 76.dp).clickable(onClick = onClick).semantics { contentDescription = trackInfoDescription; role = Role.Button }.testTag("track_${track.id}"),
   colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = .52f))
  ) {
-  Row(Modifier.fillMaxWidth().padding(Space.md), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Space.md)) {
-   TrackArtwork(track, Modifier.size(56.dp))
-   Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Space.xs)) {
+  Row(Modifier.fillMaxWidth().padding(horizontal = Space.sm, vertical = Space.xs), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Space.sm)) {
+   TrackArtwork(track, Modifier.size(52.dp))
+   Column(Modifier.weight(1f).widthIn(min = 0.dp).padding(vertical = Space.xs), verticalArrangement = Arrangement.spacedBy(2.dp)) {
     LocalizedText(
      track.title,
      language,
      modifier = Modifier.clickable(onClick = onClick).semantics { role = Role.Button }.testTag("track_title_${track.id}"),
      style = MaterialTheme.typography.titleMedium,
-     maxLines = 2,
+     maxLines = 1,
      overflow = TextOverflow.Ellipsis
     )
-    LocalizedText(track.subtitle, language, color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.bodyMedium)
-    if (current) Text(stringResource(if (playbackState.isPlaying) R.string.now_playing else R.string.pause), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+    LocalizedText(track.subtitle, language, color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.bodySmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
+    Row(Modifier.fillMaxWidth(), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Space.xs)) {
+     Text(stringResource(categoryNameRes(track.category)), Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+     if (current) Text(stringResource(if (playbackState.isPlaying) R.string.now_playing else R.string.pause), maxLines = 1, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+     if (!track.isPlayable) Text(stringResource(availabilityNameRes(track.availability)), maxLines = 1, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    }
    }
-   if (track.isPlayable && playbackController != null) {
-    IconButton(
-     onClick = { if (current && playbackState.isPlaying) playbackController.pause() else if (current) playbackController.resume() else playbackController.playTrack(track, playbackQueue) },
-     modifier = Modifier.size(48.dp).semantics { contentDescription = actionDescription }.testTag("play_${track.id}")
-    ) { Icon(if (current && playbackState.isPlaying) Icons.Filled.Pause else Icons.Filled.PlayArrow, contentDescription = null) }
-   } else if (!track.isPlayable) {
-    Text(stringResource(availabilityNameRes(track.availability)), modifier = Modifier.widthIn(max = 144.dp), maxLines = 2, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+   Row(horizontalArrangement = Arrangement.spacedBy(0.dp), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+    if (track.isPlayable && playbackController != null) {
+     IconButton(
+      onClick = { if (current && playbackState.isPlaying) playbackController.pause() else if (current) playbackController.resume() else playbackController.playTrack(track, playbackQueue) },
+      modifier = Modifier.size(40.dp).semantics { contentDescription = actionDescription }.testTag("play_${track.id}")
+     ) { Icon(if (current && playbackState.isPlaying) Icons.Filled.Pause else Icons.Filled.PlayArrow, contentDescription = null) }
+    }
+    if (onFavorite != null) {
+     IconButton(
+      onClick = onFavorite,
+      modifier = Modifier.size(40.dp).semantics { contentDescription = favoriteDescription }.testTag("favorite_${track.id}")
+     ) { Icon(if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder, contentDescription = null, tint = MaterialTheme.colorScheme.primary) }
+    }
    }
-   if (onFavorite != null) {
-    IconButton(
-     onClick = onFavorite,
-     modifier = Modifier.size(48.dp).semantics { contentDescription = favoriteDescription }.testTag("favorite_${track.id}")
-    ) { Icon(if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder, contentDescription = null, tint = MaterialTheme.colorScheme.primary) }
-   }
-   MetadataChip(stringResource(categoryNameRes(track.category)))
   }
  }
 }

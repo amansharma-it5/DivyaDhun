@@ -2,14 +2,13 @@
 
 ## Technical blockers
 
-- Physical-device QA has not been run. The emulator suite is green, but speaker output, lock-screen controls, vendor lifecycle behavior, and TalkBack still need a real-device pass.
-- A production release signing configuration is not present. A production keystore, Play App Signing enrollment, and release signing ownership must be supplied before publishing.
+- Core physical-device QA passes on `RZCX623LLJK`: after explicit owner approval, the debug package was removed and the latest remote-configured signed Phase 22 release was installed in place without clearing app data. Privacy-link tap-through, Daily Bhakti horizontal layout, playback state, background MediaSession, and owner-confirmed audible playback are recorded. Remaining blockers are owner-controlled Play preparation gates.
+- A second independent encrypted backup of the owner-controlled upload key remains pending. The encrypted Google Drive backup is owner-confirmed with SHA-256 comparison `MATCH: True`; no USB backup exists. Play App Signing enrollment and final Play Console declarations remain owner-controlled.
 
 ## External blockers
 
-- Rights-cleared production devotional recordings and any required translations.
 - Production artwork with distribution licenses and attribution records.
-- Backend/CDN deployment, content operations, and credentials for the Phase 12 remote catalog seam.
-- Google Play Console setup, privacy/support URLs, store listing, and a privacy review.
+- Google Play Console setup, store listing assets, Data Safety declarations, and owner privacy review. The public privacy/support URL is supplied and physically verified from the signed release.
+- Final owner-only Play gates: second encrypted backup, Play App Signing enrollment, declarations, asset approval, and any applicable closed-testing/device-verification requirements.
 
-The five bundled WAV files are developer-created fixtures and are not a production catalog. Their absence does not represent an application crash blocker; production content integration is a separate rights and operations gate.
+The production audio status is `LICENSED — USER_CONFIRMED`; public streaming and Cloudflare R2 hosting were confirmed by the owner, not independently reviewed. The five bundled WAV files have `OWNER_CONFIRMED` distribution rights; documentary agreements were not independently reviewed. Neither status replaces the owner’s final Play Console release decision.

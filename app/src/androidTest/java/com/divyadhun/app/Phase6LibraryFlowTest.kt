@@ -52,7 +52,8 @@ class Phase6LibraryFlowTest {
         rule.onNodeWithTag("tab_LIBRARY").performClick()
         waitForTag("screen_LIBRARY")
         rule.onNodeWithTag("screen_LIBRARY").performScrollToNode(hasTestTag("favorite_hanuman_mantra"))
-        rule.onAllNodesWithTag("favorite_hanuman_mantra").assertCountEquals(2)
+        // The favorited, recently played track is shown in Favorites, Recent, and Last Played.
+        rule.onAllNodesWithTag("favorite_hanuman_mantra").assertCountEquals(3)
         rule.onNodeWithTag("clear_history").performClick()
         waitForScrolledTag("recently_played_empty")
         rule.onNodeWithTag("recently_played_empty").assertIsDisplayed()

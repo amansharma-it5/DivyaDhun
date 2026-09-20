@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="500" viewBox="0 0 1024 500" role="img" aria-label="DivyaDhun devotional audio and daily bhakti">
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#260B12"/>
+      <stop offset="0.52" stop-color="#641F2C"/>
+      <stop offset="1" stop-color="#32131F"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="50%" cy="48%" r="56%">
+      <stop offset="0" stop-color="#D5A33B" stop-opacity="0.25"/>
+      <stop offset="1" stop-color="#D5A33B" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="card" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#561725"/>
+      <stop offset="1" stop-color="#35111A"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="500" fill="url(#background)"/>
+  <circle cx="192" cy="250" r="220" fill="url(#halo)"/>
+  <rect x="62" y="76" width="260" height="286" rx="30" fill="url(#card)" stroke="#D5A33B" stroke-opacity="0.65" stroke-width="2"/>
+  <circle cx="192" cy="218" r="104" fill="#4A1018" stroke="#D5A33B" stroke-opacity="0.55" stroke-width="3"/>
+  <path fill="none" stroke="#D5A33B" stroke-width="9" stroke-linecap="round" d="M192 130C149 175 158 216 192 234C226 216 235 175 192 130M141 216Q192 278 243 216Q240 273 192 280Q144 273 141 216Z"/>
+  <path fill="none" stroke="#F4B2BB" stroke-opacity="0.75" stroke-width="2" d="M105 326H279"/>
+  <text x="192" y="347" text-anchor="middle" fill="#FFE8C0" font-family="sans-serif" font-size="16" font-weight="600" letter-spacing="2.4">LISTEN · REFLECT</text>
+  <path fill="none" stroke="#D5A33B" stroke-opacity="0.55" stroke-width="2" d="M382 96H948"/>
+  <circle cx="372" cy="96" r="5" fill="#D5A33B"/>
+  <text x="382" y="202" fill="#FFF4F1" font-family="sans-serif" font-size="78" font-weight="700" letter-spacing="0.5">DivyaDhun</text>
+  <text x="386" y="274" fill="#F8C7CE" font-family="sans-serif" font-size="34" font-weight="600">Devotional audio</text>
+  <text x="386" y="326" fill="#FFE8C0" font-family="sans-serif" font-size="29">Daily bhakti for every day</text>
+  <path fill="none" stroke="#F4B2BB" stroke-opacity="0.3" stroke-width="2" d="M382 398H948"/>
+  <text x="386" y="431" fill="#F8C7CE" font-family="sans-serif" font-size="20" font-weight="600" letter-spacing="1.8">A QUIET SPACE FOR DEVOTION</text>
+</svg>

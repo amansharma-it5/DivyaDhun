@@ -1,13 +1,57 @@
 # DivyaDhun physical-device QA checklist
 
-Status for Phase 17: **PENDING**. No authorized physical Android device was connected during the RC pass; the Medium_Phone API 36 emulator was used for reproducible instrumentation and UI checks.
+Status for Phase 22: **CORE QA PASS — owner-confirmed audible playback**. The prior debug-signed `com.divyadhun.app` package was removed only after explicit owner approval, and the latest remote-configured, signed Phase 22 release APK is installed in place on `RZCX623LLJK` without clearing app data. Physical verification of the privacy link, Daily Bhakti layout, playback state, background MediaSession, and audible output is complete. Remaining Play Console, asset, backup, and owner-submission gates are tracked separately.
+
+Owner confirmation recorded 2026-09-20: Aman personally listened to the signed release on the physical phone and confirmed audible playback. This is `OWNER_CONFIRMED`, not an independently automated measurement.
+
+## Owner-reported signed-release defects
+
+- **Previously reported FAIL — Privacy policy:** the original handler gated `startActivity()` behind `resolveActivity()`. The fix now starts a browsable HTTPS intent directly and only handles `ActivityNotFoundException`; the published URL is asserted by `PrivacyPolicyIntentTest`.
+- **Previously reported FAIL — Aaj Ki Bhakti title layout:** the shared `TrackRow` and Daily Bhakti current/queue rows had insufficient width constraints and oversized trailing content. The fix gives the text column a zero minimum width, keeps artwork fixed, compacts trailing actions, and applies single-line ellipsis to constrained title/subtitle fields. `ReleaseRegressionLayoutTest` covers a 320dp viewport and long titles.
+- Both defects are now physically verified as fixed on `RZCX623LLJK` using the remote-configured signed APK. Audible output is recorded separately as owner-confirmed evidence below.
 
 Run this checklist on an authorized phone without clearing unrelated applications or personal data.
+
+## Data-preservation finding for `RZCX623LLJK`
+
+- The installed debug build contains a device-local Android DataStore file at `files/datastore/user_preferences.preferences_pb`. Source inspection identifies the stored state as onboarding progress, language, preferred deities, listening time, theme, simple mode, Daily Bhakti reminder setting, optional Family Mandir name/member names, favorites, recent track IDs, and the last-played track ID.
+- The app has no user-facing export/import or restore feature. `FileProvider` is used only for user-directed blessing-card sharing from the disposable cache; it is not a backup mechanism.
+- The manifest sets `android:allowBackup="false"` and `android:fullBackupContent="false"`. Its data-extraction rules exclude `file`, `database`, and `sharedpref` domains from both cloud backup and device transfer. A debug-only `run-as` listing is not a supported portable backup or restore path, so no private data archive was created.
+- A standard uninstall would remove the app sandbox, including the DataStore and disposable cache. The remote catalog and remote audio are not local user data and would remain available after reinstall, but the local preferences, favorites, history, Family Mandir values, reminder choice, and last-played state would not be reliably recoverable.
+
+**Previous decision:** preserve the phone until the owner explicitly approved the local-state loss. That approval was later provided; only `com.divyadhun.app` was uninstalled, and the signed release was installed. No unrelated phone data was changed.
+
+## Current device gate
+
+- Pre-install package record: version `0.1.0`, versionCode `1`, `DEBUGGABLE`, Android Debug certificate SHA-256 `915a1e49e6c952a4c63f882a75ace00ff1016e3dcc4bacc442eaf1722d145b0b`.
+- Phase 22 release certificate: `CN=Aman Sharma, L=Delhi, ST=Delhi, C=IN`, SHA-256 `a91a010619faa841768e4f33db69bc3e5956034f61dba6dddcbae722df00630c`.
+- Because the signatures differed, the owner explicitly approved the package-only uninstall. No unrelated package or phone data was changed. The release package is now installed with version `1.0.0`, versionCode `1`, APK signing version 2, and non-debuggable package flags.
+
+The owner has no spare Android phone. The signed release has passed the documented disposable-emulator checks; those results complement, but do not replace, the physical-device evidence below.
+
+## Signed-release disposable-emulator result
+
+- The signed `app-release.apk` was installed on clean `emulator-5554` only. Launch, onboarding, live catalog/deity browsing, playback, pause/resume, seek, mini-player, full player, queue/transport state, background service, foreground media notification, MediaSession, screen-off playback state, and emulator network off/on checks passed.
+- A signed `releaseQa` instrumentation variant is enabled with the existing release signing configuration; its test-only Compose host is excluded from the production `release` APK/AAB. The targeted privacy and layout regressions pass on the disposable AVD. This does not replace real-phone QA.
+- The latest signed `releaseQa` connected run executed 22 tests: 21 passed, including the new Daily Bhakti label regression and all existing UI/flow tests; 1 production-catalog `RemoteStreamingSmokeTest` timed out after 60 seconds on the emulator network path. A host HTTPS GET to the same R2 catalog returned HTTP 200, while the emulator production path did not complete; no UI assertion failed. Record this as `ENVIRONMENT_BLOCKED / INCOMPLETE`, not PASS, and do not treat it as proof of production streaming.
+- These emulator results do not replace real-phone QA.
+
+## Physical signed-release results — latest remote-configured APK
+
+- **PASS:** launch, fresh onboarding, production HTTPS catalog load, and host-side catalog verification of 77 unique records.
+- **PASS:** search returned 15 Hanuman devotional tracks; a production Hanuman track loaded into the player.
+- **PASS:** MediaSession playback, pause, resume, fast-forward seek, background playback with the launcher foreground, and the foreground media service notification.
+- **PASS:** screen-off playback state remained active; the Samsung lock screen exposed the DivyaDhun media card with Previous, Pause, and Next controls.
+- **PASS:** Wi-Fi and mobile data were temporarily disabled and then restored; the active MediaSession remained PLAYING and Wi-Fi reconnected. Connectivity was restored to its original state.
+- **PASS:** The latest signed APK was updated in place with `adb install --no-incremental -r`; no uninstall or data clear was used. Local and installed `classes.dex` hashes matched, and the expected release certificate remained installed.
+- **PASS:** Daily Bhakti screenshot `build/physical-qa-remote-daily.png` shows horizontal, readable, ellipsized titles with no vertical letter stacking.
+- **PASS:** Library → Preferences → Privacy policy launched the Android resolver and opened Chrome at `https://amansharma-it5.github.io/divyadhun-privacy/`; screenshot: `build/physical-qa-remote-privacy-page.png`.
+- **OWNER-CONFIRMED PASS:** Aman personally listened to the signed release on the physical phone and confirmed audible playback. This is owner evidence, not an independently automated measurement.
 
 ## Install and first launch
 
 - [ ] Record device model, Android version, ABI, locale, font scale, and battery state.
-- [ ] Install the unsigned debug APK supplied by the engineering build process.
+- [x] Install the signed Phase 22 release candidate in place without clearing app data. Do not use the unsigned APK for final acceptance.
 - [ ] Launch DivyaDhun and complete onboarding in English.
 - [ ] Repeat on a clean app-data state in Hindi.
 - [ ] Confirm that closing and reopening the app bypasses onboarding.
@@ -22,11 +66,13 @@ Run this checklist on an authorized phone without clearing unrelated application
 
 ## Playback and notifications
 
-- [ ] Start each bundled demo fixture and confirm audible output through the phone speaker and headphones.
+- [x] Open Library → Preferences → Privacy policy and verify the HTTPS page and support email.
+- [ ] Start each bundled demo fixture and confirm audible output through the phone speaker and headphones; the owner-confirmed release playback result above does not claim every fixture was separately heard.
 - [ ] Pause, resume, seek, and move previous/next while the app is foregrounded.
 - [ ] Background the app for at least 60 seconds, lock the device, and verify playback continues once.
 - [ ] Verify lock-screen and notification transport controls, including a service restart/reconnect.
 - [ ] Enable a reminder, grant notification permission, observe one notification, open the app from it, then disable the reminder.
+- [ ] Disable network access, observe the documented offline/reconnect behavior, restore network access, and start another remote track.
 
 ## Sharing and local Family Mandir
 
@@ -35,4 +81,4 @@ Run this checklist on an authorized phone without clearing unrelated application
 - [ ] Configure a Family Mandir name and members, restart the app, and verify local persistence.
 - [ ] Confirm the Family Mandir surface continues to identify data as local device-only data.
 
-Record results, screenshots, and logcat excerpts with the release candidate build identifier before marking this checklist complete.
+Record device model, release build identifier, results, screenshots, and logcat excerpts before marking this checklist complete. Audible playback is marked owner-confirmed above because Aman personally heard the signed release; it is not an automated measurement.

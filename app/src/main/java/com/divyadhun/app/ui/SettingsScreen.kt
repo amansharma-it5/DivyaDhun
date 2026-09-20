@@ -36,6 +36,7 @@ import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.divyadhun.app.R
+import com.divyadhun.app.openPrivacyPolicy
 import com.divyadhun.app.ThemeMode
 import com.divyadhun.app.content.PreferencesUiState
 import com.divyadhun.app.content.LibraryUiState
@@ -149,6 +150,12 @@ fun LibraryScreen(
                 Spacer(Modifier.width(Space.sm))
                 Text(stringResource(label))
             }
+        }
+        item {
+            OutlinedButton(
+                onClick = { openPrivacyPolicy(context) },
+                modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp).testTag("privacy_policy_button")
+            ) { Text(stringResource(R.string.privacy_policy)) }
         }
         if (state.error || library.error) item { Text(stringResource(R.string.preference_error), color = MaterialTheme.colorScheme.error) }
     }
