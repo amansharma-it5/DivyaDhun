@@ -31,6 +31,7 @@ The owner has no spare Android phone. The signed release has already passed the 
 
 - The signed `app-release.apk` was installed on clean `emulator-5554` only. Launch, onboarding, live catalog/deity browsing, playback, pause/resume, seek, mini-player, full player, queue/transport state, background service, foreground media notification, MediaSession, screen-off playback state, and emulator network off/on checks passed.
 - A signed `releaseQa` instrumentation variant is enabled with the existing release signing configuration; its test-only Compose host is excluded from the production `release` APK/AAB. The targeted privacy and layout regressions pass on the disposable AVD. This does not replace real-phone QA or human audible confirmation.
+- The complete signed `releaseQa` connected suite passes on the disposable AVD: 21/21 tests, including production-catalog remote streaming smoke with the live catalog URL supplied. This does not replace real-phone QA or human audible confirmation.
 - These emulator results do not replace real-phone QA or human audible confirmation.
 
 ## Physical signed-release results
