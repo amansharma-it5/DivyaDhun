@@ -1,6 +1,12 @@
 # DivyaDhun physical-device QA checklist
 
-Status for Phase 22: **PARTIAL — owner confirmation pending**. The prior debug-signed `com.divyadhun.app` package was removed only after explicit owner approval, and the verified Phase 22 release APK is now installed on `RZCX623LLJK`. The app remains installed. Human audible confirmation and a foreground tap-through of the privacy link remain pending.
+Status for Phase 22: **PARTIAL — owner confirmation pending**. The prior debug-signed `com.divyadhun.app` package was removed only after explicit owner approval, and the verified Phase 22 release APK is now installed on `RZCX623LLJK`. The app remains installed. The owner subsequently reported two signed-release defects: the Privacy policy action did not open, and Aaj Ki Bhakti titles wrapped vertically. Fixes are now covered by release-targeted tests, but physical re-verification is still pending. Human audible confirmation also remains pending.
+
+## Owner-reported signed-release defects
+
+- **Previously reported FAIL — Privacy policy:** the original handler gated `startActivity()` behind `resolveActivity()`. The fix now starts a browsable HTTPS intent directly and only handles `ActivityNotFoundException`; the published URL is asserted by `PrivacyPolicyIntentTest`.
+- **Previously reported FAIL — Aaj Ki Bhakti title layout:** the shared `TrackRow` and Daily Bhakti current/queue rows had insufficient width constraints and oversized trailing content. The fix gives the text column a zero minimum width, keeps artwork fixed, compacts trailing actions, and applies single-line ellipsis to constrained title/subtitle fields. `ReleaseRegressionLayoutTest` covers a 320dp viewport and long titles.
+- These are not marked physically PASS until `RZCX623LLJK` is reconnected and the owner confirms the actual signed APK behavior.
 
 Run this checklist on an authorized phone without clearing unrelated applications or personal data.
 
@@ -24,7 +30,7 @@ The owner has no spare Android phone. The signed release has already passed the 
 ## Signed-release disposable-emulator result
 
 - The signed `app-release.apk` was installed on clean `emulator-5554` only. Launch, onboarding, live catalog/deity browsing, playback, pause/resume, seek, mini-player, full player, queue/transport state, background service, foreground media notification, MediaSession, screen-off playback state, and emulator network off/on checks passed.
-- Direct release-targeted instrumentation was not run because the existing debug-signed test APK cannot attach to the release-signed target; Android rejected the mismatched signatures. No release test APK was re-signed with owner key material.
+- A signed `releaseQa` instrumentation variant is enabled with the existing release signing configuration; its test-only Compose host is excluded from the production `release` APK/AAB. The targeted privacy and layout regressions pass on the disposable AVD. This does not replace real-phone QA or human audible confirmation.
 - These emulator results do not replace real-phone QA or human audible confirmation.
 
 ## Physical signed-release results

@@ -36,10 +36,15 @@ android {
   }
  }
  buildTypes {
-  release {
+ release {
    if (hasReleaseSigning) signingConfig = signingConfigs.getByName("release")
   }
+  create("releaseQa") {
+   initWith(getByName("release"))
+   matchingFallbacks += listOf("release")
+  }
  }
+ testOptions { testBuildType = "releaseQa" }
  buildFeatures { compose = true; buildConfig = true }
  bundle { language { enableSplit = false } }
  compileOptions { sourceCompatibility = JavaVersion.VERSION_17; targetCompatibility = JavaVersion.VERSION_17 }
@@ -64,6 +69,7 @@ dependencies {
  testImplementation(libs.junit)
  androidTestImplementation(platform(libs.compose.bom))
  androidTestImplementation(libs.compose.test)
+ add("releaseQaImplementation", libs.compose.test.manifest)
  androidTestImplementation(libs.android.test)
  androidTestImplementation(libs.test.runner)
 }

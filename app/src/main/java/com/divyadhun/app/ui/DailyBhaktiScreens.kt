@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.filled.Pause
@@ -27,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
@@ -85,7 +87,9 @@ fun DailyBhaktiScreen(
                         text = "${index + 1}. ${if (language == Language.HINDI) track.title.hindi else track.title.english}",
                         modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp).testTag("routine_track_${track.id}"),
                         style = if (index == state.currentIndex) MaterialTheme.typography.titleMedium else MaterialTheme.typography.bodyLarge,
-                        color = if (index == state.currentIndex) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                        color = if (index == state.currentIndex) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                 }
             }
@@ -96,9 +100,12 @@ fun DailyBhaktiScreen(
 @Composable
 private fun DailyBhaktiCurrentTrack(track: Track, language: Language) {
     Surface(color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = .52f), shape = MaterialTheme.shapes.medium) {
-        Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text(if (language == Language.HINDI) track.title.hindi else track.title.english, style = MaterialTheme.typography.titleLarge)
-            Text(if (language == Language.HINDI) track.subtitle.hindi else track.subtitle.english, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Row(Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            TrackArtwork(track, Modifier.size(56.dp))
+            Column(Modifier.weight(1f).widthIn(min = 0.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(if (language == Language.HINDI) track.title.hindi else track.title.english, modifier = Modifier.testTag("daily_current_title"), style = MaterialTheme.typography.titleMedium, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                Text(if (language == Language.HINDI) track.subtitle.hindi else track.subtitle.english, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            }
         }
     }
 }

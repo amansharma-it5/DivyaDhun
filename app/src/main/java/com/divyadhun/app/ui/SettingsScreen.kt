@@ -24,8 +24,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import android.Manifest
-import android.content.Intent
-import android.net.Uri
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -38,7 +36,7 @@ import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.divyadhun.app.R
-import com.divyadhun.app.PRIVACY_POLICY_URL
+import com.divyadhun.app.openPrivacyPolicy
 import com.divyadhun.app.ThemeMode
 import com.divyadhun.app.content.PreferencesUiState
 import com.divyadhun.app.content.LibraryUiState
@@ -155,10 +153,7 @@ fun LibraryScreen(
         }
         item {
             OutlinedButton(
-                onClick = {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(PRIVACY_POLICY_URL))
-                    if (intent.resolveActivity(context.packageManager) != null) context.startActivity(intent)
-                },
+                onClick = { openPrivacyPolicy(context) },
                 modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp).testTag("privacy_policy_button")
             ) { Text(stringResource(R.string.privacy_policy)) }
         }

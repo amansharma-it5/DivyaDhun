@@ -2,7 +2,7 @@
 
 ## Technical blockers
 
-- Physical-device QA is partial on `RZCX623LLJK`: after explicit owner approval, the debug package was removed and the signed Phase 22 release was installed without touching unrelated phone data. Launch, 77-track catalog loading, playback, transport controls, background/screen-off behavior, and reversible network recovery passed. Human audible confirmation and an unlocked in-app privacy-link tap remain pending.
+- Physical-device QA is partial on `RZCX623LLJK`: after explicit owner approval, the debug package was removed and the signed Phase 22 release was installed without touching unrelated phone data. The owner subsequently reported a privacy-link failure and vertical Aaj Ki Bhakti title wrapping. Both fixes pass targeted release instrumentation, but physical re-verification, human audible confirmation, and an unlocked in-app tap-through remain pending.
 - A second independent encrypted backup of the owner-controlled upload key remains pending. The encrypted Google Drive backup is owner-confirmed; no USB backup exists. Play App Signing enrollment and final Play Console declarations remain owner-controlled.
 
 ## External blockers
