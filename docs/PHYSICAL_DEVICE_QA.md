@@ -1,12 +1,12 @@
 # DivyaDhun physical-device QA checklist
 
-Status for Phase 22: **PARTIAL — owner confirmation pending**. The prior debug-signed `com.divyadhun.app` package was removed only after explicit owner approval, and the verified Phase 22 release APK is now installed on `RZCX623LLJK`. The app remains installed. The owner subsequently reported two signed-release defects: the Privacy policy action did not open, and Aaj Ki Bhakti titles wrapped vertically. Fixes are now covered by release-targeted tests, but physical re-verification is still pending. Human audible confirmation also remains pending.
+Status for Phase 22: **PARTIAL — human audible confirmation pending**. The prior debug-signed `com.divyadhun.app` package was removed only after explicit owner approval, and the latest remote-configured, signed Phase 22 release APK is installed in place on `RZCX623LLJK` without clearing app data. Physical verification of the privacy link, Daily Bhakti layout, playback state, and background MediaSession is complete; human audible confirmation remains pending.
 
 ## Owner-reported signed-release defects
 
 - **Previously reported FAIL — Privacy policy:** the original handler gated `startActivity()` behind `resolveActivity()`. The fix now starts a browsable HTTPS intent directly and only handles `ActivityNotFoundException`; the published URL is asserted by `PrivacyPolicyIntentTest`.
 - **Previously reported FAIL — Aaj Ki Bhakti title layout:** the shared `TrackRow` and Daily Bhakti current/queue rows had insufficient width constraints and oversized trailing content. The fix gives the text column a zero minimum width, keeps artwork fixed, compacts trailing actions, and applies single-line ellipsis to constrained title/subtitle fields. `ReleaseRegressionLayoutTest` covers a 320dp viewport and long titles.
-- These are not marked physically PASS until `RZCX623LLJK` is reconnected and the owner confirms the actual signed APK behavior.
+- Both defects are now physically verified as fixed on `RZCX623LLJK` using the remote-configured signed APK. Human audible output is intentionally separate and remains pending.
 
 Run this checklist on an authorized phone without clearing unrelated applications or personal data.
 
@@ -34,20 +34,23 @@ The owner has no spare Android phone. The signed release has already passed the 
 - The complete signed `releaseQa` connected suite passes on the disposable AVD: 21/21 tests, including production-catalog remote streaming smoke with the live catalog URL supplied. This does not replace real-phone QA or human audible confirmation.
 - These emulator results do not replace real-phone QA or human audible confirmation.
 
-## Physical signed-release results
+## Physical signed-release results — latest remote-configured APK
 
 - **PASS:** launch, fresh onboarding, production HTTPS catalog load, and host-side catalog verification of 77 unique records.
 - **PASS:** search returned 15 Hanuman devotional tracks; a production Hanuman track loaded into the player.
 - **PASS:** MediaSession playback, pause, resume, fast-forward seek, background playback with the launcher foreground, and the foreground media service notification.
 - **PASS:** screen-off playback state remained active; the Samsung lock screen exposed the DivyaDhun media card with Previous, Pause, and Next controls.
 - **PASS:** Wi-Fi and mobile data were temporarily disabled and then restored; the active MediaSession remained PLAYING and Wi-Fi reconnected. Connectivity was restored to its original state.
+- **PASS:** The latest signed APK was updated in place with `adb install --no-incremental -r`; no uninstall or data clear was used. Local and installed `classes.dex` hashes matched, and the expected release certificate remained installed.
+- **PASS:** Daily Bhakti screenshot `build/physical-qa-remote-daily.png` shows horizontal, readable, ellipsized titles with no vertical letter stacking.
+- **PASS:** Library → Preferences → Privacy policy launched the Android resolver and opened Chrome at `https://amansharma-it5.github.io/divyadhun-privacy/`; screenshot: `build/physical-qa-remote-privacy-page.png`.
 - **NOT CONFIRMED:** human-audible output. A person must listen through the phone speaker or headphones.
-- **PENDING:** tap the in-app Privacy policy link while the phone is unlocked. The phone was left keyguard-locked after the lock-screen check; no lock bypass was attempted.
+- **PENDING:** owner confirmation that audio is actually audible through the phone speaker or connected output.
 
 ## Install and first launch
 
 - [ ] Record device model, Android version, ABI, locale, font scale, and battery state.
-- [ ] Install the signed Phase 22 release candidate. Do not use the unsigned APK for final acceptance.
+- [x] Install the signed Phase 22 release candidate in place without clearing app data. Do not use the unsigned APK for final acceptance.
 - [ ] Launch DivyaDhun and complete onboarding in English.
 - [ ] Repeat on a clean app-data state in Hindi.
 - [ ] Confirm that closing and reopening the app bypasses onboarding.
@@ -62,7 +65,7 @@ The owner has no spare Android phone. The signed release has already passed the 
 
 ## Playback and notifications
 
-- [ ] Open Library → Preferences → Privacy policy and verify the HTTPS page and support email.
+- [x] Open Library → Preferences → Privacy policy and verify the HTTPS page and support email.
 - [ ] Start each bundled demo fixture and confirm audible output through the phone speaker and headphones.
 - [ ] Pause, resume, seek, and move previous/next while the app is foregrounded.
 - [ ] Background the app for at least 60 seconds, lock the device, and verify playback continues once.

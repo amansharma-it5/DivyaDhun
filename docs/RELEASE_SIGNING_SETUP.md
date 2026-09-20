@@ -2,7 +2,7 @@
 
 Status: `SIGNED_LOCAL_BUILD_COMPLETE; OWNER_ACTION_REQUIRED_FOR_BACKUP_AND_PLAY`
 
-The Phase 22 release candidate is `com.divyadhun.app` version `1.0.0` (`versionCode 1`). The repository contains an optional local signing configuration that activates only when a complete ignored `keystore.properties` exists. The owner supplied `divyadhun-upload-key-IN.p12` with alias `divyadhun-upload`; the local signed build is now verified. The owner confirms an encrypted Google Drive backup; a second independent backup, Play App Signing enrollment, and physical-device QA remain pending.
+The Phase 22 release candidate is `com.divyadhun.app` version `1.0.0` (`versionCode 1`). The repository contains an optional local signing configuration that activates only when a complete ignored `keystore.properties` exists. The owner supplied `divyadhun-upload-key-IN.p12` with alias `divyadhun-upload`; the local signed build is verified. The owner confirms an encrypted Google Drive backup; a second independent backup, Play App Signing enrollment, and human audible confirmation remain pending. Physical privacy-link, layout, playback-state, and background MediaSession checks passed on `RZCX623LLJK`.
 
 This is intentional. The debug keystore must not be used for Play distribution, and a private upload key must not be generated or committed by an automated run.
 
@@ -29,7 +29,7 @@ The first Play submission must be an Android App Bundle, and every future update
 ## Current evidence
 
 - Release APK: `app/build/outputs/apk/release/app-release.apk` (signed; APK Signature Scheme v2 verified)
-- Release AAB: `app/build/outputs/bundle/release/app-release.aab` (JAR signature verified)
+- Release AAB: `app/build/outputs/bundle/release/app-release.aab` (rebuilt with the production catalog URL; JAR signature verified; SHA-256 `4CC53352F99A4A4462DF94C18C95B9EAF3CD95D36268288E700AD5F2031ADAF5`)
 - Owner key filename reported outside Git: `divyadhun-upload-key-IN.p12`; alias: `divyadhun-upload`; private location is owner-controlled and was not inspected by this audit.
 - Package: `com.divyadhun.app`
 - Version: `1.0.0` / `versionCode 1`

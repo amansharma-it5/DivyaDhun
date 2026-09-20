@@ -2,10 +2,10 @@
 
 The engineering branch is ready for owner-controlled release setup but is not ready for Play publication.
 
-1. Review the published policy at `https://amansharma-it5.github.io/divyadhun-privacy/` and confirm it remains accurate.
-2. Verify that the final signed build exposes the policy link from Library → Preferences.
+1. Review the published policy at `https://amansharma-it5.github.io/divyadhun-privacy/` and confirm it remains accurate; the link has been physically verified from the signed build.
+2. Personally listen to the installed signed build and confirm audible playback; automation cannot establish human-audible output.
 3. Verify an encrypted backup of the already-generated `divyadhun-upload-key-IN.p12` (alias `divyadhun-upload`), then configure `keystore.properties` locally. Never use the similarly named key without `-IN`, and never commit the keystore or passwords. The existing unencrypted 7z archive is not an acceptable backup.
-4. Upload the signed AAB to an internal/closed test track only after the signed artifact passes physical QA.
+4. Upload the signed AAB to an internal/closed test track only after audible confirmation, backup, declarations, and asset gates pass.
 5. Complete Play Console Data Safety, content rating, target audience, store listing, app-access (not applicable to the current no-account app), and content-rights declarations.
 6. Confirm whether the developer account is subject to the 12-testers/14-days closed-testing rule and complete it if required.
 7. Complete developer device verification if Play Console requests it.

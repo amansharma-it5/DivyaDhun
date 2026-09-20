@@ -2,6 +2,10 @@
 
 This is an engineering draft for the Play Console form. The owner must submit the final answers after reviewing the final release artifact, privacy policy, and any Play Console SDK declarations. Google requires the Data Safety form for published apps, including apps that do not collect user data: [Provide information for Data safety](https://support.google.com/googleplay/android-developer/answer/10787469?hl=en-AE).
 
+## Release-audit basis
+
+The current dependency catalog contains AndroidX Compose, Activity, Navigation, DataStore, Lifecycle/ViewModel, Media3, Kotlin serialization, and test libraries. Source and manifest review found no Firebase, advertising, analytics, crash-reporting, attribution, login, account, subscription, or cloud-sync SDK. The signed artifact must still be checked again if dependencies or features change.
+
 ## Proposed answers
 
 | Play question | Proposed answer | Evidence/qualification |
@@ -22,3 +26,5 @@ This is an engineering draft for the Play Console form. The owner must submit th
 - Confirm that all bundled and transitive SDK behavior matches this draft.
 - Answer the Play Console questions for the exact signed release artifact, not only the source tree.
 - Revisit this form before any analytics, crash reporting, account, subscription, cloud-sync, or upload feature is added.
+
+The owner must also review Google’s current [Data Safety guidance](https://support.google.com/googleplay/android-developer/answer/10787469?hl=en) and answer for the exact bundle submitted.

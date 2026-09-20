@@ -5,7 +5,7 @@
 - [x] Branch created from merged Phase 21 main.
 - [x] Production catalog URL is HTTPS-only and remains read-only.
 - [x] Version set to `1.0.0` / `versionCode 1`.
-- [x] Unsigned release APK and AAB built with the production catalog URL.
+- [x] Signed release APK and AAB built with the production catalog URL and verified with the expected upload certificate.
 - [x] Package, min SDK, target SDK, manifest permissions, media service, and privacy-related code audited.
 - [x] Listing, privacy policy, Data Safety, signing, and owner-action drafts written.
 - [x] No audio uploaded, no catalog object changed, no Google Play release created.
@@ -14,7 +14,7 @@
 
 - [x] Support contact supplied and privacy policy published at `https://amansharma-it5.github.io/divyadhun-privacy/`.
 - [x] Android source exposes the HTTPS privacy-policy link from Library → Preferences.
-- [ ] Owner verifies the privacy link on the signed release and confirms the published policy remains accurate.
+- [x] Signed release privacy link physically verified in Chrome at the published HTTPS URL; owner should still review policy accuracy before submission.
 - [x] Owner confirms the encrypted Google Drive backup. A second independent encrypted backup remains pending. The correct key is `divyadhun-upload-key-IN.p12` (alias `divyadhun-upload`); never use the similarly named key without `-IN`.
 - [x] Local ignored `keystore.properties` was populated privately and the signed AAB was verified without exposing passwords.
 - [ ] Owner enrolls in Play App Signing and records the upload-key recovery process.
@@ -23,7 +23,7 @@
 - [x] Owner confirmed distribution rights for the five bundled offline demo WAV fixtures; documentary agreements were not independently reviewed.
 - [ ] If applicable, complete the 12-tester/14-day closed test for a new personal developer account.
 - [ ] If applicable, complete Play Console real-device verification.
-- [ ] Install the signed release on `RZCX623LLJK` and complete audible playback, background, lock-screen, notification, MediaSession, seeking, and network-recovery QA.
+- [x] Signed release installed in place on `RZCX623LLJK`; physical layout, privacy, playback-state, and background MediaSession checks passed. Human audible confirmation, and any unverified transport/lock-screen cases, remain open.
 - [ ] Run final signed-artifact regression, remote smoke, catalog verification, secrets audit, and media audit.
 - [ ] Owner separately confirms the final release decision; do not publish or merge while any mandatory gate is open.
 

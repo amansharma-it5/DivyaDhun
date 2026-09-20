@@ -7,7 +7,7 @@ Use this checklist for the signed `com.divyadhun.app` `1.0.0` release. It is an 
 - [ ] App name, package, version code, category, target audience, and content rating match the signed bundle.
 - [x] Privacy policy: `https://amansharma-it5.github.io/divyadhun-privacy/`.
 - [x] Support contact: `divyadhun.support@gmail.com`.
-- [ ] Open the privacy link from Library → Preferences on the signed device build.
+- [x] Opened the privacy link from Library → Preferences on the signed device build; Chrome reached the published HTTPS page.
 
 ## Data Safety answers to review
 
@@ -25,5 +25,5 @@ Use this checklist for the signed `com.divyadhun.app` `1.0.0` release. It is an 
 - [ ] Create or verify a second independent encrypted backup. Play App Signing enrollment remains owner-controlled.
 - [x] Configure the ignored local signing properties and verify the signed AAB. Do not use the similarly named key without `-IN`.
 - [ ] Upload the owner-approved 512x512 icon, 1024x500 feature graphic, and genuine signed-build screenshots.
-- [ ] Complete [physical-device QA](PHYSICAL_DEVICE_QA.md), including audible playback, background/lock-screen controls, MediaSession, seeking, and reconnect behavior.
+- [ ] Complete [physical-device QA](PHYSICAL_DEVICE_QA.md), including owner-confirmed audible playback and any remaining transport/lock-screen cases. Privacy, layout, playback-state, and background MediaSession checks are recorded as PASS.
 - [ ] Do not upload to Play, publish, or merge PR #25 until all mandatory gates are green and the owner makes the release decision.
