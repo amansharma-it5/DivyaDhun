@@ -2,7 +2,7 @@
 
 Status: `SIGNED_LOCAL_BUILD_COMPLETE; OWNER_ACTION_REQUIRED_FOR_BACKUP_AND_PLAY`
 
-The Phase 22 release candidate is `com.divyadhun.app` version `1.0.0` (`versionCode 1`). The repository contains an optional local signing configuration that activates only when a complete ignored `keystore.properties` exists. The owner supplied `divyadhun-upload-key-IN.p12` with alias `divyadhun-upload`; the local signed build is verified. The owner confirms an encrypted Google Drive backup; a second independent backup and Play App Signing enrollment remain pending. Physical privacy-link, layout, playback-state, background MediaSession, and owner-confirmed audible playback passed on `RZCX623LLJK`.
+The Phase 22 release candidate is `com.divyadhun.app` version `1.0.0` (`versionCode 1`). The repository contains an optional local signing configuration that activates only when a complete ignored `keystore.properties` exists. The owner supplied `divyadhun-upload-key-IN.p12` with alias `divyadhun-upload`; the local signed build is verified. The owner confirms an encrypted Google Drive backup with SHA-256 comparison `MATCH: True`; a second independent backup and Play App Signing enrollment remain pending. Physical privacy-link, layout, playback-state, background MediaSession, and owner-confirmed audible playback passed on `RZCX623LLJK`.
 
 This is intentional. The debug keystore must not be used for Play distribution, and a private upload key must not be generated or committed by an automated run.
 

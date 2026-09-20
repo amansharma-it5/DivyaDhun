@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="500" viewBox="0 0 1024 500" role="img" aria-label="DivyaDhun devotional audio, daily bhakti, and peaceful listening">
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#321016"/>
+      <stop offset="0.55" stop-color="#5A1F2A"/>
+      <stop offset="1" stop-color="#2A1720"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#D5A33B" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#D5A33B" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1024" height="500" fill="url(#background)"/>
+  <circle cx="205" cy="250" r="210" fill="url(#halo)"/>
+  <circle cx="205" cy="250" r="132" fill="#4A1018" stroke="#D5A33B" stroke-opacity="0.42" stroke-width="2"/>
+  <path fill="none" stroke="#D5A33B" stroke-width="8" stroke-linecap="round" d="M205 142C150 197 161 238 205 256C249 238 260 197 205 142M139 229Q205 306 271 229Q267 300 205 307Q143 300 139 229Z"/>
+  <path fill="none" stroke="#F4B2BB" stroke-opacity="0.36" stroke-width="2" d="M45 405H979"/>
+  <text x="390" y="216" fill="#FCE7E9" font-family="sans-serif" font-size="72" font-weight="700" letter-spacing="1">DivyaDhun</text>
+  <text x="394" y="286" fill="#F4B2BB" font-family="sans-serif" font-size="32" font-weight="600">Devotional audio</text>
+  <text x="394" y="338" fill="#FFE8C0" font-family="sans-serif" font-size="28">Daily bhakti · Peaceful listening</text>
+</svg>

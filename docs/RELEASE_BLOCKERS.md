@@ -3,7 +3,7 @@
 ## Technical blockers
 
 - Core physical-device QA passes on `RZCX623LLJK`: after explicit owner approval, the debug package was removed and the latest remote-configured signed Phase 22 release was installed in place without clearing app data. Privacy-link tap-through, Daily Bhakti horizontal layout, playback state, background MediaSession, and owner-confirmed audible playback are recorded. Remaining blockers are owner-controlled Play preparation gates.
-- A second independent encrypted backup of the owner-controlled upload key remains pending. The encrypted Google Drive backup is owner-confirmed; no USB backup exists. Play App Signing enrollment and final Play Console declarations remain owner-controlled.
+- A second independent encrypted backup of the owner-controlled upload key remains pending. The encrypted Google Drive backup is owner-confirmed with SHA-256 comparison `MATCH: True`; no USB backup exists. Play App Signing enrollment and final Play Console declarations remain owner-controlled.
 
 ## External blockers
 
